@@ -66,8 +66,28 @@ struct SettingsView: View {
 }
 
 struct WidgetGuideView: View {
+    @Environment(AppModel.self) private var model
+
     var body: some View {
         List {
+            Section("Your widgets right now") {
+                let now = model.clock.now()
+                let content = CoastWidgetContent(date: now, station: model.station, forecast: model.forecastState.forecast, unit: model.unit)
+                VStack(alignment: .leading, spacing: 14) {
+                    SmallCoastCard(content: content, rendering: .fullColor)
+                        .padding(16)
+                        .frame(width: 170, height: 170)
+                        .background(Palette.paper, in: .rect(cornerRadius: 22))
+                    MediumCoastCard(content: content, rendering: .fullColor)
+                        .padding(16)
+                        .frame(height: 170)
+                        .background(Palette.paper, in: .rect(cornerRadius: 22))
+                }
+                .padding(.vertical, 8)
+                .listRowBackground(Color.clear)
+                .accessibilityElement(children: .contain)
+                .accessibilityLabel("Preview of the small and medium widgets with your current coast.")
+            }
             Section {
                 Text("Little Tide can’t add widgets for you, but it only takes a moment:")
                 Label("Touch and hold an empty area of your Home Screen until the apps jiggle.", systemImage: "1.circle")

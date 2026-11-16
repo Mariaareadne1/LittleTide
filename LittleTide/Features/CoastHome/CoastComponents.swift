@@ -21,7 +21,7 @@ struct CoastPostcard: View {
                 Text("Illustration · \(region.illustrationDescription)")
                     .font(.caption2)
                     .foregroundStyle(Palette.inkSoft)
-                    .lineLimit(1)
+                    .lineLimit(2)
                     .padding(.horizontal, 6).padding(.vertical, 3)
                     .background(Palette.paper.opacity(0.88), in: .rect(cornerRadius: 2))
                     .padding(8)

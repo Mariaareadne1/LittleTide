@@ -67,17 +67,21 @@ public struct StationDisplayName: Hashable, Sendable {
         self.subtitle = detail.isEmpty ? state : "\(detail), \(state)"
     }
 
-    /// Title-cases words NOAA wrote entirely in capitals ("SAN DIEGO" → "San Diego").
-    /// Tokens containing periods or digits (abbreviations such as "RR." or "U.S.") are kept.
+    /// Title-cases NOAA's ALL-CAPS place names ("SAN DIEGO (Broadway)" → "San Diego
+    /// (Broadway)"). Only the leading run of all-caps words is changed, so acronyms in
+    /// names NOAA already wrote in mixed case ("(USCG S-1 Platform)") are preserved.
+    /// Tokens with periods or digits ("RR.", "U.S.") are always kept.
     static func prettify(_ name: String) -> String {
         let minorWords: Set<String> = ["of", "the", "and", "at", "de", "del", "la"]
+        var isLeadingRun = true
         var isFirst = true
         let words = name.split(separator: " ", omittingEmptySubsequences: false).map { raw -> String in
             defer { isFirst = false }
             let word = String(raw)
             let letters = word.filter(\.isLetter)
             let isAllCaps = letters.count >= 2 && letters == letters.uppercased()
-            guard isAllCaps, !word.contains("."), !word.contains(where: \.isNumber) else { return word }
+            if !letters.isEmpty, !isAllCaps { isLeadingRun = false }
+            guard isLeadingRun, isAllCaps, !word.contains("."), !word.contains(where: \.isNumber) else { return word }
             let lower = word.lowercased()
             if !isFirst, minorWords.contains(lower) { return lower }
             return lower.capitalizedPreservingPunctuation

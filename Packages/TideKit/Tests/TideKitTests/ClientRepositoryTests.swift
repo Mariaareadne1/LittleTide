@@ -252,6 +252,8 @@ struct CatalogTests {
         #expect(StationDisplayName(noaaName: "S.C.L. RR. bridge", state: "GA").title == "S.C.L. RR. bridge")
         #expect(StationDisplayName(noaaName: "BOSTON", state: "MA").subtitle == "MA")
         #expect(StationDisplayName(noaaName: "CHARLESTON (Customhouse Wharf)", state: "SC").title == "Charleston (Customhouse Wharf)")
+        #expect(StationDisplayName(noaaName: "Sabine Offshore Light (USCG S-1 Platform)", state: "TX").title == "Sabine Offshore Light (USCG S-1 Platform)")
+        #expect(StationDisplayName(noaaName: "SEATTLE (Madison St.), Elliott Bay", state: "WA").title == "Seattle (Madison St.)")
     }
 }
 

@@ -18,6 +18,7 @@
 		51881B685E573E0C8DAFF0F7 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B862D096A9150A6F0FD4B7 /* OnboardingView.swift */; };
 		57484212783140717E6E69B1 /* TideReadout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E295FADFEAAA4969B7C333B /* TideReadout.swift */; };
 		584944DC3B0201B26121D09A /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E0D0F0AE102BD5BF58265DA9 /* WidgetKit.framework */; };
+		5B303ECEBF8D580A863E3D4B /* AppModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DBA67AE51443CAADB751905 /* AppModelTests.swift */; };
 		63D11682575AB97B5BF89DF3 /* AppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B44E2A61D66E228D88B6BE6C /* AppModel.swift */; };
 		67F92B489C8D7EE66786CAEE /* TideKit in Frameworks */ = {isa = PBXBuildFile; productRef = 8F574E89CF3D3A6DB2E23B4C /* TideKit */; };
 		6CB3B7FC49BB1227E145CDCA /* kingharbor_9410738_hilo.json in Resources */ = {isa = PBXBuildFile; fileRef = DABB48864083D2D1031B90A3 /* kingharbor_9410738_hilo.json */; };
@@ -112,6 +113,7 @@
 		8EB89EC598FC9A157984C9ED /* LittleTideTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = LittleTideTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		906FF05D5E1D43DFE38E4ABB /* LittleTide.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = LittleTide.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		95BFE4BC1A327BA18059AB7A /* TideStudyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TideStudyView.swift; sourceTree = "<group>"; };
+		9DBA67AE51443CAADB751905 /* AppModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppModelTests.swift; sourceTree = "<group>"; };
 		A1FBB962CA613D0485F666B7 /* CoastStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoastStateView.swift; sourceTree = "<group>"; };
 		A41B2D0EEC2171CBAFB59E76 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A766B455DC3B62399A415A62 /* CoastHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoastHomeView.swift; sourceTree = "<group>"; };
@@ -272,6 +274,7 @@
 		7ADAE093FAE209A8E3B656C9 /* LittleTideTests */ = {
 			isa = PBXGroup;
 			children = (
+				9DBA67AE51443CAADB751905 /* AppModelTests.swift */,
 				89BF0FE8D8398C3A437D3AFA /* DeepLinkTests.swift */,
 			);
 			path = LittleTideTests;
@@ -507,6 +510,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5B303ECEBF8D580A863E3D4B /* AppModelTests.swift in Sources */,
 				70572EC59C5701B1D0BA189E /* DeepLinkTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
