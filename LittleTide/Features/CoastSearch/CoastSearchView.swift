@@ -68,11 +68,13 @@ struct CoastSearchView: View {
     private var browseSections: some View {
         let featured = FeaturedCoasts.stations(in: model.catalog)
         if !featured.isEmpty {
-            Section("Featured coasts") {
+            Section {
                 ForEach(featured) { StationRow(station: $0, onPick: pick) }
+            } header: {
+                SectionHeader("Featured coasts")
             }
         }
-        Section("Browse by state") {
+        Section(header: SectionHeader("Browse by state")) {
             ForEach(statesInCatalog, id: \.self) { code in
                 NavigationLink(value: code) {
                     Text(USStates.names[code] ?? code)
@@ -157,5 +159,19 @@ private struct NoMatchesView: View {
         }
         .padding(.vertical, 24)
         .accessibilityElement(children: .combine)
+    }
+}
+
+/// Section header in ink tones (the system grey fails contrast on paper).
+private struct SectionHeader: View {
+    let title: String
+    init(_ title: String) { self.title = title }
+
+    var body: some View {
+        Text(title)
+            .font(.subheadline.weight(.semibold))
+            .foregroundStyle(Palette.ink)
+            .textCase(nil)
+            .accessibilityAddTraits(.isHeader)
     }
 }

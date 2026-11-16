@@ -39,6 +39,7 @@
 		D2C983A5FFA65729F2C64193 /* santamonica_9410840_15min.json in Resources */ = {isa = PBXBuildFile; fileRef = 8BFA2C22CCD03EF2A3E13EB0 /* santamonica_9410840_15min.json */; };
 		D2FD9392F60947DD65F83501 /* TideKit in Frameworks */ = {isa = PBXBuildFile; productRef = 4D343236A9ECF0445EE7F303 /* TideKit */; };
 		D3D3B8A8F0E12855E8231148 /* ForecastState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14CE9471E097A09E84F4D64D /* ForecastState.swift */; };
+		E4A947A7F296CF45D4850948 /* AccessibilityAuditTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F36BEA160D264F3A3B97FA /* AccessibilityAuditTests.swift */; };
 		ECDFA763B0E30149481E93D3 /* santamonica_9410840_hilo.json in Resources */ = {isa = PBXBuildFile; fileRef = 8AD0A9AB80B94BA3EFA955A1 /* santamonica_9410840_hilo.json */; };
 		ED5C9B0AC6F4F1D11719AB50 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DEFE676326D40EAE6440F02 /* RootView.swift */; };
 		F2139C79791FC53ADC0EC83F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A41B2D0EEC2171CBAFB59E76 /* Assets.xcassets */; };
@@ -107,6 +108,7 @@
 		6E295FADFEAAA4969B7C333B /* TideReadout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TideReadout.swift; sourceTree = "<group>"; };
 		7C1FC038207AE0E6EE1EA233 /* TideKit */ = {isa = PBXFileReference; lastKnownFileType = folder; name = TideKit; path = Packages/TideKit; sourceTree = SOURCE_ROOT; };
 		7ECD26866299B17F62AAA430 /* LittleTide.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LittleTide.entitlements; sourceTree = "<group>"; };
+		84F36BEA160D264F3A3B97FA /* AccessibilityAuditTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityAuditTests.swift; sourceTree = "<group>"; };
 		89BF0FE8D8398C3A437D3AFA /* DeepLinkTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepLinkTests.swift; sourceTree = "<group>"; };
 		8AD0A9AB80B94BA3EFA955A1 /* santamonica_9410840_hilo.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = santamonica_9410840_hilo.json; sourceTree = "<group>"; };
 		8BFA2C22CCD03EF2A3E13EB0 /* santamonica_9410840_15min.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = santamonica_9410840_15min.json; sourceTree = "<group>"; };
@@ -172,6 +174,7 @@
 		0D9E35ABEE777397688983D8 /* LittleTideUITests */ = {
 			isa = PBXGroup;
 			children = (
+				84F36BEA160D264F3A3B97FA /* AccessibilityAuditTests.swift */,
 				222EF27B5F78AE382C4C905D /* LittleTideUITests.swift */,
 				079ECD91837DC7CB3BD1938D /* WidgetHomeScreenTests.swift */,
 			);
@@ -545,6 +548,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E4A947A7F296CF45D4850948 /* AccessibilityAuditTests.swift in Sources */,
 				ADAD045417F3E986228BDD97 /* LittleTideUITests.swift in Sources */,
 				FB4187E9BBA251B6188FCF90 /* WidgetHomeScreenTests.swift in Sources */,
 			);

@@ -81,5 +81,22 @@ No StoreKit code ships. Rationale: the free product is complete; Plus features (
 alternate compositions, personal photos) are not built, and no App Store Connect product
 exists. Shipping a paywall without them would be inert. See `Documentation/APP_STORE.md`.
 
+## M6 — Launch package ✅ (owner steps remain)
+- Docs: README, DATA, PRIVACY, SUPPORT, ACCESSIBILITY, APP_STORE (listing, keywords, privacy
+  and age answers, reviewer notes, screenshot plan, demo scripts), IMAGE_CREDITS, CASE_STUDY.
+- Demo clips (`Documentation/Media/`): widget → app (live data), scrubbing (captured NOAA
+  data, fixed clock), choosing a coast.
+- Accessibility audit tests added; fixed header contrast, badge element, caption type.
+- Final regression 2026-11-16: 91 tests, 88 passed, 0 failed, 3 skipped by design.
+  Live NOAA comparison re-run: 5 stations, 20/20 events identical. Unsigned Release
+  archive succeeds with 0 warnings.
+
 ## Blockers needing the owner
-- Apple Developer team ID + signing for device install, archive and TestFlight.
+See `Documentation/APP_STORE.md` → "Owner-only steps". In short:
+- Apple Developer team ID + signing → device install, signed archive, TestFlight.
+- Register bundle IDs + App Group (placeholders `app.littletide.*`).
+- Check "Little Tide" name availability in App Store Connect.
+- Host PRIVACY.md and SUPPORT.md publicly (repo is private), add support email, update
+  `LegalText.supportURL`.
+- Optional: approve sourcing licensed / public-domain coastal photographs.
+- On-device checks not possible here: haptics, VoiceOver by ear, real widget refresh cadence.

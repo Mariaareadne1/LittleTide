@@ -49,6 +49,7 @@ final class WidgetHomeScreenTests: XCTestCase {
         snapshot("51-home-screen-widgets")
 
         // 3. Tap a widget: it must open the app on the same coast.
+        showPageWithLittleTideWidgets()
         let widget = springboard.descendants(matching: .any).matching(NSPredicate(format: "label CONTAINS 'Santa Monica'")).firstMatch
         XCTAssertTrue(widget.waitForExistence(timeout: 10), "widget not found on Home Screen")
         widget.tap()
@@ -115,8 +116,18 @@ final class WidgetHomeScreenTests: XCTestCase {
         sleep(1)
         if springboard.buttons["Done"].waitForExistence(timeout: 2) { springboard.buttons["Done"].tap() }
         sleep(1)
-        springboard.swipeLeft() // Little Tide's widgets are on the second page
+        showPageWithLittleTideWidgets()
         sleep(3)
         snapshot("style-\(style)")
+    }
+
+    /// Pages the Home Screen until a Little Tide widget (labelled with the coast) is visible.
+    private func showPageWithLittleTideWidgets() {
+        let widget = springboard.descendants(matching: .any).matching(NSPredicate(format: "label BEGINSWITH 'Santa Monica.'")).firstMatch
+        for swipeLeft in [true, true, false, false, false] {
+            if widget.exists && widget.isHittable { return }
+            if swipeLeft { springboard.swipeLeft() } else { springboard.swipeRight() }
+            sleep(1)
+        }
     }
 }

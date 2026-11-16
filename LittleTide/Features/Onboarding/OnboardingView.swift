@@ -14,7 +14,7 @@ struct OnboardingView: View {
                     .clipShape(.rect(cornerRadius: 2))
                     .overlay(alignment: .bottomLeading) {
                         Text("Original illustration")
-                            .font(.caption2)
+                            .font(.footnote)
                             .foregroundStyle(Palette.inkSoft)
                             .padding(.horizontal, 6).padding(.vertical, 3)
                             .background(Palette.paper.opacity(0.85), in: .rect(cornerRadius: 2))

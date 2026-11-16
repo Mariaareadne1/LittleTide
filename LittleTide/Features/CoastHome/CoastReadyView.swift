@@ -188,7 +188,7 @@ private struct SelectionReadout: View {
                 .foregroundStyle(Palette.ink)
             Text(readout.detail)
                 .font(Typography.caption)
-                .foregroundStyle(Palette.inkSoft)
+                .foregroundStyle(Palette.ink)
                 .lineLimit(1)
             Spacer(minLength: 4)
             if let height = readout.height {

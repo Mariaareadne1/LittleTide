@@ -71,7 +71,8 @@ struct NowSummaryView: View {
                     .accessibilityLabel("Next \(next.kind == .high ? "high" : "low") tide \(format.countdown(from: now, to: next.date)), station time.")
             }
         }
-        .accessibilityElement(children: .contain)
+        // One element, read in order: source, direction, next event, countdown.
+        .accessibilityElement(children: .combine)
         .accessibilityIdentifier("nowSummary")
     }
 }

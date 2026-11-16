@@ -60,7 +60,7 @@ final class LittleTideUITests: XCTestCase {
     func testCurveScrubAndReturnToNow() {
         let app = launch("curve")
         XCTAssertTrue(element(app, containing: "High tide at 1:04").waitForExistence(timeout: 5))
-        XCTAssertTrue(byID(app, "trendBadge").label == "Tide rising")
+        XCTAssertTrue(byID(app, "nowSummary").label.contains("Tide rising"), byID(app, "nowSummary").label)
         snapshot(app, "10-home-curve")
 
         let study = byID(app, "tideStudy")

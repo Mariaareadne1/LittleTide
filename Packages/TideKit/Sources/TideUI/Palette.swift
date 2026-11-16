@@ -14,7 +14,7 @@ public enum Palette {
     /// Deep ink. Primary text.
     public static let ink = dynamic(light: 0x24383C, dark: 0xEAE5DA)
     /// Softer ink for secondary text (≥ 4.5:1 on paper in both modes).
-    public static let inkSoft = dynamic(light: 0x4C5F62, dark: 0xB4B9B3)
+    public static let inkSoft = dynamic(light: 0x405255, dark: 0xBEC3BD)
     /// Driftwood sand. Beach band in the illustration, hairlines.
     public static let sand = dynamic(light: 0xCEBEA8, dark: 0x6E6253)
     /// Restrained rust/ochre accent: the selected-time marker only.
