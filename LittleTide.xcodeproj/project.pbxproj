@@ -23,10 +23,12 @@
 		6CB3B7FC49BB1227E145CDCA /* kingharbor_9410738_hilo.json in Resources */ = {isa = PBXBuildFile; fileRef = DABB48864083D2D1031B90A3 /* kingharbor_9410738_hilo.json */; };
 		70572EC59C5701B1D0BA189E /* DeepLinkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89BF0FE8D8398C3A437D3AFA /* DeepLinkTests.swift */; };
 		7688BB22455C3FAB6CD0CCBD /* AppClock.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2420B67F2E54021914F1671 /* AppClock.swift */; };
+		7D51FB72C825FFA7460EF91E /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 49C389CFCF73EFBC6DA57FCF /* PrivacyInfo.xcprivacy */; };
 		842E806E445A77287FEA6226 /* DeepLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9AA85CFEB032E1C14A4F05E /* DeepLink.swift */; };
 		883556083ED12A3C8606EB33 /* TideUI in Frameworks */ = {isa = PBXBuildFile; productRef = 98324160B45E4E1918FCC844 /* TideUI */; };
 		97AC5D7B20D5B0F587BFCBFA /* LittleTideWidgets.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = E11BF5665788FDD2EA4D9496 /* LittleTideWidgets.appex */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		ADAD045417F3E986228BDD97 /* LittleTideUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222EF27B5F78AE382C4C905D /* LittleTideUITests.swift */; };
+		AF0E692AA7117CA732E53814 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 48B0D2761F20AC12AB0A08C1 /* PrivacyInfo.xcprivacy */; };
 		B07E4053B66D3B075ABC5826 /* DemoConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22E85FAAEA4B5268554CED0D /* DemoConfiguration.swift */; };
 		BE34908CBC358A8813AA8569 /* TideStudyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95BFE4BC1A327BA18059AB7A /* TideStudyView.swift */; };
 		BF4BFDE930650873DD5453A6 /* CoastSearchModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B322A1C6F288E4C97FA2D6C5 /* CoastSearchModel.swift */; };
@@ -40,6 +42,7 @@
 		ED5C9B0AC6F4F1D11719AB50 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DEFE676326D40EAE6440F02 /* RootView.swift */; };
 		F2139C79791FC53ADC0EC83F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A41B2D0EEC2171CBAFB59E76 /* Assets.xcassets */; };
 		F9C1F47EC6B2B00B6D5F3549 /* CoastStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1FBB962CA613D0485F666B7 /* CoastStateView.swift */; };
+		FB4187E9BBA251B6188FCF90 /* WidgetHomeScreenTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 079ECD91837DC7CB3BD1938D /* WidgetHomeScreenTests.swift */; };
 		FF4F24DE0C876B52636907FC /* CoastHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A766B455DC3B62399A415A62 /* CoastHomeView.swift */; };
 /* End PBXBuildFile section */
 
@@ -83,6 +86,7 @@
 
 /* Begin PBXFileReference section */
 		047DCC400A39E59A33AD2ED2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		079ECD91837DC7CB3BD1938D /* WidgetHomeScreenTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetHomeScreenTests.swift; sourceTree = "<group>"; };
 		14CE9471E097A09E84F4D64D /* ForecastState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastState.swift; sourceTree = "<group>"; };
 		1A07D0DF769C63FABF6DE710 /* CoastComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoastComponents.swift; sourceTree = "<group>"; };
 		1A3ED85307905D38CBE05A92 /* SourceInfoSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SourceInfoSheet.swift; sourceTree = "<group>"; };
@@ -95,6 +99,8 @@
 		4366743EDB6412FFF7567E23 /* CoastReadyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoastReadyView.swift; sourceTree = "<group>"; };
 		453DD6A02B04DE42FEF6FF69 /* LittleTideWidgets.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LittleTideWidgets.entitlements; sourceTree = "<group>"; };
 		462703B5FF7B1FEFC73197AC /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		48B0D2761F20AC12AB0A08C1 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		49C389CFCF73EFBC6DA57FCF /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		4BD986F59B0CB6E81E6BF9B4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		519673B31D37C45A5F964C03 /* LegalText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegalText.swift; sourceTree = "<group>"; };
 		6E295FADFEAAA4969B7C333B /* TideReadout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TideReadout.swift; sourceTree = "<group>"; };
@@ -165,6 +171,7 @@
 			isa = PBXGroup;
 			children = (
 				222EF27B5F78AE382C4C905D /* LittleTideUITests.swift */,
+				079ECD91837DC7CB3BD1938D /* WidgetHomeScreenTests.swift */,
 			);
 			path = LittleTideUITests;
 			sourceTree = "<group>";
@@ -192,6 +199,7 @@
 				047DCC400A39E59A33AD2ED2 /* Info.plist */,
 				D7C1FED7CC6241850BD1C8E2 /* LittleTideWidgetBundle.swift */,
 				453DD6A02B04DE42FEF6FF69 /* LittleTideWidgets.entitlements */,
+				49C389CFCF73EFBC6DA57FCF /* PrivacyInfo.xcprivacy */,
 			);
 			path = LittleTideWidgets;
 			sourceTree = "<group>";
@@ -211,6 +219,7 @@
 			children = (
 				4BD986F59B0CB6E81E6BF9B4 /* Info.plist */,
 				7ECD26866299B17F62AAA430 /* LittleTide.entitlements */,
+				48B0D2761F20AC12AB0A08C1 /* PrivacyInfo.xcprivacy */,
 				B641F17B47F7E1C459445F18 /* App */,
 				EE5EB97EF9B248939D34DE67 /* Features */,
 				974901593545C476E8C988F2 /* Resources */,
@@ -360,6 +369,7 @@
 			buildConfigurationList = B20761D9303EF374F3031CD3 /* Build configuration list for PBXNativeTarget "LittleTideWidgets" */;
 			buildPhases = (
 				F52088292DD2D5E9141471F7 /* Sources */,
+				CD3AC75B4CD416F495589659 /* Resources */,
 				652D8A1E0A91F28F0ECBF6F9 /* Frameworks */,
 			);
 			buildRules = (
@@ -470,11 +480,20 @@
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		CD3AC75B4CD416F495589659 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7D51FB72C825FFA7460EF91E /* PrivacyInfo.xcprivacy in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		EDEAC36E2AB8E37D3374DA26 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				F2139C79791FC53ADC0EC83F /* Assets.xcassets in Resources */,
+				AF0E692AA7117CA732E53814 /* PrivacyInfo.xcprivacy in Resources */,
 				6CB3B7FC49BB1227E145CDCA /* kingharbor_9410738_hilo.json in Resources */,
 				D2C983A5FFA65729F2C64193 /* santamonica_9410840_15min.json in Resources */,
 				ECDFA763B0E30149481E93D3 /* santamonica_9410840_hilo.json in Resources */,
@@ -523,6 +542,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				ADAD045417F3E986228BDD97 /* LittleTideUITests.swift in Sources */,
+				FB4187E9BBA251B6188FCF90 /* WidgetHomeScreenTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

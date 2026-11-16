@@ -130,5 +130,5 @@ final class AppModel {
 }
 
 enum WidgetKind {
-    static let coast = "LittleTideCoast"
+    static let coast = "LittleTideCoast" // must match CoastWidget.kind
 }
