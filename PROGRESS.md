@@ -21,7 +21,7 @@ Resumable record of what is done, verified and blocked. Newest first within each
   Debug simulator build succeeds; app launches on iPhone 17 Pro (iOS 26.5).
   Simulator binaries carry the App Group entitlement.
 
-## M1 — Tide domain and data (in progress)
+## M1 — Tide domain and data ✅
 - TideKit: domain models, NOAA request/decoder/client (retry + backoff), versioned file
   cache, repository actor (cache-first, dedupe, offline fallback), pure TideEngine,
   station-day/DST helpers, catalog (3,228 US stations) + search, widget timeline planner.
@@ -29,6 +29,22 @@ Resumable record of what is done, verified and blocked. Newest first within each
 - Live comparison vs NOAA's own published lst_ldt/english predictions: 5 stations
   (CA, ME, HI, FL, NY-subordinate), every event identical to the minute, heights within
   0.001 ft → `Documentation/Evidence/noaa-live-comparison.txt`.
+
+## M2 — Identity and app interaction ✅ (first pass; polish continues in M4)
+- Original illustration system (6 coast regions, painted + line styles), waterline driven
+  by the normalised predicted height at the selected instant (neutral when no height).
+- Home: postcard, place title, Now summary (trend only when defensible), tide study with
+  scrub, haptics at real extrema, day paging, Now reset, highs/lows table, provenance footer,
+  source sheet. High/low-only stations show event stems and snap selection to events.
+- States: loading, offline-with-dated-cache banner, expired ("Forecast unavailable"),
+  failure with retry/choose another. Search: featured coasts, browse by state, debounced
+  search, honest no-match guidance.
+- Fixed during QA: clipped first hour label; edge pile-up of off-window samples; low-label
+  collision; status-bar overlap on scroll; source sheet used device time zone; expired
+  cache + failed refresh showed generic error instead of "Forecast unavailable".
+- Tests: 68 package + 2 app unit + 8 UI tests (onboarding→search→choose, no-match, scrub→Now,
+  HL snapping, offline, expired, failure, loading, units→meters, source sheet) all pass.
+  Screenshots: `Documentation/Screenshots/app/`.
 
 ## Blockers needing the owner
 - Apple Developer team ID + signing for device install, archive and TestFlight.
