@@ -1,0 +1,774 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0F3B8C48A428E1EC4A651332 /* PlaceholderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2565CCCFC59709528000AE71 /* PlaceholderTests.swift */; };
+		1674595B5E33AA2A5EA85D85 /* LittleTideApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFC1D50F113B933782701AA2 /* LittleTideApp.swift */; };
+		1799966B80F02213754BFDAB /* LittleTideWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7C1FED7CC6241850BD1C8E2 /* LittleTideWidgetBundle.swift */; };
+		3592E4A78CE126AF7CB8F2DE /* TideKit in Frameworks */ = {isa = PBXBuildFile; productRef = DF0F47FF7F2866B769F6338C /* TideKit */; };
+		4801A607E1F4D4A7CCA18897 /* TideUI in Frameworks */ = {isa = PBXBuildFile; productRef = 0F164D24BC91245A94D6BC52 /* TideUI */; };
+		584944DC3B0201B26121D09A /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E0D0F0AE102BD5BF58265DA9 /* WidgetKit.framework */; };
+		67F92B489C8D7EE66786CAEE /* TideKit in Frameworks */ = {isa = PBXBuildFile; productRef = 8F574E89CF3D3A6DB2E23B4C /* TideKit */; };
+		883556083ED12A3C8606EB33 /* TideUI in Frameworks */ = {isa = PBXBuildFile; productRef = 98324160B45E4E1918FCC844 /* TideUI */; };
+		97AC5D7B20D5B0F587BFCBFA /* LittleTideWidgets.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = E11BF5665788FDD2EA4D9496 /* LittleTideWidgets.appex */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		CDFF240D1C6C6358BCCE06B9 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 462703B5FF7B1FEFC73197AC /* SwiftUI.framework */; };
+		D2FD9392F60947DD65F83501 /* TideKit in Frameworks */ = {isa = PBXBuildFile; productRef = 4D343236A9ECF0445EE7F303 /* TideKit */; };
+		D323C01FF6FAEFAA14DF1A42 /* PlaceholderUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A61F21373A8FACDB708FB1EE /* PlaceholderUITests.swift */; };
+		F2139C79791FC53ADC0EC83F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A41B2D0EEC2171CBAFB59E76 /* Assets.xcassets */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		04F8A8681881A8477518812C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C9C3BA1A05516765FC4A4E33 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 167F2E5ABEFB23B693F08542;
+			remoteInfo = LittleTideWidgets;
+		};
+		951281F4714E4A882228FF32 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C9C3BA1A05516765FC4A4E33 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4FC5BD3978483D26287A5E96;
+			remoteInfo = LittleTide;
+		};
+		B8A8C0710384EB5549C53828 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C9C3BA1A05516765FC4A4E33 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4FC5BD3978483D26287A5E96;
+			remoteInfo = LittleTide;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		4D1ACD138DF8097E7ADBAE00 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				97AC5D7B20D5B0F587BFCBFA /* LittleTideWidgets.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		047DCC400A39E59A33AD2ED2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		2565CCCFC59709528000AE71 /* PlaceholderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceholderTests.swift; sourceTree = "<group>"; };
+		453DD6A02B04DE42FEF6FF69 /* LittleTideWidgets.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LittleTideWidgets.entitlements; sourceTree = "<group>"; };
+		462703B5FF7B1FEFC73197AC /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		4BD986F59B0CB6E81E6BF9B4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		7C1FC038207AE0E6EE1EA233 /* TideKit */ = {isa = PBXFileReference; lastKnownFileType = folder; name = TideKit; path = Packages/TideKit; sourceTree = SOURCE_ROOT; };
+		7ECD26866299B17F62AAA430 /* LittleTide.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LittleTide.entitlements; sourceTree = "<group>"; };
+		8EB89EC598FC9A157984C9ED /* LittleTideTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = LittleTideTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		906FF05D5E1D43DFE38E4ABB /* LittleTide.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = LittleTide.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A41B2D0EEC2171CBAFB59E76 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A61F21373A8FACDB708FB1EE /* PlaceholderUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceholderUITests.swift; sourceTree = "<group>"; };
+		D7C1FED7CC6241850BD1C8E2 /* LittleTideWidgetBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LittleTideWidgetBundle.swift; sourceTree = "<group>"; };
+		DFC1D50F113B933782701AA2 /* LittleTideApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LittleTideApp.swift; sourceTree = "<group>"; };
+		E0D0F0AE102BD5BF58265DA9 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		E11BF5665788FDD2EA4D9496 /* LittleTideWidgets.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = LittleTideWidgets.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		E60764D31E9897466D089E02 /* LittleTideUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = LittleTideUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		652D8A1E0A91F28F0ECBF6F9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				67F92B489C8D7EE66786CAEE /* TideKit in Frameworks */,
+				4801A607E1F4D4A7CCA18897 /* TideUI in Frameworks */,
+				584944DC3B0201B26121D09A /* WidgetKit.framework in Frameworks */,
+				CDFF240D1C6C6358BCCE06B9 /* SwiftUI.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8C0CF294B7C598A3FD283FE2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D2FD9392F60947DD65F83501 /* TideKit in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B455CA879C5837BC92C73AC5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3592E4A78CE126AF7CB8F2DE /* TideKit in Frameworks */,
+				883556083ED12A3C8606EB33 /* TideUI in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		0D9E35ABEE777397688983D8 /* LittleTideUITests */ = {
+			isa = PBXGroup;
+			children = (
+				A61F21373A8FACDB708FB1EE /* PlaceholderUITests.swift */,
+			);
+			path = LittleTideUITests;
+			sourceTree = "<group>";
+		};
+		0E1F543C373BC52FBA645A87 /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				7C1FC038207AE0E6EE1EA233 /* TideKit */,
+			);
+			path = Packages;
+			sourceTree = "<group>";
+		};
+		36C325BB88AE02915D67EAB3 /* LittleTideWidgets */ = {
+			isa = PBXGroup;
+			children = (
+				047DCC400A39E59A33AD2ED2 /* Info.plist */,
+				D7C1FED7CC6241850BD1C8E2 /* LittleTideWidgetBundle.swift */,
+				453DD6A02B04DE42FEF6FF69 /* LittleTideWidgets.entitlements */,
+			);
+			path = LittleTideWidgets;
+			sourceTree = "<group>";
+		};
+		3F23786FADDFC87A597375C1 /* LittleTide */ = {
+			isa = PBXGroup;
+			children = (
+				4BD986F59B0CB6E81E6BF9B4 /* Info.plist */,
+				7ECD26866299B17F62AAA430 /* LittleTide.entitlements */,
+				B641F17B47F7E1C459445F18 /* App */,
+				EE5EB97EF9B248939D34DE67 /* Features */,
+				974901593545C476E8C988F2 /* Resources */,
+			);
+			path = LittleTide;
+			sourceTree = "<group>";
+		};
+		4FA83114D7991D02DAD76599 = {
+			isa = PBXGroup;
+			children = (
+				3F23786FADDFC87A597375C1 /* LittleTide */,
+				7ADAE093FAE209A8E3B656C9 /* LittleTideTests */,
+				0D9E35ABEE777397688983D8 /* LittleTideUITests */,
+				36C325BB88AE02915D67EAB3 /* LittleTideWidgets */,
+				0E1F543C373BC52FBA645A87 /* Packages */,
+				5A02FF702917969B92A2F297 /* Frameworks */,
+				C9DAB2DF1BF7A2ECADDBD2B1 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		5A02FF702917969B92A2F297 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				462703B5FF7B1FEFC73197AC /* SwiftUI.framework */,
+				E0D0F0AE102BD5BF58265DA9 /* WidgetKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		7ADAE093FAE209A8E3B656C9 /* LittleTideTests */ = {
+			isa = PBXGroup;
+			children = (
+				2565CCCFC59709528000AE71 /* PlaceholderTests.swift */,
+			);
+			path = LittleTideTests;
+			sourceTree = "<group>";
+		};
+		974901593545C476E8C988F2 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				A41B2D0EEC2171CBAFB59E76 /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		B641F17B47F7E1C459445F18 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				DFC1D50F113B933782701AA2 /* LittleTideApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		C9DAB2DF1BF7A2ECADDBD2B1 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				906FF05D5E1D43DFE38E4ABB /* LittleTide.app */,
+				8EB89EC598FC9A157984C9ED /* LittleTideTests.xctest */,
+				E60764D31E9897466D089E02 /* LittleTideUITests.xctest */,
+				E11BF5665788FDD2EA4D9496 /* LittleTideWidgets.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		EE5EB97EF9B248939D34DE67 /* Features */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		05D064695D7E8BE2670D5696 /* LittleTideTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F3FD360D56B2B09800C6ABEA /* Build configuration list for PBXNativeTarget "LittleTideTests" */;
+			buildPhases = (
+				223E31F4E145A9688CD76FC4 /* Sources */,
+				8C0CF294B7C598A3FD283FE2 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B67DAF23C720AE4500ADD82E /* PBXTargetDependency */,
+			);
+			name = LittleTideTests;
+			packageProductDependencies = (
+				4D343236A9ECF0445EE7F303 /* TideKit */,
+			);
+			productName = LittleTideTests;
+			productReference = 8EB89EC598FC9A157984C9ED /* LittleTideTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		167F2E5ABEFB23B693F08542 /* LittleTideWidgets */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B20761D9303EF374F3031CD3 /* Build configuration list for PBXNativeTarget "LittleTideWidgets" */;
+			buildPhases = (
+				F52088292DD2D5E9141471F7 /* Sources */,
+				652D8A1E0A91F28F0ECBF6F9 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = LittleTideWidgets;
+			packageProductDependencies = (
+				8F574E89CF3D3A6DB2E23B4C /* TideKit */,
+				0F164D24BC91245A94D6BC52 /* TideUI */,
+			);
+			productName = LittleTideWidgets;
+			productReference = E11BF5665788FDD2EA4D9496 /* LittleTideWidgets.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		4FC5BD3978483D26287A5E96 /* LittleTide */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A394228B6298C06D36D29F2A /* Build configuration list for PBXNativeTarget "LittleTide" */;
+			buildPhases = (
+				61ABEBA006E0BE7BC1F5F199 /* Sources */,
+				EDEAC36E2AB8E37D3374DA26 /* Resources */,
+				B455CA879C5837BC92C73AC5 /* Frameworks */,
+				4D1ACD138DF8097E7ADBAE00 /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				8B2C69E2DF704BD38D64DAF4 /* PBXTargetDependency */,
+			);
+			name = LittleTide;
+			packageProductDependencies = (
+				DF0F47FF7F2866B769F6338C /* TideKit */,
+				98324160B45E4E1918FCC844 /* TideUI */,
+			);
+			productName = LittleTide;
+			productReference = 906FF05D5E1D43DFE38E4ABB /* LittleTide.app */;
+			productType = "com.apple.product-type.application";
+		};
+		6B10A4DF27383C0E6D70916C /* LittleTideUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B7DDC9AC2E33BA717A182F87 /* Build configuration list for PBXNativeTarget "LittleTideUITests" */;
+			buildPhases = (
+				7B435311D8C7525452C75459 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				728A8E9EC832FB0F3A81185F /* PBXTargetDependency */,
+			);
+			name = LittleTideUITests;
+			packageProductDependencies = (
+			);
+			productName = LittleTideUITests;
+			productReference = E60764D31E9897466D089E02 /* LittleTideUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		C9C3BA1A05516765FC4A4E33 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 2660;
+				TargetAttributes = {
+					05D064695D7E8BE2670D5696 = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Automatic;
+					};
+					167F2E5ABEFB23B693F08542 = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Automatic;
+					};
+					4FC5BD3978483D26287A5E96 = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Automatic;
+					};
+					6B10A4DF27383C0E6D70916C = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Automatic;
+						TestTargetID = 4FC5BD3978483D26287A5E96;
+					};
+				};
+			};
+			buildConfigurationList = DA0BDD1F0503B00A09614630 /* Build configuration list for PBXProject "LittleTide" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 4FA83114D7991D02DAD76599;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				F5FBC514A2A03333E5325CEB /* XCLocalSwiftPackageReference "Packages/TideKit" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = C9DAB2DF1BF7A2ECADDBD2B1 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				4FC5BD3978483D26287A5E96 /* LittleTide */,
+				167F2E5ABEFB23B693F08542 /* LittleTideWidgets */,
+				05D064695D7E8BE2670D5696 /* LittleTideTests */,
+				6B10A4DF27383C0E6D70916C /* LittleTideUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		EDEAC36E2AB8E37D3374DA26 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F2139C79791FC53ADC0EC83F /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		223E31F4E145A9688CD76FC4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0F3B8C48A428E1EC4A651332 /* PlaceholderTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		61ABEBA006E0BE7BC1F5F199 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1674595B5E33AA2A5EA85D85 /* LittleTideApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7B435311D8C7525452C75459 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D323C01FF6FAEFAA14DF1A42 /* PlaceholderUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F52088292DD2D5E9141471F7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1799966B80F02213754BFDAB /* LittleTideWidgetBundle.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		728A8E9EC832FB0F3A81185F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4FC5BD3978483D26287A5E96 /* LittleTide */;
+			targetProxy = 951281F4714E4A882228FF32 /* PBXContainerItemProxy */;
+		};
+		8B2C69E2DF704BD38D64DAF4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 167F2E5ABEFB23B693F08542 /* LittleTideWidgets */;
+			targetProxy = 04F8A8681881A8477518812C /* PBXContainerItemProxy */;
+		};
+		B67DAF23C720AE4500ADD82E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4FC5BD3978483D26287A5E96 /* LittleTide */;
+			targetProxy = B8A8C0710384EB5549C53828 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		256A7C52B61B711D99C230F3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = LittleTideWidgets/LittleTideWidgets.entitlements;
+				INFOPLIST_FILE = LittleTideWidgets/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = app.littletide.LittleTide.Widgets;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		5625BA6DE0D0E2C0BAAD766B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = app.littletide.LittleTideUITests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = LittleTide;
+			};
+			name = Debug;
+		};
+		7ADD3D93856B6E87DE6F8E45 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphonesimulator*]" = "-";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		8A742CB573DF8B00F1D8EFC2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = app.littletide.LittleTideTests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LittleTide.app/LittleTide";
+			};
+			name = Release;
+		};
+		A8C7514B7F7103E4E9971062 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = app.littletide.LittleTideTests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LittleTide.app/LittleTide";
+			};
+			name = Debug;
+		};
+		AE62865AD462B400608B40C2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = LittleTideWidgets/LittleTideWidgets.entitlements;
+				INFOPLIST_FILE = LittleTideWidgets/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = app.littletide.LittleTide.Widgets;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		B82E8999F64AAC075CAFA821 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = LittleTide/LittleTide.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = LittleTide/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = app.littletide.LittleTide;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		D0CCDC50A0D0B9E3D85F0810 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = LittleTide/LittleTide.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = LittleTide/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = app.littletide.LittleTide;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		E77F5D3F7FFFE19E2BC1BF87 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphonesimulator*]" = "-";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = "";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+		F05CA4B643BC2B85B642278E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = app.littletide.LittleTideUITests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = LittleTide;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A394228B6298C06D36D29F2A /* Build configuration list for PBXNativeTarget "LittleTide" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D0CCDC50A0D0B9E3D85F0810 /* Debug */,
+				B82E8999F64AAC075CAFA821 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		B20761D9303EF374F3031CD3 /* Build configuration list for PBXNativeTarget "LittleTideWidgets" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				256A7C52B61B711D99C230F3 /* Debug */,
+				AE62865AD462B400608B40C2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		B7DDC9AC2E33BA717A182F87 /* Build configuration list for PBXNativeTarget "LittleTideUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5625BA6DE0D0E2C0BAAD766B /* Debug */,
+				F05CA4B643BC2B85B642278E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		DA0BDD1F0503B00A09614630 /* Build configuration list for PBXProject "LittleTide" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7ADD3D93856B6E87DE6F8E45 /* Debug */,
+				E77F5D3F7FFFE19E2BC1BF87 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		F3FD360D56B2B09800C6ABEA /* Build configuration list for PBXNativeTarget "LittleTideTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A8C7514B7F7103E4E9971062 /* Debug */,
+				8A742CB573DF8B00F1D8EFC2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		F5FBC514A2A03333E5325CEB /* XCLocalSwiftPackageReference "Packages/TideKit" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/TideKit;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		0F164D24BC91245A94D6BC52 /* TideUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = TideUI;
+		};
+		4D343236A9ECF0445EE7F303 /* TideKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = TideKit;
+		};
+		8F574E89CF3D3A6DB2E23B4C /* TideKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = TideKit;
+		};
+		98324160B45E4E1918FCC844 /* TideUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = TideUI;
+		};
+		DF0F47FF7F2866B769F6338C /* TideKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = TideKit;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = C9C3BA1A05516765FC4A4E33 /* Project object */;
+}
