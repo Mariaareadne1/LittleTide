@@ -34,8 +34,11 @@ information on the glass.
   considered and not used: no verified app-embedding licence (`TYPOGRAPHY.md`).
 - Styles (`TideUI/Typography.swift`): `brand`, `heroLocation`, `heroTideTime`,
   `sectionHeading`, `eventTitle`, `body`, `bodyEmphasis`, `data` (tabular), `label`,
-  `regionLabel` (tracked caps), `metadata`, `chartLabel`, widget styles. Serif styles scale
-  through `UIFontMetrics` with matching optical size.
+  `regionLabel`, `metadata`, `chartLabel`, widget styles. Serif styles scale through
+  `UIFontMetrics` with matching optical size.
+- Sentence case everywhere, no tracked capitals and no italic for emphasis. Weights stay at
+  regular and medium; semibold only for button labels and small SF Symbols. Short labels,
+  captions and headlines end without a period.
 - Hierarchy on the hero: region label → place (serif) → card: direction and source →
   "High at 1:04 PM" (serif) → countdown, height, zone → freshness when relevant.
 - Large text: rows and the readout reflow with `ViewThatFits`; the hero grows rather than

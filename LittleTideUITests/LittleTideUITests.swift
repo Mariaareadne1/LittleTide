@@ -32,7 +32,7 @@ final class LittleTideUITests: XCTestCase {
 
     func testFirstLaunchSearchAndChooseCoast() {
         let app = launch("onboarding")
-        XCTAssertTrue(app.staticTexts["A little window into your coast."].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.staticTexts["A little window into your coast"].waitForExistence(timeout: 5))
         snapshot(app, "01-onboarding")
         app.buttons["chooseCoast"].tap()
 

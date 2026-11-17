@@ -132,7 +132,7 @@ public struct MediumCoastCard: View {
                 VStack(alignment: .leading, spacing: 5) {
                     Text(station.displayName.title).typeStyle(.widgetPlace).foregroundStyle(colors.ink).lineLimit(2)
                     Text("Forecast unavailable").typeStyle(.widgetHeroMedium).foregroundStyle(colors.ink).minimumScaleFactor(0.6).lineLimit(1)
-                    Text("Open Little Tide to get new predictions from NOAA.").typeStyle(.widgetSecondary).foregroundStyle(colors.soft)
+                    Text("Open Little Tide to get new predictions from NOAA").typeStyle(.widgetSecondary).foregroundStyle(colors.soft)
                 }
                 Spacer(minLength: 0)
                 if rendering == .monochrome { LineArt(station: station, level: 0.5).frame(width: 110) }
@@ -182,7 +182,7 @@ public struct MediumCoastCard: View {
     }
 }
 
-/// "LOW TIDE ↘": the event kind with the direction, when defensible.
+/// "Low tide ↘": the event kind with the direction, when defensible.
 private struct EventKindLine: View {
     let ready: CoastWidgetContent.Ready
     let colors: CardColors
@@ -220,7 +220,7 @@ private struct UnconfiguredCard: View {
             TideMark().frame(width: 26, height: 26)
             Spacer(minLength: 0)
             Text("Little Tide").typeStyle(.widgetHeroMedium).foregroundStyle(CardColors(rendering: rendering).ink)
-            Text("Open the app to choose your coast.").typeStyle(.widgetSecondary).foregroundStyle(CardColors(rendering: rendering).soft)
+            Text("Open the app to choose your coast").typeStyle(.widgetSecondary).foregroundStyle(CardColors(rendering: rendering).soft)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .accessibilityElement(children: .combine)

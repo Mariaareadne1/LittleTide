@@ -64,7 +64,7 @@ public struct GlassButtonStyle: ButtonStyle {
     public func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .glassSurface(Capsule(), interactive: true)
-            .scaleEffect(configuration.isPressed && !reduceMotion ? 0.95 : 1)
+            .scaleEffect(configuration.isPressed && !reduceMotion ? 0.97 : 1)
             .animation(reduceMotion ? nil : .easeOut(duration: 0.18), value: configuration.isPressed)
     }
 }

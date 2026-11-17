@@ -151,12 +151,18 @@ struct TideStudyView: View {
             context.draw(resolved, at: CGPoint(x: backing.midX, y: backing.midY))
         }
 
+        // Vertical markers pass behind the event labels instead of striking through them.
+        var markers = context
+        var open = Path(CGRect(x: rect.minX - 8, y: rect.minY - 24, width: rect.width + 16, height: rect.height + 32))
+        placedLabels.forEach { open.addRect($0.insetBy(dx: -1, dy: -1)) }
+        markers.clip(to: open, style: FillStyle(eoFill: true))
+
         if window.contains(now) {
             let x = geometry.x(for: now)
             var line = Path()
             line.move(to: CGPoint(x: x, y: rect.minY))
             line.addLine(to: CGPoint(x: x, y: rect.maxY))
-            context.stroke(line, with: .color(Palette.onArt.opacity(0.6)), style: StrokeStyle(lineWidth: 1, dash: [2, 3]))
+            markers.stroke(line, with: .color(Palette.onArt.opacity(0.6)), style: StrokeStyle(lineWidth: 1, dash: [2, 3]))
         }
 
         if let selection, window.contains(selection) {
@@ -164,7 +170,7 @@ struct TideStudyView: View {
             var line = Path()
             line.move(to: CGPoint(x: x, y: rect.minY - 6))
             line.addLine(to: CGPoint(x: x, y: rect.maxY))
-            context.stroke(line, with: .color(Palette.coral), lineWidth: 1.5)
+            markers.stroke(line, with: .color(Palette.coral), lineWidth: 1.5)
             if let reading = TideEngine.height(at: selection, forecast: forecast) {
                 let y = geometry.y(for: reading.heightMeters)
                 let knob = Path(ellipseIn: CGRect(x: x - 5, y: y - 5, width: 10, height: 10))

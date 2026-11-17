@@ -35,7 +35,6 @@ public enum TypeStyle: CaseIterable, Sendable {
         var sansWeight: Font.Weight = .regular
         var tracking: CGFloat = 0
         var lineSpacing: CGFloat = 0
-        var uppercase = false
         var tabular = false
         /// Widgets render at fixed sizes; don't scale with Dynamic Type there.
         var scales = true
@@ -46,7 +45,7 @@ public enum TypeStyle: CaseIterable, Sendable {
         case .brand: return Spec(size: 27, textStyle: .title2, serifWeight: 420, tracking: -0.3)
         case .heroLocation: return Spec(size: 40, textStyle: .largeTitle, serifWeight: 360, tracking: -0.8, lineSpacing: -2)
         case .heroTideTime: return Spec(size: 33, textStyle: .title, serifWeight: 430, tracking: -0.5, tabular: true)
-        case .sectionHeading: return Spec(size: 25, textStyle: .title2, serifWeight: 380, italic: true, tracking: -0.3)
+        case .sectionHeading: return Spec(size: 25, textStyle: .title2, serifWeight: 400, tracking: -0.3)
         case .eventTitle: return Spec(size: 20, textStyle: .title3, serifWeight: 420)
         case .placeTitleCompact: return Spec(size: 19, textStyle: .headline, serifWeight: 420)
         case .widgetHeroSmall: return Spec(size: 27, textStyle: .title, serifWeight: 460, tracking: -0.4, tabular: true, scales: false)
@@ -55,12 +54,12 @@ public enum TypeStyle: CaseIterable, Sendable {
         case .body: return Spec(size: 15, textStyle: .subheadline, lineSpacing: 2)
         case .bodyEmphasis: return Spec(size: 15, textStyle: .subheadline, sansWeight: .semibold)
         case .data: return Spec(size: 16, textStyle: .callout, sansWeight: .medium, tabular: true)
-        case .label: return Spec(size: 13, textStyle: .footnote, sansWeight: .semibold, tracking: 0.2)
-        case .regionLabel: return Spec(size: 12, textStyle: .caption, sansWeight: .semibold, tracking: 1.4, uppercase: true)
+        case .label: return Spec(size: 13, textStyle: .footnote, sansWeight: .medium)
+        case .regionLabel: return Spec(size: 13, textStyle: .footnote, sansWeight: .medium)
         case .metadata: return Spec(size: 12, textStyle: .caption, tabular: true)
         case .chartLabel: return Spec(size: 11, textStyle: .caption2, sansWeight: .medium, tabular: true)
         case .widgetSecondary: return Spec(size: 12, textStyle: .caption, sansWeight: .medium, tabular: true, scales: false)
-        case .widgetMicro: return Spec(size: 10, textStyle: .caption2, sansWeight: .semibold, tracking: 0.8, uppercase: true, scales: false)
+        case .widgetMicro: return Spec(size: 11, textStyle: .caption2, sansWeight: .medium, scales: false)
         }
     }
 
@@ -119,12 +118,11 @@ private struct TypeStyleModifier: ViewModifier {
             .font(style.font(for: dynamicType))
             .tracking(spec.tracking)
             .lineSpacing(spec.lineSpacing)
-            .textCase(spec.uppercase ? .uppercase : nil)
     }
 }
 
 extension View {
-    /// Applies a semantic Little Tide text style (font, tracking, leading, case).
+    /// Applies a semantic Little Tide text style (font, tracking, leading).
     public func typeStyle(_ style: TypeStyle) -> some View {
         modifier(TypeStyleModifier(style: style))
     }
@@ -170,15 +168,3 @@ extension UIFont.TextStyle {
     }
 }
 #endif
-
-/// Legacy names kept so existing call sites compile while migrating to `TypeStyle`.
-public enum Typography {
-    public static var placeTitle: Font { TypeStyle.heroLocation.font() }
-    public static var sectionTitle: Font { TypeStyle.sectionHeading.font() }
-    public static var eventTime: Font { TypeStyle.heroTideTime.font() }
-    public static var dataValue: Font { TypeStyle.data.font() }
-    public static var body: Font { TypeStyle.body.font() }
-    public static var caption: Font { .system(.footnote) }
-    public static var label: Font { TypeStyle.label.font() }
-    public static let labelTracking: CGFloat = 1.1
-}

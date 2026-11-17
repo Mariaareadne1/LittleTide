@@ -99,7 +99,7 @@ struct CoastReadyView: View {
             .dynamicTypeSize(...DynamicTypeSize.xLarge)
 
             HStack(alignment: .center, spacing: 12) {
-                Text(forecast.hasCurve ? "Drag across the day to explore NOAA’s predicted tide." : "This station publishes high and low times only. Drag to step between them.")
+                Text(forecast.hasCurve ? "Drag across the day to explore NOAA’s predicted tide" : "This station publishes high and low times only. Drag to step between them.")
                     .typeStyle(.metadata)
                     .foregroundStyle(Palette.onArtSoft)
                     .fixedSize(horizontal: false, vertical: true)
@@ -234,7 +234,7 @@ private struct DayPager: View {
                 .disabled(!canGoForward)
                 .accessibilityLabel("Next day")
         }
-        .font(.system(size: 14, weight: .semibold))
+        .font(.system(size: 14, weight: .medium))
         .foregroundStyle(Palette.onArt)
         .liquidGlass(cornerRadius: 999, kind: .button)
     }

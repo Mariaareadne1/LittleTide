@@ -61,7 +61,7 @@ struct OnboardingView: View {
 
     private var card: some View {
         VStack(alignment: .leading, spacing: 14) {
-            Text("A little window into your coast.")
+            Text("A little window into your coast")
                 .typeStyle(.heroLocation)
                 .foregroundStyle(Palette.onArt)
                 .fixedSize(horizontal: false, vertical: true)
@@ -81,7 +81,7 @@ struct OnboardingView: View {
             .foregroundStyle(Palette.oceanDeep)
             .padding(.top, 6)
             .accessibilityIdentifier("chooseCoast")
-            Text("No account or location needed.")
+            Text("No account or location needed")
                 .typeStyle(.metadata)
                 .foregroundStyle(Palette.onArtSoft)
                 .frame(maxWidth: .infinity)

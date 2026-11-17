@@ -73,3 +73,13 @@ colliding chart labels, a truncated coast-window caption.
 ## Incident
 `5e13248` was pushed with a failing accessibility audit (a capped caption flagged as
 partial Dynamic Type support). Fixed in `df61dfe`; the final full run above is green.
+
+## Type and copy polish (2026-11-17, unslop pass)
+Sentence case replaces tracked capitals, the section heading is roman, small symbols drop from
+bold to semibold, short lines lose their periods, chart markers pass behind event labels, and
+the glass press scale eases to 0.97. Unused `EditorialLabel` and legacy `Typography` removed.
+- `swift test` (Packages/TideKit): 89 passed.
+- Full app suite on "LittleTide QA 17 Pro": TEST SUCCEEDED, 0 failures, 4 opt-in UI tests skipped.
+- `LittleTideUITests` on "LittleTide QA 17 Pro Max": 11/11 passed; App Store screenshots in
+  `AppStore/6.9in/` re-captured from that run.
+- Not re-run: iPhone SE suite, Home Screen widget QA, live NOAA comparison, perf probe.

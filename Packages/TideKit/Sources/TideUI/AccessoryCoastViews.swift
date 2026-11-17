@@ -60,9 +60,9 @@ public struct AccessoryCoastView: View {
                 .accessibilityLabel(ready.accessibilityLabel)
             } else {
                 VStack(spacing: 0) {
-                    Image(systemName: AccessoryText.symbol(for: ready)).font(.caption.weight(.bold))
+                    Image(systemName: AccessoryText.symbol(for: ready)).font(.caption.weight(.semibold))
                     Text(AccessoryText.shortTime(ready.nextTime)).font(.system(.headline, design: .rounded)).minimumScaleFactor(0.6)
-                    Text(ready.nextKindWord.uppercased()).font(.system(size: 9, weight: .semibold))
+                    Text(ready.nextKindWord).font(.system(size: 10, weight: .medium))
                 }
                 .accessibilityElement(children: .ignore)
                 .accessibilityLabel(ready.accessibilityLabel)

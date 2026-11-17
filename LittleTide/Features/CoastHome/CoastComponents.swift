@@ -85,7 +85,7 @@ struct TrendBadge: View {
     var body: some View {
         HStack(spacing: 5) {
             Image(systemName: trend == .rising ? "arrow.up.right" : "arrow.down.right")
-                .font(.system(size: 12, weight: .bold))
+                .font(.system(size: 12, weight: .semibold))
                 .foregroundStyle(Palette.onArt)
             Text(trend == .rising ? "Rising tide" : "Falling tide")
                 .typeStyle(.label)
@@ -111,7 +111,7 @@ struct DayEventsList: View {
                 .padding(.bottom, 6)
                 .accessibilityAddTraits(.isHeader)
             if events.isEmpty {
-                Text("No predicted highs or lows on this day.")
+                Text("No predicted highs or lows on this day")
                     .typeStyle(.body).foregroundStyle(Palette.onArtSoft)
             }
             ForEach(events, id: \.date) { event in

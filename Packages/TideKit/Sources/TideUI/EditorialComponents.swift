@@ -1,20 +1,5 @@
 import SwiftUI
 
-/// Small uppercase editorial label, e.g. "PREDICTED TIDE · NOAA".
-public struct EditorialLabel: View {
-    let text: String
-
-    public init(_ text: String) { self.text = text }
-
-    public var body: some View {
-        Text(text)
-            .font(Typography.label)
-            .tracking(Typography.labelTracking)
-            .textCase(.uppercase)
-            .foregroundStyle(Palette.inkSoft)
-    }
-}
-
 /// A hairline rule in the sand colour.
 public struct Hairline: View {
     public init() {}

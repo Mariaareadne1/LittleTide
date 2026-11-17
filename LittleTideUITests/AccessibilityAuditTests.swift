@@ -52,8 +52,8 @@ final class AccessibilityAuditTests: XCTestCase {
         // Rows that reflow via ViewThatFits swap views as text grows, and the wordmark's
         // growth is capped on purpose; both verified at Accessibility sizes in screenshots.
         if issue.auditType == .dynamicType, let label = issue.element?.label,
-           ["Little Tide", "The tide today", "NOW", "Now", "Rising", "Falling",
-            "Rising tide", "Falling tide", "Predicted tide", "PREDICTED · NOAA", "High tide", "Low tide"].contains(label)
+           ["Little Tide", "The tide today", "Now", "Rising", "Falling",
+            "Rising tide", "Falling tide", "Predicted tide", "Predicted · NOAA", "High tide", "Low tide"].contains(label)
             || label.hasSuffix("AM") || label.hasSuffix("PM") || label.hasSuffix(" ft") || label.hasSuffix(" m") {
             return true
         }

@@ -112,7 +112,7 @@ struct CoastHero<Card: View>: View {
             .accessibilityLabel("Change coast")
             .accessibilityIdentifier("changeCoast")
             Button(action: actions.openSettings) {
-                Image(systemName: "ellipsis").font(.system(size: 17, weight: .bold)).frame(width: 44, height: 44)
+                Image(systemName: "ellipsis").font(.system(size: 17, weight: .semibold)).frame(width: 44, height: 44)
             }
             .buttonStyle(LiquidGlassButtonStyle())
             .accessibilityLabel("Settings")
