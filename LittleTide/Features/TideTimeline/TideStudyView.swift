@@ -126,7 +126,7 @@ struct TideStudyView: View {
             context.fill(dot, with: .color(Palette.oceanDeep))
             context.stroke(dot, with: .color(Palette.onArt), lineWidth: 1.5)
             let label = Text(event.kind == .high ? "H \(format.time(event.date))" : "L \(format.time(event.date))")
-                .font(TypeStyle.chartLabel.font(for: dynamicType))
+                .font(TypeStyle.chartLabel.font(for: min(dynamicType, .xLarge)))
                 .foregroundStyle(Palette.onArt)
             let resolved = context.resolve(label)
             let labelSize = resolved.measure(in: CGSize(width: 200, height: 40))
@@ -205,7 +205,7 @@ struct TideStudyView: View {
             mark.addLine(to: CGPoint(x: x, y: rect.maxY + (hour % 6 == 0 ? 5 : 3)))
             context.stroke(mark, with: .color(Palette.onArt.opacity(0.5)), lineWidth: 0.75)
             if hour % 6 == 0 {
-                let label = Text(hourLabel(tick)).font(TypeStyle.chartLabel.font(for: dynamicType)).foregroundStyle(Palette.onArtSoft)
+                let label = Text(hourLabel(tick)).font(TypeStyle.chartLabel.font(for: min(dynamicType, .xLarge))).foregroundStyle(Palette.onArtSoft)
                 let isFirst = x <= rect.minX + 1
                 context.draw(label, at: CGPoint(x: x, y: rect.maxY + 14), anchor: isFirst ? .leading : .center)
             }

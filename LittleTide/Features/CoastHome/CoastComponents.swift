@@ -32,21 +32,24 @@ struct NowSummaryView: View {
     var body: some View {
         let moment = TideMoment(forecast: forecast, instant: now)
         VStack(alignment: .leading, spacing: 8) {
-            HStack(spacing: 8) {
-                if moment.trend != .unknown {
-                    TrendBadge(trend: moment.trend)
-                } else {
-                    Text("Predicted tide").typeStyle(.label).foregroundStyle(Palette.onArt)
+            ViewThatFits(in: .horizontal) {
+                HStack(spacing: 8) {
+                    direction(moment)
+                    Spacer(minLength: 8)
+                    sourceTag
                 }
-                Spacer(minLength: 8)
-                Text("Predicted · NOAA").typeStyle(.regionLabel).foregroundStyle(Palette.onArtSoft)
+                VStack(alignment: .leading, spacing: 4) {
+                    direction(moment)
+                    sourceTag
+                }
             }
             if let next = moment.nextEvent {
                 Text(format.eventHeadline(next))
                     .typeStyle(.heroTideTime)
                     .foregroundStyle(Palette.onArt)
-                    .lineLimit(2)
+                    .lineLimit(3)
                     .minimumScaleFactor(0.8)
+                    .fixedSize(horizontal: false, vertical: true)
                     .contentTransition(.numericText())
                     .accessibilityLabel(format.eventAccessibilityLabel(next))
                 Text("Next \(next.kind == .high ? "high" : "low") \(format.countdown(from: now, to: next.date)) · \(format.height(next.heightMeters)) · \(format.zoneAbbreviation(at: next.date))")
@@ -60,6 +63,19 @@ struct NowSummaryView: View {
         // One element, read in order: direction, next event, countdown.
         .accessibilityElement(children: .combine)
         .accessibilityIdentifier("nowSummary")
+    }
+
+    @ViewBuilder
+    private func direction(_ moment: TideMoment) -> some View {
+        if moment.trend != .unknown {
+            TrendBadge(trend: moment.trend)
+        } else {
+            Text("Predicted tide").typeStyle(.label).foregroundStyle(Palette.onArt)
+        }
+    }
+
+    private var sourceTag: some View {
+        Text("Predicted · NOAA").typeStyle(.regionLabel).foregroundStyle(Palette.onArtSoft)
     }
 }
 
@@ -100,22 +116,23 @@ struct DayEventsList: View {
             }
             ForEach(events, id: \.date) { event in
                 Button { select(event) } label: {
-                    HStack(spacing: 12) {
-                        Image(systemName: event.kind == .high ? "arrow.up.to.line" : "arrow.down.to.line")
-                            .font(.footnote)
-                            .foregroundStyle(Palette.onArtSoft)
-                            .frame(width: 20)
-                        Text(event.kind == .high ? "High tide" : "Low tide")
-                            .typeStyle(.eventTitle)
-                            .foregroundStyle(Palette.onArt)
-                        Spacer(minLength: 8)
-                        Text(format.time(event.date))
-                            .typeStyle(.data)
-                            .foregroundStyle(Palette.onArt)
-                        Text(format.height(event.heightMeters))
-                            .typeStyle(.data)
-                            .foregroundStyle(Palette.onArtSoft)
-                            .frame(minWidth: 62, alignment: .trailing)
+                    ViewThatFits(in: .horizontal) {
+                        HStack(spacing: 12) {
+                            icon(event)
+                            title(event)
+                            Spacer(minLength: 8)
+                            time(event)
+                            height(event).frame(minWidth: 62, alignment: .trailing)
+                        }
+                        // Accessibility sizes: title on one line, time and height on the next.
+                        VStack(alignment: .leading, spacing: 4) {
+                            HStack(spacing: 12) { icon(event); title(event) }
+                            HStack {
+                                time(event)
+                                Spacer(minLength: 8)
+                                height(event)
+                            }
+                        }
                     }
                     .padding(.vertical, 12)
                     .contentShape(.rect)
@@ -131,6 +148,25 @@ struct DayEventsList: View {
                 if event != events.last { Rectangle().fill(Palette.onArt.opacity(0.18)).frame(height: 0.5) }
             }
         }
+    }
+
+    private func icon(_ event: TideEvent) -> some View {
+        Image(systemName: event.kind == .high ? "arrow.up.to.line" : "arrow.down.to.line")
+            .font(.footnote)
+            .foregroundStyle(Palette.onArtSoft)
+            .frame(width: 20)
+    }
+
+    private func title(_ event: TideEvent) -> some View {
+        Text(event.kind == .high ? "High tide" : "Low tide").typeStyle(.eventTitle).foregroundStyle(Palette.onArt)
+    }
+
+    private func time(_ event: TideEvent) -> some View {
+        Text(format.time(event.date)).typeStyle(.data).foregroundStyle(Palette.onArt).lineLimit(1)
+    }
+
+    private func height(_ event: TideEvent) -> some View {
+        Text(format.height(event.heightMeters)).typeStyle(.data).foregroundStyle(Palette.onArtSoft).lineLimit(1)
     }
 }
 

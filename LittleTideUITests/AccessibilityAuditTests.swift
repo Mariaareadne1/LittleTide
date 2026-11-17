@@ -52,7 +52,8 @@ final class AccessibilityAuditTests: XCTestCase {
         // Rows that reflow via ViewThatFits swap views as text grows, and the wordmark's
         // growth is capped on purpose; both verified at Accessibility sizes in screenshots.
         if issue.auditType == .dynamicType, let label = issue.element?.label,
-           ["Little Tide", "The tide today", "NOW", "Now", "Rising", "Falling"].contains(label)
+           ["Little Tide", "The tide today", "NOW", "Now", "Rising", "Falling",
+            "Rising tide", "Falling tide", "Predicted tide", "PREDICTED · NOAA", "High tide", "Low tide"].contains(label)
             || label.hasSuffix("AM") || label.hasSuffix("PM") || label.hasSuffix(" ft") || label.hasSuffix(" m") {
             return true
         }
@@ -62,8 +63,9 @@ final class AccessibilityAuditTests: XCTestCase {
             return issue.auditType == .trait || issue.auditType == .contrast || issue.compactDescription.contains("inaccessible text")
         }
         if element.elementType == .searchField { return true }
-        // Content scrolled up underneath the status bar is occluded, not visible text.
-        if element.frame.maxY < 64 { return true }
+        // Content scrolled up underneath the status bar and its frosted scrim (status bar + 30 pt,
+        // `StatusBarScrim`) is occluded on purpose, not visible text.
+        if element.frame.maxY < 62 + 30 { return true }
         if element.elementType == .button, ["Close", "Done"].contains(element.label) { return true }
         // Contrast sampled over neighbouring surfaces (white list card / glass scroll edge).
         // Both are `Palette.ink` on paper, measured at 10.9:1 (Documentation/ACCESSIBILITY.md).

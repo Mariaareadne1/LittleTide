@@ -46,7 +46,8 @@ final class LittleTideUITests: XCTestCase {
         XCTAssertTrue(app.staticTexts["No station matches “zzqx beach”"].waitForExistence(timeout: 5))
         snapshot(app, "03-search-no-match")
 
-        search.buttons["Clear text"].tap()
+        // Delete rather than tap the clear button, which is easy to miss on small screens.
+        search.typeText(String(repeating: XCUIKeyboardKey.delete.rawValue, count: "zzqx beach".count))
         search.typeText("santa monica")
         let row = app.buttons["station-9410840"]
         XCTAssertTrue(row.waitForExistence(timeout: 5))
@@ -77,6 +78,19 @@ final class LittleTideUITests: XCTestCase {
         snapshot(app, "05-search-your-coasts")
         recent.tap()
         XCTAssertTrue(element(app, containing: "High tide at 1:04").waitForExistence(timeout: 5))
+    }
+
+    func testLargestAccessibilityTextKeepsTheTideReadable() {
+        let app = launch("curve", ["-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXL"])
+        let summary = byID(app, "nowSummary")
+        XCTAssertTrue(summary.waitForExistence(timeout: 5))
+        XCTAssertTrue(summary.label.contains("High tide at 1:04"), summary.label)
+        snapshot(app, "60-ax-xxl-home")
+        app.swipeUp()
+        XCTAssertTrue(byID(app, "selectionReadout").waitForExistence(timeout: 5))
+        snapshot(app, "61-ax-xxl-details")
+        app.swipeUp()
+        snapshot(app, "62-ax-xxl-events")
     }
 
     func testCurveScrubAndReturnToNow() {

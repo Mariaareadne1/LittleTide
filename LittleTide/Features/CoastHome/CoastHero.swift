@@ -30,24 +30,30 @@ struct CoastHero<Card: View>: View {
     }
 
     var body: some View {
-        ZStack(alignment: .bottom) {
-            art
-                .frame(width: layout.width, height: layout.height)
+        // At least one screen tall; taller when large accessibility text needs the room, so the
+        // tide card is never squeezed into truncation.
+        content
+            .frame(width: layout.width)
+            .frame(minHeight: layout.height, alignment: .bottom)
+            .overlay(alignment: .top) {
+                header
+                    .padding(.top, layout.topInset + 6)
+                    .padding(.horizontal, 20)
+            }
+            .background {
+                ZStack {
+                    art
+                        .animation(reduceMotion ? nil : .easeInOut(duration: 0.6), value: level)
+                    if paintedScene == nil { fallbackScrims }
+                }
                 .clipped()
-                .animation(reduceMotion ? nil : .easeInOut(duration: 0.6), value: level)
-            if paintedScene == nil { fallbackScrims }
-
-            content
-        }
-        .frame(width: layout.width, height: layout.height)
-        .glassStage("heroGlass") { panels = $0 }
+            }
+            .glassStage("heroGlass") { panels = $0 }
     }
 
+    /// Place, card and scroll hint, bottom-aligned; the header floats above them.
     private var content: some View {
         VStack(alignment: .leading, spacing: 0) {
-            header
-                .padding(.top, layout.topInset + 6)
-            Spacer(minLength: 24)
             identity
             card
                 .padding(.top, 16)
@@ -56,6 +62,8 @@ struct CoastHero<Card: View>: View {
                 .padding(.bottom, 14)
         }
         .padding(.horizontal, 20)
+        // Room for the floating header (44 pt controls) plus breathing space.
+        .padding(.top, layout.topInset + 6 + 44 + 24)
     }
 
     private var fallbackScrims: some View {

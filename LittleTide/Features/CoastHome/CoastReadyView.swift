@@ -94,6 +94,9 @@ struct CoastReadyView: View {
                 isHapticsEnabled: model.isHapticsEnabled, selection: $selection,
                 fill: PaintedScene(region: CoastRegion(station: station))?.chartFill
             )
+            // Axis and event labels stop growing at xLarge so they never collide; the readout
+            // above carries the same facts at full size, and VoiceOver reads the chart's value.
+            .dynamicTypeSize(...DynamicTypeSize.xLarge)
 
             HStack(alignment: .center, spacing: 12) {
                 Text(forecast.hasCurve ? "Drag across the day to explore NOAA’s predicted tide." : "This station publishes high and low times only. Drag to step between them.")
@@ -184,6 +187,8 @@ private struct CoastWindow: View {
             Text(hasHeight ? "Illustrative waterline" : "No published height at this time")
                 .typeStyle(.metadata)
                 .foregroundStyle(Palette.onArt)
+                .lineLimit(2)
+                .dynamicTypeSize(...DynamicTypeSize.accessibility1)
                 .padding(.horizontal, 10).padding(.vertical, 4)
                 .background(Palette.oceanDeep.opacity(0.78), in: .capsule)
                 .padding(10)
@@ -254,6 +259,14 @@ private struct SelectionReadout: View {
                 HStack(alignment: .firstTextBaseline, spacing: 10) { lead(readout); Spacer(minLength: 4); heightText(readout) }
                 Text(readout.detail).typeStyle(.label).foregroundStyle(Palette.onArtSoft)
             }
+            // Accessibility sizes: one fact per line, nothing fixed-width.
+            VStack(alignment: .leading, spacing: 4) {
+                Text(isNow ? "Now" : readout.day).typeStyle(.regionLabel).foregroundStyle(isNow ? Palette.onArtSoft : Palette.coral)
+                Text(readout.time).typeStyle(.data).foregroundStyle(Palette.onArt)
+                if let height = readout.height { Text(height).typeStyle(.data).foregroundStyle(Palette.onArt) }
+                Text(readout.detail).typeStyle(.label).foregroundStyle(Palette.onArtSoft)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
         .padding(.vertical, 12)
         .contentShape(.rect)

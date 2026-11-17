@@ -62,8 +62,13 @@ Documented exclusions:
 - Remaining exclusions:
   - Dynamic Type reports on `ViewThatFits` rows and the capped wordmark.
   - Element-less contrast reports from the system sheet's glass navigation chrome.
-  - Contrast reports for text less than half on screen: under the status bar, or past the
-    bottom edge after the audit scrolls. Those elements have no pixels to measure.
+  - Contrast reports for text less than half on screen: under the status bar and its
+    frosted scrim (status bar + 30 pt), or past the bottom edge after the audit scrolls.
+    Those elements are intentionally occluded or have no pixels to measure.
+  - Dynamic Type reports on the tide card header ("Rising tide", "Predicted · NOAA") and the
+    highs-and-lows rows ("High tide", "Low tide"), which reflow from one row to two with
+    `ViewThatFits`; verified growing at AX-XXL on iPhone 17
+    Pro and iPhone SE (`Design/refinement/r6-accessibility-xxl.jpg`).
 
 ## Painted scenes and shader glass (2026-11-17)
 - White type over painted water sits on deep-teal shader glass, with scrims and a
