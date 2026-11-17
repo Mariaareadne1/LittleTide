@@ -187,13 +187,13 @@ private struct CoastWindow: View {
             Text(hasHeight ? "Illustrative waterline" : "No published height at this time")
                 .typeStyle(.metadata)
                 .foregroundStyle(Palette.onArt)
-                .lineLimit(2)
-                .dynamicTypeSize(...DynamicTypeSize.accessibility1)
+                .fixedSize(horizontal: false, vertical: true)
                 .padding(.horizontal, 10).padding(.vertical, 4)
                 .background(Palette.oceanDeep.opacity(0.78), in: .capsule)
                 .padding(10)
         }
-        .frame(height: 112)
+        // Grows with large text so the caption is never cut.
+        .frame(minHeight: 112)
         .clipShape(.rect(cornerRadius: 22))
         .overlay { RoundedRectangle(cornerRadius: 22).strokeBorder(Palette.onArt.opacity(0.28), lineWidth: 1) }
         .accessibilityElement(children: .ignore)
