@@ -28,7 +28,7 @@ struct SettingsView: View {
                     Toggle("Haptics at highs and lows", isOn: $model.isHapticsEnabled)
                 }
                 Section {
-                    NavigationLink("Add a home-screen widget") { WidgetGuideView() }
+                    NavigationLink("Add a widget") { WidgetGuideView() }
                 }
                 Section("Data") {
                     Button {
@@ -91,12 +91,19 @@ struct WidgetGuideView: View {
                 .accessibilityElement(children: .contain)
                 .accessibilityLabel("Preview of the small and medium widgets with your current coast.")
             }
+            Section("On the Lock Screen") {
+                let now = model.clock.now()
+                let content = CoastWidgetContent(date: now, station: model.station, forecast: model.forecastState.forecast, unit: model.unit)
+                LockScreenPreview(content: content)
+                    .listRowBackground(Color.clear)
+            }
             Section {
                 Text("Little Tide can’t add widgets for you, but it only takes a moment:")
                 Label("Touch and hold an empty area of your Home Screen until the apps jiggle.", systemImage: "1.circle")
                 Label("Tap Edit in the top corner, then Add Widget.", systemImage: "2.circle")
                 Label("Search for Little Tide and choose the small or medium size.", systemImage: "3.circle")
                 Label("Tap Add Widget, then Done.", systemImage: "4.circle")
+                Text("For the Lock Screen, touch and hold it, tap Customize, choose Lock Screen, then tap the widget area and pick Little Tide.")
             }
             Section {
                 Text("Widgets show your chosen coast. They update from saved predictions through the day; iOS decides exactly when they refresh, so open the app if the widget asks you to.")
@@ -104,6 +111,35 @@ struct WidgetGuideView: View {
             }
         }
         .navigationTitle("Add a widget")
+    }
+}
+
+/// The three Lock Screen faces as the system draws them: monochrome white on the wallpaper.
+private struct LockScreenPreview: View {
+    let content: CoastWidgetContent
+
+    var body: some View {
+        VStack(spacing: 14) {
+            AccessoryCoastView(content: content, face: .inline)
+                .font(.subheadline.weight(.semibold))
+                .lineLimit(1)
+            HStack(spacing: 14) {
+                AccessoryCoastView(content: content, face: .circular)
+                    .frame(width: 66, height: 66)
+                    .background(.white.opacity(0.16), in: .circle)
+                AccessoryCoastView(content: content, face: .rectangular)
+                    .frame(width: 172, height: 66, alignment: .leading)
+                    .padding(.horizontal, 6)
+            }
+        }
+        .foregroundStyle(.white)
+        .padding(.vertical, 18)
+        .frame(maxWidth: .infinity)
+        .background(LinearGradient(colors: [Palette.oceanMid, Palette.oceanDeep], startPoint: .top, endPoint: .bottom),
+                    in: .rect(cornerRadius: 22, style: .continuous))
+        .environment(\.colorScheme, .dark)
+        .accessibilityElement(children: .contain)
+        .accessibilityLabel("Preview of the Lock Screen widgets with your current coast.")
     }
 }
 

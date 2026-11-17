@@ -160,6 +160,19 @@ final class LittleTideUITests: XCTestCase {
         snapshot(app, "33-loading")
     }
 
+    func testWidgetGuideShowsHomeAndLockScreenFaces() {
+        let app = launch("curve")
+        XCTAssertTrue(element(app, containing: "High tide at 1:04").waitForExistence(timeout: 5))
+        app.buttons["settings"].tap()
+        let guide = app.buttons["Add a widget"]
+        XCTAssertTrue(guide.waitForExistence(timeout: 5))
+        guide.tap()
+        XCTAssertTrue(app.staticTexts["On the Lock Screen"].waitForExistence(timeout: 5) || app.otherElements["On the Lock Screen"].exists)
+        let lockScreen = app.otherElements["Preview of the Lock Screen widgets with your current coast."]
+        if lockScreen.exists, !lockScreen.isHittable { app.swipeUp(velocity: .slow) }
+        snapshot(app, "42-widget-guide")
+    }
+
     func testUnitsAndSourceSheet() {
         let app = launch("curve")
         XCTAssertTrue(element(app, containing: "High tide at 1:04").waitForExistence(timeout: 5))

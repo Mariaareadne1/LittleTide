@@ -23,7 +23,7 @@ struct CoastWidget: Widget {
         }
         .configurationDisplayName("Little Tide")
         .description("The next predicted high or low at your coast, from NOAA.")
-        .supportedFamilies([.systemSmall, .systemMedium])
+        .supportedFamilies([.systemSmall, .systemMedium, .accessoryInline, .accessoryCircular, .accessoryRectangular])
     }
 }
 
@@ -82,8 +82,27 @@ struct CoastWidgetEntryView: View {
     @Environment(\.widgetRenderingMode) private var renderingMode
 
     var body: some View {
+        switch family {
+        case .accessoryInline, .accessoryCircular, .accessoryRectangular:
+            accessory
+        default:
+            system
+        }
+    }
+
+    private var accessory: some View {
+        let face: AccessoryFace = family == .accessoryInline ? .inline : family == .accessoryCircular ? .circular : .rectangular
+        return AccessoryCoastView(content: entry.content, face: face)
+            .redacted(reason: entry.isPlaceholder ? .placeholder : [])
+            .containerBackground(for: .widget) {
+                if family == .accessoryCircular { AccessoryWidgetBackground() } else { Color.clear }
+            }
+            .widgetURL(url)
+    }
+
+    private var system: some View {
         let rendering: CoastCardRendering = renderingMode == .fullColor ? .fullColor : .monochrome
-        Group {
+        return Group {
             switch family {
             case .systemMedium:
                 MediumCoastCard(content: entry.content, rendering: rendering)
