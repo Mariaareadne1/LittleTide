@@ -91,6 +91,8 @@ final class LittleTideUITests: XCTestCase {
         let readout = byID(app, "selectionReadout")
         let before = readout.label
         XCTAssertTrue(before.hasPrefix("Now, 10:20"), before)
+        let window = byID(app, "coastWindow")
+        XCTAssertEqual(window.value as? String, "Water near the day's high") // 3.8 ft, day range 0.8–4.1 ft
 
         // Drag from early morning to ~9 PM (the evening low).
         let start = study.coordinate(withNormalizedOffset: CGVector(dx: 0.1, dy: 0.5))
@@ -100,6 +102,8 @@ final class LittleTideUITests: XCTestCase {
         XCTAssertNotEqual(after, before)
         XCTAssertTrue(after.contains("PM"), after)
         XCTAssertTrue(after.contains("predicted height"), after)
+        // The painted waterline follows the same selected instant (the evening low).
+        XCTAssertEqual(window.value as? String, "Water near the day's low")
         snapshot(app, "11-home-scrubbed")
 
         // Lifting the finger keeps the preview; Now resets it.

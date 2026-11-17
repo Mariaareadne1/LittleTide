@@ -82,6 +82,13 @@ struct CoastReadyView: View {
 
             SelectionReadout(forecast: forecast, instant: displayed, isNow: selection == nil, format: format)
 
+            // The same painted shore, cropped to the waterline, follows the scrubbed time so the
+            // tide visibly moves while the hero is scrolled away.
+            if let scene = PaintedScene(region: CoastRegion(station: station)) {
+                CoastWindow(scene: scene, level: waterLevel, hasHeight: TideEngine.height(at: displayed, forecast: forecast) != nil,
+                            isAnimating: layout.areDetailsVisible)
+            }
+
             TideStudyView(
                 forecast: forecast, window: window, now: now, format: format,
                 isHapticsEnabled: model.isHapticsEnabled, selection: $selection,
@@ -159,6 +166,44 @@ struct CoastReadyView: View {
         } else {
             let events = TideEngine.events(in: window, from: forecast.events)
             selection = forecast.hasCurve ? window.start.addingTimeInterval(window.duration / 2) : events.first?.date
+        }
+    }
+}
+
+/// A wide crop of the painted coast at the selected instant's predicted level.
+private struct CoastWindow: View {
+    let scene: PaintedScene
+    let level: Double
+    let hasHeight: Bool
+    let isAnimating: Bool
+
+    var body: some View {
+        ZStack(alignment: .bottomLeading) {
+            PaintedCoastView(scene: scene, level: level, isAnimating: isAnimating)
+                .accessibilityHidden(true)
+            Text(hasHeight ? "Illustrative waterline" : "No published height at this time")
+                .typeStyle(.metadata)
+                .foregroundStyle(Palette.onArt)
+                .padding(.horizontal, 10).padding(.vertical, 4)
+                .background(Palette.oceanDeep.opacity(0.78), in: .capsule)
+                .padding(10)
+        }
+        .frame(height: 112)
+        .clipShape(.rect(cornerRadius: 22))
+        .overlay { RoundedRectangle(cornerRadius: 22).strokeBorder(Palette.onArt.opacity(0.28), lineWidth: 1) }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("Illustration of a representative shoreline at the selected time's predicted level. Not a live view.")
+        .accessibilityValue(spokenLevel)
+        .accessibilityIdentifier("coastWindow")
+    }
+
+    /// Where the water sits within the day's predicted range, in words.
+    private var spokenLevel: String {
+        guard hasHeight else { return "No published height" }
+        switch level {
+        case ..<0.34: return "Water near the day's low"
+        case 0.67...: return "Water near the day's high"
+        default: return "Water midway through the day's range"
         }
     }
 }
