@@ -108,7 +108,9 @@ exists. Shipping a paywall without them would be inert. See `Documentation/APP_S
   line art in tinted/clear; app reloads widget timelines on launch. Verified on the real
   Home Screen in light/dark/tinted/clear.
 - Accessibility audits now measure real pixel contrast for flagged elements (all 7.4–10.9:1).
-- Regression: 95 tests — 92 passed, 0 failed, 3 skipped (opt-in).
+- Regression: 95 tests — 92 passed, 0 failed, 3 skipped (opt-in). Final run after polish
+  identical; Release archive 0 warnings (fonts + OFL in app and widget); live NOAA 20/20.
+- Polish: status-bar scrim fades in with scroll; Reduce Transparency verified.
 
 ## Blockers needing the owner
 See `Documentation/APP_STORE.md` → "Owner-only steps". In short:

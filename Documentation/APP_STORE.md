@@ -64,13 +64,14 @@ content. Expected **4+**.
 ## Screenshots
 Use **real** captures from the real app, at 6.9" (1320×2868) and 6.1" sizes. Workflow:
 `Tools/shoot.sh <sim> curve out.png`, or run the `LittleTideUITests` attachments.
-Candidates in `Documentation/Screenshots/`:
-1. Home: Santa Monica with the curve (`app/10-home-curve.png`)
-2. Scrubbing to the evening low (`app/11-home-scrubbed.png`)
-3. Widgets on the Home Screen, light (`widgets/home-light.png`)
-4. Widgets in tinted mode (`widgets/home-tinted.png`)
-5. A high/low-only station (`app/20-home-highlow.png`)
-6. Search and featured coasts (`app/02-search-featured.png`)
+Current-design candidates in `Documentation/Design/`. The older `Screenshots/` set predates
+the redesign.
+1. Home, live NOAA data: Chatham Harbor, Point Reyes, La Jolla (`after/home-*.png`)
+2. Scrubbing to the evening low (`after/11-home-scrubbed.png`)
+3. Widgets on the Home Screen, light and dark (`widgets/home-screen-light.png`, `-dark.png`)
+4. Widgets in tinted and clear modes (`widgets/home-screen-tinted.png`, `-clear.png`)
+5. A high/low-only station (`after/21-highlow-snapped.png`)
+6. Onboarding (`after/01-onboarding.png`)
 
 Demo-mode screenshots use real NOAA predictions captured on 15–18 Nov 2026 with a fixed
 clock. The caption should say "NOAA predictions". Never describe them as a "live beach camera".

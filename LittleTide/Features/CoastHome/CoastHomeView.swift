@@ -11,6 +11,7 @@ struct CoastHomeView: View {
     @State private var isChoosingCoast = false
     @State private var isShowingSettings = false
     @State private var isShowingSource = false
+    @State private var scrollOffset: CGFloat = 0
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
@@ -20,13 +21,21 @@ struct CoastHomeView: View {
                 ScrollView {
                     content(now: now, layout: HomeLayout(width: proxy.size.width, topInset: proxy.safeAreaInsets.top))
                         .padding(.bottom, 36)
+                        .background(alignment: .top) {
+                            GeometryReader { inner in
+                                Color.clear.preference(key: ScrollOffsetKey.self, value: inner.frame(in: .named("homeScroll")).minY)
+                            }
+                        }
                 }
+                .coordinateSpace(name: "homeScroll")
+                .onPreferenceChange(ScrollOffsetKey.self) { scrollOffset = $0 }
                 .ignoresSafeArea(edges: .top)
                 .refreshable { await model.refreshAndWait() }
             }
         }
         .background(Palette.paper.ignoresSafeArea())
-        .overlay(alignment: .top) { StatusBarScrim() }
+        // Invisible over the sky at rest; settles in as content scrolls under the status bar.
+        .overlay(alignment: .top) { StatusBarScrim().opacity(min(max(-scrollOffset / 160, 0), 1)) }
         .animation(reduceMotion ? nil : .easeInOut(duration: 0.35), value: model.station?.id)
         .onChange(of: model.stationGeneration) { _, _ in
             selection = nil
@@ -79,4 +88,9 @@ extension AppModel {
         refresh(manual: true)
         while isRefreshing { try? await Task.sleep(for: .milliseconds(100)) }
     }
+}
+
+private struct ScrollOffsetKey: PreferenceKey {
+    static let defaultValue: CGFloat = 0
+    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) { value = nextValue() }
 }

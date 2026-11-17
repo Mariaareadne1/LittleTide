@@ -132,10 +132,13 @@ struct TideCard<Content: View>: View {
 struct StatusBarScrim: View {
     var body: some View {
         GeometryReader { proxy in
-            Rectangle()
-                .fill(.ultraThinMaterial)
-                .mask(LinearGradient(colors: [.black, .black.opacity(0)], startPoint: .top, endPoint: .bottom))
-                .frame(height: proxy.safeAreaInsets.top + 10)
+            ZStack {
+                Rectangle().fill(.ultraThinMaterial)
+                Palette.paper.opacity(0.8)
+            }
+            .mask(LinearGradient(stops: [.init(color: .black, location: 0), .init(color: .black, location: 0.7), .init(color: .clear, location: 1)],
+                                 startPoint: .top, endPoint: .bottom))
+            .frame(height: proxy.safeAreaInsets.top + 18)
                 .ignoresSafeArea(edges: .top)
         }
         .allowsHitTesting(false)

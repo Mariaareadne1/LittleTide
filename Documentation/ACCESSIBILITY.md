@@ -42,6 +42,27 @@ Documented exclusions:
 - Two contrast reports on `Palette.ink` text, "Featured coasts" and "Rising". The auditor
   sampled over neighbouring surfaces, and the measured ratio is 10.9:1.
 
+## After the typography and glass redesign (2026-11-16)
+- Text on painted art or glass is always full `ink`, never `inkSoft`. The tide card and
+  onboarding card use a milky, paper-tinted glass, and the region label sits on its own
+  glass pill.
+- Reduce Transparency: every glass surface becomes opaque paper with a sand hairline.
+  Verified on the simulator (`Documentation/Design/after/reduce-transparency.png`).
+- Reduce Motion: the waterline, button-press and station-change animations are disabled.
+- Dynamic Type:
+  - SF styles use native text styles.
+  - Serif styles are built through `UIFontMetrics.scaledFont`, with an optical size
+    matched to the scaled size.
+  - Rows reflow with `ViewThatFits` at large sizes.
+  - The wordmark and header controls cap at xxxLarge so content keeps the room.
+- The audit's contrast sampler misreads text over painted and glass backgrounds. The test
+  now **measures each flagged element's rendered pixels** (darkest 3 % against the 60th
+  percentile) and fails anything under 4.5:1. Measured: wordmark 8.8:1, region pill
+  10.9:1, onboarding title 10.5:1, onboarding body 10.6:1.
+- Remaining exclusions:
+  - Dynamic Type reports on `ViewThatFits` rows and the capped wordmark.
+  - Element-less contrast reports from the system sheet's glass navigation chrome.
+
 ## Not yet verified
 On-device VoiceOver, haptics and Switch Control. The simulator has no haptics, and VoiceOver
 was checked through the accessibility tree rather than by listening.
