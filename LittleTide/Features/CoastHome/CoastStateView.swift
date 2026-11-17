@@ -19,11 +19,8 @@ struct CoastStateView: View {
     var chooseAnother: (() -> Void)?
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            CoastHero(station: station, level: 0.5, topInset: layout.topInset, width: layout.width, actions: actions)
-                .saturation(isLoading ? 0.55 : 0.85)
+        CoastHero(station: station, level: 0.5, layout: layout, actions: actions) {
             TideCard { message }
-                .padding(.top, -150)
         }
     }
 
@@ -35,23 +32,23 @@ struct CoastStateView: View {
                 HStack(spacing: 12) {
                     ProgressView()
                     Text("Retrieving predictions from NOAA…")
-                        .typeStyle(.body).foregroundStyle(Palette.ink)
+                        .typeStyle(.body).foregroundStyle(Palette.onArt)
                 }
                 .accessibilityElement(children: .combine)
                 .accessibilityIdentifier("loadingState")
             case let .failed(error):
                 Text("Predictions unavailable")
-                    .typeStyle(.eventTitle).foregroundStyle(Palette.ink)
+                    .typeStyle(.eventTitle).foregroundStyle(Palette.onArt)
                     .accessibilityAddTraits(.isHeader)
                 Text(error.userMessage)
-                    .typeStyle(.body).foregroundStyle(Palette.inkSoft)
+                    .typeStyle(.body).foregroundStyle(Palette.onArtSoft)
                     .accessibilityIdentifier("errorMessage")
             case let .expired(lastUpdated, format):
                 Text("Forecast unavailable")
-                    .typeStyle(.eventTitle).foregroundStyle(Palette.ink)
+                    .typeStyle(.eventTitle).foregroundStyle(Palette.onArt)
                     .accessibilityAddTraits(.isHeader)
                 Text("The saved predictions (retrieved \(format.day(lastUpdated))) no longer cover the current time. Connect to the internet to get new predictions from NOAA.")
-                    .typeStyle(.body).foregroundStyle(Palette.inkSoft)
+                    .typeStyle(.body).foregroundStyle(Palette.onArtSoft)
                     .fixedSize(horizontal: false, vertical: true)
                     .accessibilityIdentifier("expiredMessage")
             }
@@ -73,15 +70,16 @@ struct CoastStateView: View {
             }
             .buttonStyle(.borderedProminent)
             .buttonBorderShape(.capsule)
-            .tint(Palette.ink)
+            .tint(.white)
+            .foregroundStyle(Palette.oceanDeep)
             .accessibilityIdentifier("retryButton")
         }
         if let chooseAnother {
             Button(action: chooseAnother) {
                 Text("Choose another coast").typeStyle(.bodyEmphasis).padding(.horizontal, 18).frame(minHeight: 44)
             }
-            .buttonStyle(GlassButtonStyle())
-            .foregroundStyle(Palette.ink)
+            .buttonStyle(OceanGlassButtonStyle())
+            .foregroundStyle(Palette.onArt)
         }
     }
 

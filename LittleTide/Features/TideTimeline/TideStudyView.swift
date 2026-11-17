@@ -11,6 +11,8 @@ struct TideStudyView: View {
     let format: TideFormat
     let isHapticsEnabled: Bool
     @Binding var selection: Date?
+    /// Painted water used to fill under NOAA's curve (decorative texture only).
+    var fill: Image? = nil
 
     @State private var hapticTick = 0
     @Environment(\.dynamicTypeSize) private var dynamicType
@@ -94,11 +96,18 @@ struct TideStudyView: View {
         plot.clip(to: Path(CGRect(x: rect.minX, y: 0, width: rect.width, height: rect.maxY + 1)))
         if forecast.hasCurve {
             let area = Path(geometry.areaPath(samples: forecast.samples))
-            plot.fill(area, with: .linearGradient(
-                Gradient(colors: [Palette.seaGlass.opacity(0.32), Palette.seaGlass.opacity(0.06)]),
-                startPoint: CGPoint(x: 0, y: rect.minY), endPoint: CGPoint(x: 0, y: rect.maxY)
-            ))
-            plot.stroke(Path(geometry.curvePath(samples: forecast.samples)), with: .color(Palette.seaGlassDeep), lineWidth: 1.5)
+            if let fill {
+                var painted = plot
+                painted.clip(to: area)
+                let image = painted.resolve(fill)
+                painted.draw(image, in: CGRect(x: rect.minX, y: rect.minY, width: rect.width, height: rect.height + 20))
+                painted.fill(area, with: .linearGradient(Gradient(colors: [.white.opacity(0.18), .clear]),
+                                                         startPoint: CGPoint(x: 0, y: rect.minY), endPoint: CGPoint(x: 0, y: rect.maxY)))
+            } else {
+                plot.fill(area, with: .linearGradient(Gradient(colors: [Palette.onArt.opacity(0.3), Palette.onArt.opacity(0.05)]),
+                                                      startPoint: CGPoint(x: 0, y: rect.minY), endPoint: CGPoint(x: 0, y: rect.maxY)))
+            }
+            plot.stroke(Path(geometry.curvePath(samples: forecast.samples)), with: .color(Palette.onArt), lineWidth: 2)
         } else {
             // Event stems only: nothing is drawn between predictions NOAA does not publish.
             for event in dayEvents {
@@ -106,7 +115,7 @@ struct TideStudyView: View {
                 var stem = Path()
                 stem.move(to: CGPoint(x: p.x, y: rect.maxY))
                 stem.addLine(to: p)
-                context.stroke(stem, with: .color(Palette.seaGlass), lineWidth: 2)
+                context.stroke(stem, with: .color(Palette.onArt.opacity(0.75)), lineWidth: 2)
             }
         }
 
@@ -114,11 +123,11 @@ struct TideStudyView: View {
         for event in dayEvents {
             let p = geometry.point(event)
             let dot = Path(ellipseIn: CGRect(x: p.x - 3.5, y: p.y - 3.5, width: 7, height: 7))
-            context.fill(dot, with: .color(Palette.paper))
-            context.stroke(dot, with: .color(Palette.seaGlassDeep), lineWidth: 1.5)
+            context.fill(dot, with: .color(Palette.oceanDeep))
+            context.stroke(dot, with: .color(Palette.onArt), lineWidth: 1.5)
             let label = Text(event.kind == .high ? "H \(format.time(event.date))" : "L \(format.time(event.date))")
                 .font(TypeStyle.chartLabel.font(for: dynamicType))
-                .foregroundStyle(Palette.inkSoft)
+                .foregroundStyle(Palette.onArt)
             let resolved = context.resolve(label)
             let labelSize = resolved.measure(in: CGSize(width: 200, height: 40))
             let gap: CGFloat = 6 + labelSize.height / 2
@@ -138,7 +147,7 @@ struct TideStudyView: View {
                 backing = flipped
             }
             placedLabels.append(backing)
-            context.fill(Path(roundedRect: backing, cornerRadius: 3), with: .color(Palette.paper.opacity(0.85)))
+            context.fill(Path(roundedRect: backing, cornerRadius: 4), with: .color(Palette.oceanDeep.opacity(0.72)))
             context.draw(resolved, at: CGPoint(x: backing.midX, y: backing.midY))
         }
 
@@ -147,7 +156,7 @@ struct TideStudyView: View {
             var line = Path()
             line.move(to: CGPoint(x: x, y: rect.minY))
             line.addLine(to: CGPoint(x: x, y: rect.maxY))
-            context.stroke(line, with: .color(Palette.inkSoft.opacity(0.7)), style: StrokeStyle(lineWidth: 1, dash: [2, 3]))
+            context.stroke(line, with: .color(Palette.onArt.opacity(0.6)), style: StrokeStyle(lineWidth: 1, dash: [2, 3]))
         }
 
         if let selection, window.contains(selection) {
@@ -155,12 +164,12 @@ struct TideStudyView: View {
             var line = Path()
             line.move(to: CGPoint(x: x, y: rect.minY - 6))
             line.addLine(to: CGPoint(x: x, y: rect.maxY))
-            context.stroke(line, with: .color(Palette.rust), lineWidth: 1.5)
+            context.stroke(line, with: .color(Palette.coral), lineWidth: 1.5)
             if let reading = TideEngine.height(at: selection, forecast: forecast) {
                 let y = geometry.y(for: reading.heightMeters)
                 let knob = Path(ellipseIn: CGRect(x: x - 5, y: y - 5, width: 10, height: 10))
-                context.fill(knob, with: .color(Palette.rust))
-                context.stroke(knob, with: .color(Palette.paper), lineWidth: 1.5)
+                context.fill(knob, with: .color(Palette.coral))
+                context.stroke(knob, with: .color(.white), lineWidth: 1.5)
             }
         }
     }
@@ -170,7 +179,7 @@ struct TideStudyView: View {
         var baseline = Path()
         baseline.move(to: CGPoint(x: rect.minX, y: rect.maxY))
         baseline.addLine(to: CGPoint(x: rect.maxX, y: rect.maxY))
-        context.stroke(baseline, with: .color(Palette.sand), lineWidth: 1)
+        context.stroke(baseline, with: .color(Palette.onArt.opacity(0.35)), lineWidth: 1)
 
         // Datum (0) line, when the day's range reaches it.
         if geometry.heightRange.contains(0) {
@@ -178,9 +187,9 @@ struct TideStudyView: View {
             var datum = Path()
             datum.move(to: CGPoint(x: rect.minX, y: y))
             datum.addLine(to: CGPoint(x: rect.maxX, y: y))
-            context.stroke(datum, with: .color(Palette.sand), style: StrokeStyle(lineWidth: 0.75, dash: [1, 3]))
+            context.stroke(datum, with: .color(Palette.onArt.opacity(0.35)), style: StrokeStyle(lineWidth: 0.75, dash: [1, 3]))
             context.draw(
-                Text("0 \(format.unit.symbol) \(forecast.datum)").font(TypeStyle.chartLabel.font(for: .large)).foregroundStyle(Palette.inkSoft),
+                Text("0 \(format.unit.symbol) \(forecast.datum)").font(TypeStyle.chartLabel.font(for: .large)).foregroundStyle(Palette.onArtSoft),
                 at: CGPoint(x: rect.minX + 2, y: y - 7), anchor: .leading
             )
         }
@@ -194,9 +203,9 @@ struct TideStudyView: View {
             var mark = Path()
             mark.move(to: CGPoint(x: x, y: rect.maxY))
             mark.addLine(to: CGPoint(x: x, y: rect.maxY + (hour % 6 == 0 ? 5 : 3)))
-            context.stroke(mark, with: .color(Palette.inkSoft.opacity(0.6)), lineWidth: 0.75)
+            context.stroke(mark, with: .color(Palette.onArt.opacity(0.5)), lineWidth: 0.75)
             if hour % 6 == 0 {
-                let label = Text(hourLabel(tick)).font(TypeStyle.chartLabel.font(for: dynamicType)).foregroundStyle(Palette.inkSoft)
+                let label = Text(hourLabel(tick)).font(TypeStyle.chartLabel.font(for: dynamicType)).foregroundStyle(Palette.onArtSoft)
                 let isFirst = x <= rect.minX + 1
                 context.draw(label, at: CGPoint(x: x, y: rect.maxY + 14), anchor: isFirst ? .leading : .center)
             }

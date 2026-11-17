@@ -17,6 +17,19 @@ public enum Palette {
     public static let inkSoft = dynamic(light: 0x405255, dark: 0xBEC3BD)
     /// Driftwood sand. Beach band in the illustration, hairlines.
     public static let sand = dynamic(light: 0xCEBEA8, dark: 0x6E6253)
+    // MARK: Ocean theme (home screen and widgets sit on painted water)
+
+    /// Deep sea teal behind detail content and scrims.
+    public static let oceanDeep = Color(red: 0.047, green: 0.243, blue: 0.298)
+    /// Mid teal for gradients.
+    public static let oceanMid = Color(red: 0.075, green: 0.353, blue: 0.408)
+    /// Text on painted water or teal glass.
+    public static let onArt = Color.white
+    /// Secondary text on painted water or teal glass (≥ 4.5:1 on oceanDeep).
+    public static let onArtSoft = Color.white.opacity(0.82)
+    /// Selection marker on teal.
+    public static let coral = Color(red: 0.98, green: 0.69, blue: 0.53)
+
     /// Teal-black used for glass shadows.
     public static let glassShadow = dynamic(light: 0x0F3B47, dark: 0x000000)
     /// Light veil laid behind text that sits directly on the painted sky.

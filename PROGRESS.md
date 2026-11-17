@@ -112,6 +112,15 @@ exists. Shipping a paywall without them would be inert. See `Documentation/APP_S
   identical; Release archive 0 warnings (fonts + OFL in app and widget); live NOAA 20/20.
 - Polish: status-bar scrim fades in with scroll; Reduce Transparency verified.
 
+## Visual reconstruction (reference: aerial painterly coast + teal Liquid Glass)
+- `VISUAL_AUDIT.md`: file map, gap analysis, decision. The reference's "Nauset Beach
+  8449920" is not a NOAA station → Chatham 8447435 with verified editorial label
+  "Chatham / Cape Cod, MA" (`EditorialNames`).
+- Metal Toolchain (Apple, 687.9 MB) installed with the owner's approval to compile shaders.
+- M1 ✅ East Coast painted scene: ArtForge generator + Metal tide shader + full-screen
+  composition with real NOAA data. Functional tests pass (90/95; 3 opt-in skipped); the two
+  home accessibility audits fail only for regions still on the old illustration (fixed in M2).
+
 ## Blockers needing the owner
 See `Documentation/APP_STORE.md` → "Owner-only steps". In short:
 - Apple Developer team ID + signing → device install, signed archive, TestFlight.

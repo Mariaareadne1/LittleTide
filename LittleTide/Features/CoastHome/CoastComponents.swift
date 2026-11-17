@@ -8,10 +8,10 @@ struct FreshnessBanner: View {
     var body: some View {
         Label(text, systemImage: "clock.arrow.circlepath")
             .typeStyle(.label)
-            .foregroundStyle(Palette.ink)
+            .foregroundStyle(Palette.onArt)
             .padding(.horizontal, 14).padding(.vertical, 10)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .background(Palette.fog, in: .rect(cornerRadius: 14, style: .continuous))
+            .oceanGlass(cornerRadius: 16)
             .accessibilityIdentifier("freshnessBanner")
     }
 }
@@ -30,15 +30,15 @@ struct NowSummaryView: View {
                 if moment.trend != .unknown {
                     TrendBadge(trend: moment.trend)
                 } else {
-                    Text("Predicted tide").typeStyle(.label).foregroundStyle(Palette.ink)
+                    Text("Predicted tide").typeStyle(.label).foregroundStyle(Palette.onArt)
                 }
                 Spacer(minLength: 8)
-                Text("NOAA").typeStyle(.regionLabel).foregroundStyle(Palette.ink)
+                Text("Predicted · NOAA").typeStyle(.regionLabel).foregroundStyle(Palette.onArtSoft)
             }
             if let next = moment.nextEvent {
                 Text(format.eventHeadline(next))
                     .typeStyle(.heroTideTime)
-                    .foregroundStyle(Palette.ink)
+                    .foregroundStyle(Palette.onArt)
                     .lineLimit(2)
                     .minimumScaleFactor(0.8)
                     .contentTransition(.numericText())
@@ -46,7 +46,7 @@ struct NowSummaryView: View {
                 Text("Next \(next.kind == .high ? "high" : "low") \(format.countdown(from: now, to: next.date)) · \(format.height(next.heightMeters)) · \(format.zoneAbbreviation(at: next.date))")
                     .typeStyle(.body)
                     .monospacedDigit()
-                    .foregroundStyle(Palette.ink.opacity(0.85))
+                    .foregroundStyle(Palette.onArtSoft)
                     .contentTransition(.numericText())
                     .accessibilityLabel("Next \(next.kind == .high ? "high" : "low") tide \(format.countdown(from: now, to: next.date)), station time.")
             }
@@ -64,10 +64,10 @@ struct TrendBadge: View {
         HStack(spacing: 5) {
             Image(systemName: trend == .rising ? "arrow.up.right" : "arrow.down.right")
                 .font(.system(size: 12, weight: .bold))
-                .foregroundStyle(Palette.seaGlassDeep)
+                .foregroundStyle(Palette.onArt)
             Text(trend == .rising ? "Rising tide" : "Falling tide")
                 .typeStyle(.label)
-                .foregroundStyle(Palette.ink)
+                .foregroundStyle(Palette.onArt)
         }
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(trend == .rising ? "Tide rising" : "Tide falling")
@@ -85,44 +85,44 @@ struct DayEventsList: View {
         VStack(alignment: .leading, spacing: 0) {
             Text("Highs and lows")
                 .typeStyle(.regionLabel)
-                .foregroundStyle(Palette.inkSoft)
+                .foregroundStyle(Palette.onArtSoft)
                 .padding(.bottom, 6)
                 .accessibilityAddTraits(.isHeader)
             if events.isEmpty {
                 Text("No predicted highs or lows on this day.")
-                    .typeStyle(.body).foregroundStyle(Palette.inkSoft)
+                    .typeStyle(.body).foregroundStyle(Palette.onArtSoft)
             }
             ForEach(events, id: \.date) { event in
                 Button { select(event) } label: {
                     HStack(spacing: 12) {
                         Image(systemName: event.kind == .high ? "arrow.up.to.line" : "arrow.down.to.line")
                             .font(.footnote)
-                            .foregroundStyle(Palette.seaGlassDeep)
+                            .foregroundStyle(Palette.onArtSoft)
                             .frame(width: 20)
                         Text(event.kind == .high ? "High tide" : "Low tide")
                             .typeStyle(.eventTitle)
-                            .foregroundStyle(Palette.ink)
+                            .foregroundStyle(Palette.onArt)
                         Spacer(minLength: 8)
                         Text(format.time(event.date))
                             .typeStyle(.data)
-                            .foregroundStyle(Palette.ink)
+                            .foregroundStyle(Palette.onArt)
                         Text(format.height(event.heightMeters))
                             .typeStyle(.data)
-                            .foregroundStyle(Palette.inkSoft)
+                            .foregroundStyle(Palette.onArtSoft)
                             .frame(minWidth: 62, alignment: .trailing)
                     }
                     .padding(.vertical, 12)
                     .contentShape(.rect)
                     .background(alignment: .leading) {
                         if selection == event.date {
-                            Rectangle().fill(Palette.rust).frame(width: 2).offset(x: -10)
+                            Rectangle().fill(Palette.coral).frame(width: 2).offset(x: -10)
                         }
                     }
                 }
                 .buttonStyle(.plain)
                 .accessibilityLabel(format.eventAccessibilityLabel(event))
                 .accessibilityHint("Shows this prediction on the timeline.")
-                if event != events.last { Hairline() }
+                if event != events.last { Rectangle().fill(Palette.onArt.opacity(0.18)).frame(height: 0.5) }
             }
         }
     }
@@ -141,20 +141,20 @@ struct SourceFooter: View {
             VStack(alignment: .leading, spacing: 4) {
                 Text("Predicted tide · NOAA CO-OPS")
                     .typeStyle(.regionLabel)
-                    .foregroundStyle(Palette.inkSoft)
+                    .foregroundStyle(Palette.onArtSoft)
                 Text("Station \(station.id) · heights above \(forecast.datum) · times in \(format.zoneAbbreviation(at: now)) (station time)")
                     .typeStyle(.metadata)
-                    .foregroundStyle(Palette.inkSoft)
+                    .foregroundStyle(Palette.onArtSoft)
                     .fixedSize(horizontal: false, vertical: true)
                 Text("Retrieved \(format.day(forecast.fetchedAt)), \(format.time(forecast.fetchedAt))")
                     .typeStyle(.metadata)
-                    .foregroundStyle(Palette.inkSoft)
+                    .foregroundStyle(Palette.onArtSoft)
                 HStack(spacing: 4) {
                     Text("About this prediction")
                     Image(systemName: "info.circle")
                 }
                 .typeStyle(.label)
-                .foregroundStyle(Palette.seaGlassDeep)
+                .foregroundStyle(Palette.onArt)
                 .padding(.top, 6)
             }
             .frame(maxWidth: .infinity, alignment: .leading)

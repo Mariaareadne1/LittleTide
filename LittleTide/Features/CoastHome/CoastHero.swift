@@ -6,125 +6,167 @@ import TideUI
 struct HeroActions {
     let chooseCoast: () -> Void
     let openSettings: () -> Void
+    let openStationDetails: () -> Void
 }
 
-/// Layer A + B: the edge-to-edge painted coast with the station's identity set in its sky.
-/// The horizon follows the title, so long names never land on the water.
-struct CoastHero: View {
+/// The first screen: the painted coast fills the display; the place and the tide right now
+/// sit low over the water, as in a field guide plate.
+struct CoastHero<Card: View>: View {
     let station: TideStation
+    /// Normalised water level for the illustration (0 lowest … 1 highest in view).
     let level: Double
-    let topInset: CGFloat
-    let width: CGFloat
+    let layout: HomeLayout
     let actions: HeroActions
-    /// Extra painted space below the title for an overlapping card.
-    var bottomRoom: CGFloat = 250
+    @ViewBuilder let card: Card
 
-    @State private var titleBottom: CGFloat = 200
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
-    static let maximumHorizon: CGFloat = 0.6
-
-    /// Tall enough that the horizon always falls below the title.
-    private var height: CGFloat { max(width * 1.22, titleBottom + bottomRoom, (titleBottom + 44) / Self.maximumHorizon) }
-    private var horizon: CGFloat { min(max((titleBottom + 44) / height, 0.34), Self.maximumHorizon) }
-
     var body: some View {
-        ZStack(alignment: .topLeading) {
-            CoastArtView(region: CoastRegion(station: station), waterLevel: level, horizon: horizon)
-                .frame(width: width, height: height)
-                .animation(reduceMotion ? nil : .easeOut(duration: 0.4), value: level)
-                .accessibilitySortPriority(-1)
+        ZStack(alignment: .bottom) {
+            art
+                .frame(width: layout.width, height: layout.height)
+                .clipped()
+                .animation(reduceMotion ? nil : .easeInOut(duration: 0.6), value: level)
+            // Scrims keep white type legible over any part of the painting.
+            VStack(spacing: 0) {
+                LinearGradient(colors: [Palette.oceanDeep.opacity(0.75), Palette.oceanDeep.opacity(0)], startPoint: .top, endPoint: .bottom)
+                    .frame(height: layout.topInset + 130)
+                Spacer()
+                LinearGradient(stops: [.init(color: Palette.oceanMid.opacity(0), location: 0),
+                                       .init(color: Palette.oceanMid.opacity(0.55), location: 0.5),
+                                       .init(color: Palette.oceanDeep.opacity(0.78), location: 1)],
+                               startPoint: .top, endPoint: .bottom)
+                    .frame(height: layout.height * 0.5)
+            }
+            .allowsHitTesting(false)
+            .accessibilityHidden(true)
 
             VStack(alignment: .leading, spacing: 0) {
                 header
-                identity.padding(.top, 22)
+                    .padding(.top, layout.topInset + 6)
+                Spacer(minLength: 24)
+                identity
+                card
+                    .padding(.top, 16)
+                scrollHint
+                    .padding(.top, 18)
+                    .padding(.bottom, 14)
             }
             .padding(.horizontal, 20)
-            .padding(.top, topInset + 4)
-            .background(
-                GeometryReader { proxy in
-                    Color.clear.preference(key: TitleBottomKey.self, value: proxy.frame(in: .named("hero")).maxY)
-                }
-            )
         }
-        .frame(width: width, height: height, alignment: .top)
-        .overlay(alignment: .bottom) {
-            // Let the painted sand settle into the paper below rather than ending on a line.
-            LinearGradient(colors: [Palette.paper.opacity(0), Palette.paper], startPoint: .top, endPoint: .bottom)
-                .frame(height: 70)
-                .allowsHitTesting(false)
-                .accessibilityHidden(true)
+        .frame(width: layout.width, height: layout.height)
+    }
+
+    @ViewBuilder
+    private var art: some View {
+        if let scene = PaintedScene(region: CoastRegion(station: station)) {
+            PaintedCoastView(scene: scene, level: level)
+        } else {
+            // Regions without a painted scene yet keep the earlier illustration.
+            CoastArtView(region: CoastRegion(station: station), waterLevel: level, horizon: 0.45)
         }
-        .clipped()
-        .coordinateSpace(name: "hero")
-        .onPreferenceChange(TitleBottomKey.self) { titleBottom = $0 }
     }
 
     private var header: some View {
         HStack(spacing: 10) {
             TideMark().frame(width: 22, height: 22)
+                .colorMultiply(.white)
             Text("Little Tide")
                 .typeStyle(.brand)
-                .foregroundStyle(Palette.ink)
+                .foregroundStyle(Palette.onArt)
                 .accessibilityAddTraits(.isHeader)
             Spacer()
             Button(action: actions.chooseCoast) {
                 Image(systemName: "magnifyingglass").font(.system(size: 17, weight: .medium)).frame(width: 44, height: 44)
             }
-            .buttonStyle(GlassButtonStyle())
+            .buttonStyle(OceanGlassButtonStyle())
             .accessibilityLabel("Change coast")
             .accessibilityIdentifier("changeCoast")
             Button(action: actions.openSettings) {
-                Image(systemName: "gearshape").font(.system(size: 17, weight: .medium)).frame(width: 44, height: 44)
+                Image(systemName: "ellipsis").font(.system(size: 17, weight: .bold)).frame(width: 44, height: 44)
             }
-            .buttonStyle(GlassButtonStyle())
+            .buttonStyle(OceanGlassButtonStyle())
             .accessibilityLabel("Settings")
             .accessibilityIdentifier("settings")
         }
-        .foregroundStyle(Palette.ink)
-        // Chrome stays compact at accessibility sizes; content below scales fully.
+        .foregroundStyle(Palette.onArt)
         .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
     }
 
     private var identity: some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text(station.displayName.subtitle)
+            Text(station.headline.region)
                 .typeStyle(.regionLabel)
-                .foregroundStyle(Palette.ink)
+                .foregroundStyle(Palette.onArtSoft)
                 .lineLimit(2)
-                .padding(.horizontal, 10).padding(.vertical, 5)
-                .glassSurface(Capsule(), tint: Palette.paper.opacity(0.5))
-            Text(station.displayName.title)
-                .typeStyle(.heroLocation)
-                .foregroundStyle(Palette.ink)
-                .lineLimit(4)
-                .minimumScaleFactor(0.8)
-                .fixedSize(horizontal: false, vertical: true)
-                .accessibilityAddTraits(.isHeader)
+            Button(action: actions.openStationDetails) {
+                HStack(alignment: .firstTextBaseline, spacing: 10) {
+                    Text(station.headline.place)
+                        .typeStyle(.heroLocation)
+                        .foregroundStyle(Palette.onArt)
+                        .lineLimit(2)
+                        .minimumScaleFactor(0.75)
+                        .multilineTextAlignment(.leading)
+                    Image(systemName: "chevron.right")
+                        .font(.system(size: 20, weight: .medium))
+                        .foregroundStyle(Palette.onArtSoft)
+                }
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel("\(station.headline.place), \(station.headline.region)")
+            .accessibilityHint("Shows station \(station.id) details and data source.")
+            .accessibilityIdentifier("placeTitle")
         }
-        // A soft veil of sky keeps the type legible over any painted scene.
-        .shadow(color: Palette.skyVeil.opacity(0.7), radius: 14)
-        .accessibilityElement(children: .combine)
-        .accessibilityLabel("\(station.displayName.title), \(station.displayName.subtitle). Station \(station.id).")
+        .shadow(color: Palette.oceanDeep.opacity(0.45), radius: 12)
+    }
+
+    private var scrollHint: some View {
+        HStack(spacing: 6) {
+            Spacer()
+            Text("The tide today")
+            Image(systemName: "chevron.down")
+            Spacer()
+        }
+        .typeStyle(.label)
+        .foregroundStyle(Palette.onArtSoft)
+        .accessibilityHidden(true)
     }
 }
 
-private struct TitleBottomKey: PreferenceKey {
-    static let defaultValue: CGFloat = 200
-    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) { value = nextValue() }
+/// Teal-tinted glass for content on painted water: genuinely translucent, white type.
+struct OceanGlass: ViewModifier {
+    var cornerRadius: CGFloat = 28
+
+    func body(content: Content) -> some View {
+        content.glassSurface(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous), tint: Palette.oceanDeep.opacity(0.82))
+    }
 }
 
-/// Layer C: the floating glass card with the tide right now.
+struct OceanGlassButtonStyle: ButtonStyle {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .glassSurface(Capsule(), interactive: true, tint: Palette.oceanDeep.opacity(0.7))
+            .scaleEffect(configuration.isPressed && !reduceMotion ? 0.94 : 1)
+            .animation(reduceMotion ? nil : .easeOut(duration: 0.18), value: configuration.isPressed)
+    }
+}
+
+extension View {
+    func oceanGlass(cornerRadius: CGFloat = 28) -> some View { modifier(OceanGlass(cornerRadius: cornerRadius)) }
+}
+
+/// The tide right now, as a compact glass card.
 struct TideCard<Content: View>: View {
     @ViewBuilder let content: Content
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) { content }
             .padding(.horizontal, 22)
-            .padding(.vertical, 20)
+            .padding(.vertical, 18)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .glassSurface(RoundedRectangle(cornerRadius: 30, style: .continuous), tint: Palette.paper.opacity(0.55))
-            .padding(.horizontal, 14)
+            .oceanGlass(cornerRadius: 30)
     }
 }
 
@@ -134,12 +176,12 @@ struct StatusBarScrim: View {
         GeometryReader { proxy in
             ZStack {
                 Rectangle().fill(.ultraThinMaterial)
-                Palette.paper.opacity(0.8)
+                Palette.oceanDeep.opacity(0.7)
             }
             .mask(LinearGradient(stops: [.init(color: .black, location: 0), .init(color: .black, location: 0.7), .init(color: .clear, location: 1)],
                                  startPoint: .top, endPoint: .bottom))
             .frame(height: proxy.safeAreaInsets.top + 18)
-                .ignoresSafeArea(edges: .top)
+            .ignoresSafeArea(edges: .top)
         }
         .allowsHitTesting(false)
         .accessibilityHidden(true)

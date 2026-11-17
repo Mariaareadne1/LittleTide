@@ -59,8 +59,8 @@ final class AccessibilityAuditTests: XCTestCase {
         return false
     }
 
-    /// Estimates WCAG contrast from the rendered pixels in `frame`: darkest 3 % (glyphs)
-    /// against the 60th-percentile luminance (background). Used to overrule the audit's
+    /// Estimates WCAG contrast from the rendered pixels in `frame`: the darkest or lightest
+    /// 3 % (glyphs, either polarity) against the median luminance (background). Used to overrule the audit's
     /// contrast sampler, which misreads text over painted and glass backgrounds.
     static func measuredContrast(of frame: CGRect, in image: UIImage) -> Double? {
         guard let cg = image.cgImage, frame.width > 2, frame.height > 2 else { return nil }
@@ -80,8 +80,11 @@ final class AccessibilityAuditTests: XCTestCase {
         }
         guard lums.count > 20 else { return nil }
         lums.sort()
-        let text = lums[Int(Double(lums.count) * 0.03)], background = lums[Int(Double(lums.count) * 0.6)]
-        return (max(text, background) + 0.05) / (min(text, background) + 0.05)
+        // Text may be dark on light or light on dark: compare each extreme with the median.
+        func ratio(_ a: Double, _ b: Double) -> Double { (max(a, b) + 0.05) / (min(a, b) + 0.05) }
+        let median = lums[lums.count / 2]
+        let dark = lums[Int(Double(lums.count) * 0.03)], light = lums[Int(Double(lums.count) * 0.97)]
+        return max(ratio(dark, median), ratio(light, median))
     }
 
     private func launch(_ scenario: String) -> XCUIApplication {

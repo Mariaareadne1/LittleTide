@@ -19,7 +19,7 @@ struct CoastHomeView: View {
             TimelineView(.periodic(from: .now, by: 30)) { _ in
                 let now = model.clock.now()
                 ScrollView {
-                    content(now: now, layout: HomeLayout(width: proxy.size.width, topInset: proxy.safeAreaInsets.top))
+                    content(now: now, layout: HomeLayout(width: proxy.size.width, height: proxy.size.height + proxy.safeAreaInsets.top + proxy.safeAreaInsets.bottom, topInset: proxy.safeAreaInsets.top))
                         .padding(.bottom, 36)
                         .background(alignment: .top) {
                             GeometryReader { inner in
@@ -33,7 +33,7 @@ struct CoastHomeView: View {
                 .refreshable { await model.refreshAndWait() }
             }
         }
-        .background(Palette.paper.ignoresSafeArea())
+        .background(LinearGradient(colors: [Palette.oceanMid, Palette.oceanDeep], startPoint: .top, endPoint: .bottom).ignoresSafeArea())
         // Invisible over the sky at rest; settles in as content scrolls under the status bar.
         .overlay(alignment: .top) { StatusBarScrim().opacity(min(max(-scrollOffset / 160, 0), 1)) }
         .animation(reduceMotion ? nil : .easeInOut(duration: 0.35), value: model.station?.id)
@@ -49,7 +49,8 @@ struct CoastHomeView: View {
     }
 
     private var actions: HeroActions {
-        HeroActions(chooseCoast: { isChoosingCoast = true }, openSettings: { isShowingSettings = true })
+        HeroActions(chooseCoast: { isChoosingCoast = true }, openSettings: { isShowingSettings = true },
+                    openStationDetails: { isShowingSource = true })
     }
 
     @ViewBuilder
@@ -80,6 +81,8 @@ struct CoastHomeView: View {
 
 struct HomeLayout {
     let width: CGFloat
+    /// Full screen height including safe areas: the hero fills it.
+    let height: CGFloat
     let topInset: CGFloat
 }
 
