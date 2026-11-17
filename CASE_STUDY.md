@@ -1,83 +1,77 @@
 # Little Tide: design-engineering case study
 
-## Problem
-Tide apps tend to be dashboards, built for boaters and surfers and dense with numbers.
-Plenty of people only want a calm, glanceable answer to "when is the tide out at my beach?",
-plus a way to feel the shape of the day. They don't want marine instrumentation.
+A design-led iPhone utility for people who feel connected to a particular stretch of US
+coast: a painted aerial coast whose water follows NOAA's predicted tide, liquid glass that
+bends the painting, and Home Screen and Lock Screen widgets.
 
-## Audience
-People who live near, walk, or love a particular stretch of US coast: tide-poolers,
-dog-walkers, beachcombers, and people far from a coast they miss.
+## Context and problem
+Tide information is genuinely useful, and good tide apps exist. Tide Guide is a polished,
+dense instrument with Editors' Choice. Ocean Watch is free, NOAA-based and collects no
+data. What they share is a table-and-chart language built for planning. The design
+question here was different: can the tide be *felt* at a glance, as a picture of your coast
+at this hour, without giving up accuracy or honesty? (`Documentation/COMPETITORS.md`.)
 
-## Differentiation
-The product is not a forecast hub. It is one coast, one honest number, and one tactile
-timeline. Each choice serves that:
-- **A postcard, not a dashboard.** A framed illustration, a serif place name and one
-  headline fact. Everything else is quieter.
-- **Truthfulness as a design material.** The app shows "Rising" only when it can defend it.
-  Subordinate stations show stems at their published events, never a fake curve. The
-  illustration's waterline moves only when NOAA publishes a height. Stale data is labeled.
-- **The timeline is the app.** Dragging across the day moves a rust marker, updates the
-  readout and raises or lowers the illustration's water, with a soft haptic at each real
-  extreme.
+## Principles
+1. **Truthfulness is a design material.** Show "Rising" only when the data supports it; draw
+   no curve where NOAA publishes only highs and lows; label stale data where the claim is
+   made; call the painted waterline illustrative.
+2. **The coast is the interface.** Information floats on glass over the painting rather
+   than living in cards on a white page.
+3. **One coast, one glance.** Next event first, everything else quieter.
 
-## Visual directions considered
-Three directions were weighed in sketches and notes. Only the chosen one was built, so
-there are no screenshots of the others.
-1. **Instrument panel:** gauges, a dial and dense tables. Rejected: it is a dashboard, the
-   thing to avoid.
-2. **Photographic postcard:** a full-bleed photo per region. It was preferred for mood, but
-   blocked for V1 because licensable, truthfully regional photography needs per-image
-   provenance work and owner approval to download.
-3. **Quiet Coastal Editorial with original illustration (chosen):** limestone paper, ink,
-   sea-glass, New York serif with SF, and procedurally drawn coasts in six regional
-   characters. It is legally clean, renders identically in widgets, adapts to dark mode and
-   redraws as line art for tinted and clear Home Screens. It also lets the art *respond to
-   the data*, which no stock photo can.
+## Iterations
+| Stage | What changed | Evidence |
+|---|---|---|
+| M0–M6 (first build) | NOAA engine, search, timeline, widgets, procedural side-view illustrations on cream paper | `Documentation/Screenshots/` |
+| Typography and glass | Newsreader + SF Pro (Canela not licensable for app embedding), iOS glass | `Documentation/Design/before`, `after` |
+| Reconstruction | Aerial painted coasts from an approved reference: ArtForge height fields, Metal tide shader, three regions | `Documentation/Design/reconstruction/` |
+| Liquid glass | glass-studies optical model ported into the shader so glass refracts the painting; people and boats placed where the tide stays truthful | `reconstruction/m3-*.jpg` |
+| Refinement (this brief) | Baseline audit and scorecard, regional NOAA fixtures, staleness on the first screen, recent coasts, coast window synced to scrubbing, Lock Screen widgets, AX-XXL and iPhone SE layouts, rendering pause | `Documentation/Baseline/`, `Documentation/Design/refinement/` |
 
-## Art system
-- Palette tokens with light and dark values (`TideUI/Palette.swift`).
-- Six `CoastRegion` scenes. Each is built from sky, far land, sea marks, a fixed beach slope
-  and objects in the shallows. The waterline sits between fixed bounds and is driven by the
-  normalized predicted height, so low water exposes rocks and pilings and high water covers
-  them. Each scene has a painted variant and a single-colour line variant.
-- An original mark (horizon plus tide line) used in the app, onboarding and icon.
+## Design decisions worth explaining
+- **Why paint instead of photographs?** Photography needs per-image licensing and can't
+  show low and high water from the same viewpoint. A generated height field can: the shader
+  floods the same terrain to any predicted level, so the picture changes for a reason.
+- **Why glass in the shader?** SwiftUI materials blur whatever is behind them, but the
+  painting is a shader output, so system glass could only frost it. Rendering glass inside
+  the same shader lets it refract the actual sand and foam (IOR 1.52, Fresnel, chromatic
+  split) while text stays on a deep-teal absorbing layer that keeps contrast above 4.5:1.
+- **Why a coast window?** Scrubbing happens below the fold, where the hero is invisible.
+  A wide crop of the same painting follows the scrubbed time, so dragging to 9:13 PM
+  visibly uncovers the beach; VoiceOver hears "Water near the day's low".
+- **Why recent coasts, not favourites?** The audit found switching coasts was the main
+  daily-use gap; remembering the last four choices solves it with no new screens.
 
-## Tide data engineering
-Highlights (see `Documentation/DATA.md`):
-- Live probing found that NOAA's local-time output skips DST for some Alaska stations and
-  that some metadata offsets are wrong. Little Tide therefore fetches GMT and resolves a
-  civil IANA zone itself.
-- It requests the 15-minute curve only from reference stations and degrades honestly to
-  high/low-only when the curve is missing.
-- A pure, clock-injected `TideEngine` drives all of this, with 72 unit tests covering DST,
-  midnight, year boundaries, uneven event counts, gaps, negatives and malformed data.
-- Against NOAA's own published tables, 5 stations matched every event to the minute.
+## Technical implementation
+- **Data:** NOAA CO-OPS requested in GMT and metric, displayed in each station's civil IANA
+  zone (resolved locally because NOAA's offsets are wrong for some stations). Curves only
+  for reference stations; hi/lo-only stations never get an invented curve.
+- **Correctness:** 89 package tests include real recorded responses from the Pacific,
+  Atlantic across a DST change, a diurnal Gulf station, Alaska, Hawaii and a subordinate
+  station. A live comparison matched NOAA's own local-time tables at 7/7 stations.
+- **State:** one `AppModel` and pure `TideEngine` functions feed the hero, card, readout,
+  coast window, chart and widgets, so they cannot disagree; a request token prevents
+  out-of-order responses from showing under the wrong coast.
+- **Widgets:** pure `CoastWidgetContent` per entry, pre-rendered painted snapshots (widgets
+  can't run shaders), line art in tinted/clear, Lock Screen faces in system monochrome.
+- **Performance:** scenes pause when mostly off-screen or inactive. On a loaded simulator
+  the scrolled-state CPU fell from 0.64 s to about 0.53 s per 5 s; GPU cost needs a device.
 
-## Widget implementation
-- Pure `CoastWidgetContent` per timeline entry, with family-specific compositions.
-- Entries every 30 minutes plus one second after each event, reloading at the earlier of
-  6 h or the last known event.
-- Line art and system colours when `widgetRenderingMode` is not full colour.
-- Verified by automating SpringBoard: install both sizes, deep-link back into the app, and
-  capture light, dark, tinted and clear styles.
+## Evidence
+- Tests: see `Documentation/QA_REPORT.md` for exact commands and results.
+- Screenshots: `Documentation/Baseline/Screenshots/` (before) and
+  `Documentation/Design/refinement/` (after); widgets on a real simulator Home Screen.
+- Recordings: `Documentation/Media/` (widget to app, scrubbing, choosing a coast). They
+  predate the painted redesign.
 
-## Test evidence
-- 87 automated tests: 84 passed and 3 skipped by design (opt-in Home Screen and live NOAA).
-- Screenshots are in `Documentation/Screenshots/{app,widgets,qa}` and demo clips in
-  `Documentation/Media`.
+## Results
+No users, downloads, revenue or reviews yet: the app has not been submitted. It builds,
+passes its suites, archives in Release with 0 warnings, and runs with real NOAA data on the
+simulator. Signing and TestFlight need the owner's Apple Developer account.
 
-## Launch decisions
-- Free, with one coast, both widgets and the full timeline.
-- "Plus" (favourites, extra compositions, personal photos) was deferred rather than shipped
-  as an inert paywall.
-- US NOAA stations only, iPhone only, no location permission.
-
-## Honest limitations
-- Illustrations only for now; photography is pending licensing.
-- One coast at a time, and widgets follow it. There is no per-widget station.
-- Catalog stations without a NOAA state field were assigned by name or a 20 km
-  nearest-neighbour rule and spot-checked; a few edge cases may remain.
-- Signing, device testing (haptics and VoiceOver on hardware), App Store Connect and naming
-  checks are still to do.
-- No usage metrics exist, by design. There is no analytics.
+## Reflection
+The redesign is better, not just prettier, where the picture carries information. The
+waterline answers "is it out?" before any number is read, the glass keeps text legible
+without hiding the coast, and every claim on screen is backed by NOAA data or labelled as
+illustration. The remaining risks are on hardware: shader cost, haptics and VoiceOver by
+ear have only been checked on the simulator.

@@ -1,8 +1,18 @@
-# App Store and TestFlight kit
+# App Store readiness and TestFlight kit
 
-Status at 2026-11-16: **TestFlight-ready code, not yet signed or uploaded.** This Mac has no
-Apple Developer team or signing identity. Approval cannot be guaranteed; the notes below
-follow the current App Review Guidelines as read during development.
+## Status at 2026-11-17 (commit on `main`, see PROGRESS.md)
+| State | Result |
+|---|---|
+| Builds locally (Debug) | Yes, Xcode 26.6, iOS 26.5 SDK |
+| Runs on the simulator | Yes, iPhone 17 Pro and iPhone SE (3rd gen), iOS 26.5 |
+| Native widgets work | Yes: small and medium installed on the simulator Home Screen with live NOAA data, deep link verified; Lock Screen faces build and preview in-app, not placed on a Lock Screen |
+| Release archive | Yes, unsigned (`CODE_SIGNING_ALLOWED=NO`), 0 warnings, `.app` 25 MB, widget 5.5 MB |
+| Ready for TestFlight | Code yes; blocked on signing (owner steps 1–2) |
+| Uploaded to TestFlight | **No** |
+| Submitted to App Review | **No** |
+
+Approval cannot be guaranteed; the notes below follow the current App Review Guidelines as
+read during development. Recheck the SDK requirement on submission day.
 
 ## Owner-only steps, in order
 1. **Apple Developer Program** membership. Set `DEVELOPMENT_TEAM` in `project.yml`
@@ -50,11 +60,12 @@ content. Expected **4+**.
   > tide-prediction stations across the United States and see the next predicted high or
   > low, in the station's own local time.
   >
-  > • Small and medium Home Screen widgets that look at home in light, dark, tinted and clear styles.
-  > • A day of tide you can explore with a finger, drawn from NOAA's 15-minute predictions where they exist.
+  > • Small and medium Home Screen widgets that look at home in light, dark, tinted and clear styles, plus Lock Screen widgets.
+  > • A day of tide you can explore with a finger, drawn from NOAA's 15-minute predictions where they exist; a painted waterline follows along.
+  > • Switch back to your recent coasts in one tap.
   > • Honest data: subordinate stations show NOAA's published highs and lows, and nothing is guessed in between.
   > • Works offline from saved predictions, clearly dated.
-  > • Original illustrations for each kind of coast.
+  > • Original painted coasts for each kind of shore, with glass that bends the light.
   > • No account, ads, tracking or location.
   >
   > Predictions come from NOAA CO-OPS. They are astronomical predictions; weather can make
@@ -66,14 +77,15 @@ content. Expected **4+**.
 ## Screenshots
 Use **real** captures from the real app, at 6.9" (1320×2868) and 6.1" sizes. Workflow:
 `Tools/shoot.sh <sim> curve out.png`, or run the `LittleTideUITests` attachments.
-Current-design candidates in `Documentation/Design/`. The older `Screenshots/` set predates
-the redesign.
-1. Home, live NOAA data: Chatham Harbor, Point Reyes, La Jolla (`after/home-*.png`)
-2. Scrubbing to the evening low (`after/11-home-scrubbed.png`)
-3. Widgets on the Home Screen, light and dark (`widgets/home-screen-light.png`, `-dark.png`)
-4. Widgets in tinted and clear modes (`widgets/home-screen-tinted.png`, `-clear.png`)
-5. A high/low-only station (`after/21-highlow-snapped.png`)
-6. Onboarding (`after/01-onboarding.png`)
+Current-design candidates are in `Documentation/Design/refinement/` and
+`Documentation/Design/reconstruction/`; `Design/after/` and `Screenshots/` predate the
+painted redesign. Recapture the final set at 6.9" from the painted build:
+1. Home over the painted coast (`refinement/r1-*`, frame 3)
+2. Scrubbing to the evening low with the coast window (`refinement/r2-*`)
+3. Home Screen widgets with live NOAA data (`refinement/r5-*`)
+4. Lock Screen faces (`refinement/r4-*`; capture on a real Lock Screen before submission)
+5. Recent coasts in the picker (`refinement/r3-*`)
+6. Onboarding (`reconstruction/m3-liquid-glass-*`, frame 1)
 
 Demo-mode screenshots use real NOAA predictions captured on 15–18 Nov 2026 with a fixed
 clock. The caption should say "NOAA predictions". Never describe them as a "live beach camera".
@@ -82,6 +94,11 @@ Suggested alt text: "Little Tide showing Santa Monica's predicted high at 1:04 P
 curve of the day's tide."
 
 ## Demo recordings (`Documentation/Media/`)
+- **demo-d-painted-scrub-and-recents.mp4** (current design, 32 s, iPhone SE): the painted
+  home, scrubbing with the coast window following, return to Now, then switching coasts and
+  back from recents. Captured NOAA data with a fixed clock.
+
+Older recordings (pre-painted design):
 - **demo-a-widget-to-app.mp4.** Script: Home Screen with both widgets; tap the medium widget;
   the app opens on Santa Monica with live NOAA data.
 - **demo-b-scrub-tide.mp4.** Script: drag across the day to the evening low; the marker,
@@ -100,7 +117,7 @@ curve of the day's tide."
 ## Guideline self-check
 - **2.1 completeness:** every control works; there are no placeholders.
 - **2.3 metadata:** claims match the features.
-- **4.2 minimum functionality:** native widgets, an interactive timeline and search across 3,228 stations.
-- **5.1.1 privacy:** a policy exists and is linked in-app; it must be hosted publicly (step 4).
+- **4.2 minimum functionality:** native Home Screen and Lock Screen widgets, an interactive timeline and search across 3,228 stations.
+- **5.1.1 privacy:** a policy exists, is public, and is linked in Settings ("Full privacy policy").
 - **2.5.1:** public APIs only.
 - **5.2 IP:** original art, NOAA credited and not implied as an endorser.

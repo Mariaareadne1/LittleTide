@@ -7,6 +7,29 @@ Resumable record of what is done, verified and blocked. Newest first within each
 - GitHub CLI authenticated. **No code-signing identity / Apple Developer team on this Mac.**
 - XcodeGen 2.46.0 (Homebrew) generates `LittleTide.xcodeproj` from `project.yml`.
 
+## Refinement brief (2026-11-17) — consumer-quality audit and hardening
+Brief `docs/` paths map onto `Documentation/`. Dedicated simulators: "LittleTide QA 17 Pro"
+(F8902CF2-…) and "LittleTide QA SE" (818E8A1D-…); the shared iPhone 17 Pro is also used by
+another project's UI tests.
+
+| Milestone | Commit | Result |
+|---|---|---|
+| R0 baseline | `0453b62` | `BASELINE_AUDIT.md`, `BASELINE_TESTS.md` (95: 92 pass, 3 opt-in skip), `PRODUCT_AUDIT.md` scorecard + top-5 weaknesses, `COMPETITORS.md`, baseline screenshots |
+| R1 data | `86d9b54` | Real Atlantic (Chatham, DST), Gulf (Pensacola, diurnal), Alaska (Juneau) fixtures + 10 tests; live comparison 7/7 stations |
+| R2–R3 home | `e37da96` | Recent coasts; staleness in the tide card; scroll offset bug fixed (scrim never appeared); scenes pause off-screen; hero level uses displayed day; `REFERENCE_AUDIT.md` |
+| R4 timeline | `43402ad` | Coast window follows scrubbing; VoiceOver value; UI test asserts high → low |
+| R5 widgets | `a2ef8f9` | Lock Screen inline/circular/rectangular; guide preview; Home Screen widgets re-verified live |
+| R6 accessibility | `5e13248`, `df61dfe` | AX-XXL and iPhone SE layouts; hero grows; no truncation; chart labels capped |
+| R7–R8 QA and docs | this commit | `QA_REPORT.md`, `ARCHITECTURE.md`, `DESIGN_SYSTEM.md`, `PRODUCT_REFINEMENT.md`, case study rewrite, App Store readiness table, new demo |
+
+Final verification: 118 tests, 113 passed, 0 failed, 5 skipped (opt-in); SE 15/15;
+package 89; Release archive 0 warnings (25 MB app, 5.5 MB widget).
+
+Next, in order: owner signing steps (`Documentation/APP_STORE.md`), then on-device checks
+(GPU cost in Instruments, haptics, VoiceOver, Lock Screen placement), then recapture
+6.9" App Store screenshots from the painted build. Candidates after V1: sunrise/sunset
+marks, configurable widget station.
+
 ## M0 — Audit and foundation ✅
 - Reference repos audited → `SOURCE_AUDIT.md`.
 - Live NOAA probing: 3,502 prediction stations (1,260 R / 2,242 S). Findings:
