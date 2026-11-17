@@ -83,6 +83,23 @@ final class AppModelTests: XCTestCase {
         XCTAssertEqual(relaunched.unit, .meters)
     }
 
+    func testRecentCoastsFollowSelectionsAndPersist() {
+        let now = ISO8601DateFormatter().date(from: "2026-11-16T10:00:00Z")!
+        let transport = SlowTransport(delays: [:], bodies: [:])
+        let (model, defaults) = makeModel(transport: transport, now: now)
+        model.select(station("A"))
+        model.select(station("B"))
+        model.select(station("C"))
+        XCTAssertEqual(model.recentStations.map(\.id), ["B", "A"])
+        model.select(station("A")) // going back moves A out of recents and C in
+        XCTAssertEqual(model.recentStations.map(\.id), ["C", "B"])
+        let relaunched = AppModel(
+            repository: TideRepository(client: NOAATideClient(transport: transport), cache: MemoryCache()),
+            settings: SharedSettings(defaults: defaults), clock: .fixed(now), widgetReloader: {}
+        )
+        XCTAssertEqual(relaunched.recentStations.map(\.id), ["C", "B"])
+    }
+
     func testUnknownDeepLinkIsIgnored() {
         let (model, _) = makeModel(transport: SlowTransport(delays: [:], bodies: [:]), now: .now)
         model.handle(URL(string: "littletide://station/NOPE123")!)

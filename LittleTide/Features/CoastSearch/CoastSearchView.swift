@@ -66,7 +66,17 @@ struct CoastSearchView: View {
 
     @ViewBuilder
     private var browseSections: some View {
-        let featured = FeaturedCoasts.stations(in: model.catalog)
+        if let current = model.station {
+            // The coast on screen, then earlier choices: switching back is one tap.
+            Section {
+                StationRow(station: current, isCurrent: true, onPick: pick)
+                ForEach(model.recentStations) { StationRow(station: $0, onPick: pick) }
+            } header: {
+                SectionHeader(model.recentStations.isEmpty ? "Your coast" : "Your coasts")
+            }
+        }
+        let shown = Set(([model.station].compactMap { $0 } + model.recentStations).map(\.id))
+        let featured = FeaturedCoasts.stations(in: model.catalog).filter { !shown.contains($0.id) }
         if !featured.isEmpty {
             Section {
                 ForEach(featured) { StationRow(station: $0, onPick: pick) }
@@ -111,6 +121,7 @@ private struct StateStationList: View {
 
 struct StationRow: View {
     let station: TideStation
+    var isCurrent = false
     let onPick: (TideStation) -> Void
 
     var body: some View {
@@ -125,6 +136,12 @@ struct StationRow: View {
                         .foregroundStyle(Palette.inkSoft)
                 }
                 Spacer(minLength: 12)
+                if isCurrent {
+                    Label("Showing", systemImage: "checkmark")
+                        .labelStyle(.titleAndIcon)
+                        .typeStyle(.metadata)
+                        .foregroundStyle(Palette.ink)
+                }
                 VStack(alignment: .trailing, spacing: 2) {
                     Text(station.id)
                         .typeStyle(.metadata)
@@ -140,8 +157,9 @@ struct StationRow: View {
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("\(station.displayName.title), \(station.displayName.subtitle)")
         .accessibilityValue("Station \(station.id). \(station.kind == .reference ? "Full tide curve" : "High and low times only").")
-        .accessibilityAddTraits(.isButton)
-        .accessibilityIdentifier("station-\(station.id)")
+        .accessibilityAddTraits(isCurrent ? [.isButton, .isSelected] : .isButton)
+        .accessibilityHint(isCurrent ? "The coast shown now." : "")
+        .accessibilityIdentifier(isCurrent ? "currentStation-\(station.id)" : "station-\(station.id)")
     }
 }
 

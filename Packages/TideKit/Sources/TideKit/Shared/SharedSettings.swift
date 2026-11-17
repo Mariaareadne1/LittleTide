@@ -6,6 +6,7 @@ import Foundation
 public struct SharedSettings: @unchecked Sendable {
     enum Key {
         static let selectedStation = "selectedStation.v1"
+        static let recentStations = "recentStations.v1"
         static let unit = "heightUnit"
         static let visualTreatment = "visualTreatment"
     }
@@ -29,6 +30,17 @@ public struct SharedSettings: @unchecked Sendable {
         defaults.set(data, forKey: Key.selectedStation)
     }
 
+    /// Previously chosen coasts, most recent first. Missing or unreadable data is an empty list.
+    public var recentStations: [TideStation] {
+        guard let data = defaults.data(forKey: Key.recentStations) else { return [] }
+        return (try? JSONDecoder().decode([TideStation].self, from: data)) ?? []
+    }
+
+    public func setRecentStations(_ stations: [TideStation]) {
+        guard let data = try? JSONEncoder().encode(stations) else { return }
+        defaults.set(data, forKey: Key.recentStations)
+    }
+
     /// Defaults to feet for US users, metres elsewhere.
     public var unit: HeightUnit {
         if let raw = defaults.string(forKey: Key.unit), let unit = HeightUnit(rawValue: raw) { return unit }
@@ -48,7 +60,7 @@ public struct SharedSettings: @unchecked Sendable {
     }
 
     public func removeAll() {
-        [Key.selectedStation, Key.unit, Key.visualTreatment].forEach(defaults.removeObject(forKey:))
+        [Key.selectedStation, Key.recentStations, Key.unit, Key.visualTreatment].forEach(defaults.removeObject(forKey:))
     }
 }
 

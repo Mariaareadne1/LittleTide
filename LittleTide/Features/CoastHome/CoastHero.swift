@@ -81,7 +81,7 @@ struct CoastHero<Card: View>: View {
     @ViewBuilder
     private var art: some View {
         if let scene = paintedScene {
-            PaintedCoastView(scene: scene, level: level, scrim: scrim, panels: panels)
+            PaintedCoastView(scene: scene, level: level, scrim: scrim, panels: panels, isAnimating: layout.isHeroVisible)
         } else {
             // Regions without a painted scene yet keep the earlier illustration.
             CoastArtView(region: CoastRegion(station: station), waterLevel: level, horizon: 0.45)
@@ -205,12 +205,12 @@ struct StatusBarScrim: View {
     var body: some View {
         GeometryReader { proxy in
             ZStack {
-                Rectangle().fill(.ultraThinMaterial)
-                Palette.oceanDeep.opacity(0.7)
+                Rectangle().fill(.regularMaterial)
+                Palette.oceanDeep.opacity(0.9)
             }
-            .mask(LinearGradient(stops: [.init(color: .black, location: 0), .init(color: .black, location: 0.7), .init(color: .clear, location: 1)],
+            .mask(LinearGradient(stops: [.init(color: .black, location: 0), .init(color: .black, location: 0.72), .init(color: .clear, location: 1)],
                                  startPoint: .top, endPoint: .bottom))
-            .frame(height: proxy.safeAreaInsets.top + 18)
+            .frame(height: proxy.safeAreaInsets.top + 30)
             .ignoresSafeArea(edges: .top)
         }
         .allowsHitTesting(false)

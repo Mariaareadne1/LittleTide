@@ -28,6 +28,7 @@
 		70572EC59C5701B1D0BA189E /* DeepLinkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89BF0FE8D8398C3A437D3AFA /* DeepLinkTests.swift */; };
 		7688BB22455C3FAB6CD0CCBD /* AppClock.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2420B67F2E54021914F1671 /* AppClock.swift */; };
 		7D51FB72C825FFA7460EF91E /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 49C389CFCF73EFBC6DA57FCF /* PrivacyInfo.xcprivacy */; };
+		823248EC2B38335C35146CA9 /* RenderingPerformanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF7FA75C25FDA8847A0534A5 /* RenderingPerformanceTests.swift */; };
 		842E806E445A77287FEA6226 /* DeepLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9AA85CFEB032E1C14A4F05E /* DeepLink.swift */; };
 		8465DB5034E3A84A0CF501AD /* CoastHero.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEE90753FF9FA329D9E61C1D /* CoastHero.swift */; };
 		883556083ED12A3C8606EB33 /* TideUI in Frameworks */ = {isa = PBXBuildFile; productRef = 98324160B45E4E1918FCC844 /* TideUI */; };
@@ -130,6 +131,7 @@
 		B44E2A61D66E228D88B6BE6C /* AppModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppModel.swift; sourceTree = "<group>"; };
 		D7C1FED7CC6241850BD1C8E2 /* LittleTideWidgetBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LittleTideWidgetBundle.swift; sourceTree = "<group>"; };
 		DABB48864083D2D1031B90A3 /* kingharbor_9410738_hilo.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = kingharbor_9410738_hilo.json; sourceTree = "<group>"; };
+		DF7FA75C25FDA8847A0534A5 /* RenderingPerformanceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenderingPerformanceTests.swift; sourceTree = "<group>"; };
 		DFC1D50F113B933782701AA2 /* LittleTideApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LittleTideApp.swift; sourceTree = "<group>"; };
 		E0D0F0AE102BD5BF58265DA9 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		E11BF5665788FDD2EA4D9496 /* LittleTideWidgets.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = LittleTideWidgets.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -184,6 +186,7 @@
 			children = (
 				84F36BEA160D264F3A3B97FA /* AccessibilityAuditTests.swift */,
 				222EF27B5F78AE382C4C905D /* LittleTideUITests.swift */,
+				DF7FA75C25FDA8847A0534A5 /* RenderingPerformanceTests.swift */,
 				079ECD91837DC7CB3BD1938D /* WidgetHomeScreenTests.swift */,
 			);
 			path = LittleTideUITests;
@@ -566,6 +569,7 @@
 			files = (
 				E4A947A7F296CF45D4850948 /* AccessibilityAuditTests.swift in Sources */,
 				ADAD045417F3E986228BDD97 /* LittleTideUITests.swift in Sources */,
+				823248EC2B38335C35146CA9 /* RenderingPerformanceTests.swift in Sources */,
 				FB4187E9BBA251B6188FCF90 /* WidgetHomeScreenTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

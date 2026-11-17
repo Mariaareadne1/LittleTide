@@ -19,15 +19,17 @@ struct CoastHomeView: View {
             TimelineView(.periodic(from: .now, by: 30)) { _ in
                 let now = model.clock.now()
                 ScrollView {
-                    content(now: now, layout: HomeLayout(width: proxy.size.width, height: proxy.size.height + proxy.safeAreaInsets.top + proxy.safeAreaInsets.bottom, topInset: proxy.safeAreaInsets.top))
-                        .background(alignment: .top) {
-                            GeometryReader { inner in
-                                Color.clear.preference(key: ScrollOffsetKey.self, value: inner.frame(in: .named("homeScroll")).minY)
-                            }
+                    content(now: now, layout: layout(proxy))
+                        // A geometry preference from inside the scroll content does not re-fire
+                        // while scrolling; onGeometryChange (back-deployed to iOS 16) does.
+                        // Quantised so the home view re-renders every few points, not every frame.
+                        .onGeometryChange(for: CGFloat.self) { geometry in
+                            (geometry.frame(in: .named("homeScroll")).minY / 8).rounded() * 8
+                        } action: { offset in
+                            scrollOffset = offset
                         }
                 }
                 .coordinateSpace(name: "homeScroll")
-                .onPreferenceChange(ScrollOffsetKey.self) { scrollOffset = $0 }
                 .ignoresSafeArea(edges: .top)
                 .refreshable { await model.refreshAndWait() }
             }
@@ -45,6 +47,17 @@ struct CoastHomeView: View {
         .sheet(isPresented: $isShowingSource) {
             SourceInfoSheet(station: station, forecast: model.forecastState.forecast)
         }
+    }
+
+    private func layout(_ proxy: GeometryProxy) -> HomeLayout {
+        let height = proxy.size.height + proxy.safeAreaInsets.top + proxy.safeAreaInsets.bottom
+        return HomeLayout(
+            width: proxy.size.width, height: height, topInset: proxy.safeAreaInsets.top,
+            // Only the painting that is substantially on screen keeps animating. Once less than
+            // ~45 % of the hero shows (just the card under the status scrim), it holds still.
+            isHeroVisible: scrollOffset > -(height * 0.55),
+            areDetailsVisible: scrollOffset < -(height * 0.3)
+        )
     }
 
     private var actions: HeroActions {
@@ -83,6 +96,8 @@ struct HomeLayout {
     /// Full screen height including safe areas: the hero fills it.
     let height: CGFloat
     let topInset: CGFloat
+    var isHeroVisible = true
+    var areDetailsVisible = true
 }
 
 extension AppModel {
@@ -90,9 +105,4 @@ extension AppModel {
         refresh(manual: true)
         while isRefreshing { try? await Task.sleep(for: .milliseconds(100)) }
     }
-}
-
-private struct ScrollOffsetKey: PreferenceKey {
-    static let defaultValue: CGFloat = 0
-    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) { value = nextValue() }
 }

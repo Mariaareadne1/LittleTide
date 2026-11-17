@@ -164,10 +164,15 @@ public struct PaintedCoastView: View {
     let mode: Mode
     let scrim: SceneScrim
     let panels: [GlassPanel]
+    /// False while the scene is scrolled out of view, so it stops redrawing.
+    let isAnimating: Bool
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.scenePhase) private var scenePhase
     @Environment(\.accessibilityReduceTransparency) private var reduceTransparency
 
-    public init(scene: PaintedScene, level: Double, mode: Mode = .coast, scrim: SceneScrim = .none, panels: [GlassPanel] = []) {
+    public init(scene: PaintedScene, level: Double, mode: Mode = .coast, scrim: SceneScrim = .none, panels: [GlassPanel] = [],
+                isAnimating: Bool = true) {
+        self.isAnimating = isAnimating
         self.scene = scene
         self.level = level
         self.mode = mode
@@ -186,7 +191,7 @@ public struct PaintedCoastView: View {
             let scrim = scrim
             // Under Reduce Transparency the glass is drawn as opaque surfaces by SwiftUI instead.
             let panelData = reduceTransparency ? [Float(0)] : Self.encode(panels)
-            TimelineView(.animation(minimumInterval: 1 / 30, paused: reduceMotion)) { context in
+            TimelineView(.animation(minimumInterval: 1 / 30, paused: reduceMotion || !isAnimating || scenePhase != .active)) { context in
                 let time = Float(context.date.timeIntervalSinceReferenceDate.truncatingRemainder(dividingBy: 3600))
                 Rectangle()
                     .visualEffect { content, proxy in

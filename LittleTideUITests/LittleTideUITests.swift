@@ -57,6 +57,28 @@ final class LittleTideUITests: XCTestCase {
         XCTAssertTrue(element(app, containing: "High tide at 1:04").waitForExistence(timeout: 5))
     }
 
+    func testSwitchCoastAndBackFromRecents() {
+        let app = launch("curve")
+        XCTAssertTrue(element(app, containing: "High tide at 1:04").waitForExistence(timeout: 5))
+        app.buttons["changeCoast"].tap()
+        XCTAssertTrue(app.buttons["currentStation-9410840"].waitForExistence(timeout: 5))
+        let search = app.searchFields.firstMatch
+        search.tap()
+        search.typeText("king harbor")
+        let kingHarbor = app.buttons["station-9410738"]
+        XCTAssertTrue(kingHarbor.waitForExistence(timeout: 5))
+        kingHarbor.tap()
+        XCTAssertTrue(element(app, containing: "King Harbor").waitForExistence(timeout: 5))
+
+        app.buttons["changeCoast"].tap()
+        XCTAssertTrue(app.buttons["currentStation-9410738"].waitForExistence(timeout: 5))
+        let recent = app.buttons["station-9410840"]
+        XCTAssertTrue(recent.waitForExistence(timeout: 5), "the previous coast is offered as a recent coast")
+        snapshot(app, "05-search-your-coasts")
+        recent.tap()
+        XCTAssertTrue(element(app, containing: "High tide at 1:04").waitForExistence(timeout: 5))
+    }
+
     func testCurveScrubAndReturnToNow() {
         let app = launch("curve")
         XCTAssertTrue(element(app, containing: "High tide at 1:04").waitForExistence(timeout: 5))

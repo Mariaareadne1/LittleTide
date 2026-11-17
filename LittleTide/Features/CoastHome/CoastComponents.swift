@@ -2,17 +2,23 @@ import SwiftUI
 import TideKit
 import TideUI
 
-struct FreshnessBanner: View {
+/// Offline or ageing predictions, said plainly inside the tide card.
+struct FreshnessLine: View {
     let text: String
 
     var body: some View {
-        Label(text, systemImage: "clock.arrow.circlepath")
-            .typeStyle(.label)
-            .foregroundStyle(Palette.onArt)
-            .padding(.horizontal, 14).padding(.vertical, 10)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .oceanGlass(cornerRadius: 16)
-            .accessibilityIdentifier("freshnessBanner")
+        Label {
+            Text(text).fixedSize(horizontal: false, vertical: true)
+        } icon: {
+            Image(systemName: "clock.arrow.circlepath")
+        }
+        .typeStyle(.label)
+        .foregroundStyle(Palette.onArt)
+        .padding(.top, 10)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .overlay(alignment: .top) { Rectangle().fill(Palette.onArt.opacity(0.22)).frame(height: 1) }
+        .accessibilityElement(children: .combine)
+        .accessibilityIdentifier("freshnessBanner")
     }
 }
 

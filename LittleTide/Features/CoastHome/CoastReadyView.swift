@@ -27,14 +27,17 @@ struct CoastReadyView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            CoastHero(station: station, level: heroLevel, layout: layout, actions: actions) {
-                TideCard { NowSummaryView(forecast: forecast, now: now, format: format) }
+            CoastHero(station: station, level: waterLevel, layout: layout, actions: actions) {
+                TideCard {
+                    NowSummaryView(forecast: forecast, now: now, format: format)
+                    // Staleness belongs on the first screen, next to the claim it qualifies.
+                    if let freshness {
+                        FreshnessLine(text: freshness).padding(.top, 12)
+                    }
+                }
             }
 
             VStack(alignment: .leading, spacing: 0) {
-                if let banner = freshnessBanner {
-                    FreshnessBanner(text: banner).padding(.top, 16)
-                }
                 studySection.padding(.top, 28)
                 DayEventsList(events: TideEngine.events(in: window, from: forecast.events), format: format, selection: selection) { event in
                     selection = event.date
@@ -52,7 +55,11 @@ struct CoastReadyView: View {
             .background {
                 // Deep water beneath the details, so their glass refracts painted water too.
                 if let scene = PaintedScene(region: CoastRegion(station: station)) {
-                    PaintedCoastView(scene: scene, level: 0.5, mode: .underwater, panels: detailPanels)
+                    // Extends past the content so over-scroll and the home indicator area
+                    // show painted water rather than a flat band.
+                    PaintedCoastView(scene: scene, level: 0.5, mode: .underwater, panels: detailPanels,
+                                     isAnimating: layout.areDetailsVisible)
+                        .padding(.bottom, -400)
                 }
             }
             .glassStage("detailsGlass") { detailPanels = $0 }
@@ -117,22 +124,16 @@ struct CoastReadyView: View {
             .fixedSize()
     }
 
-    /// The hero shows the tide right now (the scrubbed time is shown in the curve below).
-    private var heroLevel: Double {
-        guard let range = TideEngine.heightRange(in: today, forecast: forecast),
-              let reading = TideEngine.height(at: selection ?? now, forecast: forecast) else { return 0.5 }
-        return TideEngine.normalizedLevel(reading.heightMeters, within: range)
-    }
-
-    /// Water level for the illustration, normalised to the day's predicted range.
-    /// Neutral when the selected instant has no published height.
+    /// Water level for the hero illustration at the displayed instant (now, or the scrubbed
+    /// time), normalised to the displayed day's predicted range so paging days never clips.
+    /// Neutral when the instant has no published height.
     private var waterLevel: Double {
         guard let range = TideEngine.heightRange(in: window, forecast: forecast),
               let reading = TideEngine.height(at: displayed, forecast: forecast) else { return 0.5 }
         return TideEngine.normalizedLevel(reading.heightMeters, within: range)
     }
 
-    private var freshnessBanner: String? {
+    private var freshness: String? {
         if let refreshError {
             return "\(refreshError == .noConnection ? "Offline" : "Couldn’t refresh") · showing predictions retrieved \(format.day(forecast.fetchedAt)), \(format.time(forecast.fetchedAt))"
         }

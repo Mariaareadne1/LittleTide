@@ -9,6 +9,8 @@ import WidgetKit
 final class AppModel {
     private(set) var catalog: StationCatalog?
     private(set) var station: TideStation?
+    /// Coasts chosen before, most recent first (never the current one).
+    private(set) var recentStations: [TideStation]
     private(set) var forecastState: ForecastState = .idle
     private(set) var isRefreshing = false
     /// Increments whenever the coast changes, so views can reset their selection.
@@ -40,6 +42,7 @@ final class AppModel {
         self.catalog = catalog
         self.widgetReloader = widgetReloader
         station = settings.selectedStation
+        recentStations = settings.recentStations
         unit = settings.unit
         treatment = settings.visualTreatment
         isHapticsEnabled = UserDefaults.standard.object(forKey: Self.hapticsKey) as? Bool ?? true
@@ -60,6 +63,8 @@ final class AppModel {
     /// appear under the new name.
     func select(_ newStation: TideStation) {
         guard newStation != station else { return }
+        recentStations = RecentCoasts.updated(recentStations, leaving: station, for: newStation)
+        settings.setRecentStations(recentStations)
         settings.setSelectedStation(newStation)
         station = newStation
         stationGeneration += 1
