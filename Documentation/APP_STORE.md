@@ -77,9 +77,10 @@ content. Expected **4+**.
 ## Screenshots
 Use **real** captures from the real app, at 6.9" (1320×2868) and 6.1" sizes. Workflow:
 `Tools/shoot.sh <sim> curve out.png`, or run the `LittleTideUITests` attachments.
-Current-design candidates are in `Documentation/Design/refinement/` and
-`Documentation/Design/reconstruction/`; `Design/after/` and `Screenshots/` predate the
-painted redesign. Recapture the final set at 6.9" from the painted build:
+**Ready 6.9" set (1320 × 2868, JPEG, no alpha): `Documentation/AppStore/6.9in/`** (see its
+README for provenance). Other current-design evidence is in `Documentation/Design/refinement/`
+and `reconstruction/`; `Design/after/` and `Screenshots/` predate the painted redesign.
+Planned order (the 6.9" set covers 1, 2, 5, 6 and the widget guide):
 1. Home over the painted coast (`refinement/r1-*`, frame 3)
 2. Scrubbing to the evening low with the coast window (`refinement/r2-*`)
 3. Home Screen widgets with live NOAA data (`refinement/r5-*`)
