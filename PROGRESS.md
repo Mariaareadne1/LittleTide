@@ -137,8 +137,8 @@ See `Documentation/APP_STORE.md` → "Owner-only steps". In short:
 - Apple Developer team ID + signing → device install, signed archive, TestFlight.
 - Register bundle IDs + App Group (placeholders `app.littletide.*`).
 - Check "Little Tide" name availability in App Store Connect.
-- Host PRIVACY.md and SUPPORT.md publicly (repo is private), add support email, update
-  `LegalText.supportURL`.
+- Add a public support email to SUPPORT.md. (Privacy and support pages are public as of
+  2026-11-17, since the repo is public; the app links to both.)
 - Optional: approve sourcing licensed / public-domain coastal photographs.
 - Optional: buy a Commercial Type mobile-app licence for Canela (see TYPOGRAPHY.md).
 - On-device checks not possible here: haptics, VoiceOver by ear, real widget refresh cadence.

@@ -14,9 +14,11 @@ follow the current App Review Guidelines as read during development.
 3. **Name check.** Search App Store Connect for "Little Tide" and close variants. This was
    *not* verified. The name lives in `CFBundleDisplayName`, the widget display name and
    onboarding copy.
-4. **Public URLs.** Host `Documentation/PRIVACY.md` and `Documentation/SUPPORT.md` publicly
-   (e.g. GitHub Pages; the repository is private) and add a support email. Then update
-   `LegalText.supportURL` in `LittleTide/Features/Settings/LegalText.swift`.
+4. **Public URLs.** Done: the repository is public (2026-11-17), and the app links to both
+   pages (`LegalText.supportURL`, `LegalText.privacyPolicyURL`). Use these in App Store Connect:
+   - Privacy Policy URL: https://github.com/Mariaareadne1/LittleTide/blob/main/Documentation/PRIVACY.md
+   - Support URL: https://github.com/Mariaareadne1/LittleTide/blob/main/Documentation/SUPPORT.md
+   Still to do: add a public support email to `SUPPORT.md`.
 5. Create the app record, archive with your team (see README), upload and add TestFlight testers.
 6. Complete App Privacy, age rating and export compliance with the answers below, then submit.
 

@@ -29,6 +29,10 @@ struct OnboardingView: View {
                         Text("Original illustration")
                             .typeStyle(.metadata)
                             .foregroundStyle(Palette.onArt)
+                            // A tight deep-teal halo keeps small type above 4.5:1 while the
+                            // painted water animates behind the glass.
+                            .shadow(color: Palette.oceanDeep.opacity(0.9), radius: 1.5)
+                            .shadow(color: Palette.oceanDeep.opacity(0.6), radius: 4)
                             .padding(.horizontal, 10).padding(.vertical, 5)
                             .liquidGlass(cornerRadius: 999, kind: .button)
                     }

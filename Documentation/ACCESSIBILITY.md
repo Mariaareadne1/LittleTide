@@ -62,6 +62,14 @@ Documented exclusions:
 - Remaining exclusions:
   - Dynamic Type reports on `ViewThatFits` rows and the capped wordmark.
   - Element-less contrast reports from the system sheet's glass navigation chrome.
+  - Contrast reports for text less than half on screen: under the status bar, or past the
+    bottom edge after the audit scrolls. Those elements have no pixels to measure.
+
+## Painted scenes and shader glass (2026-11-17)
+- White type over painted water sits on deep-teal shader glass, with scrims and a
+  deep-teal halo.
+- The onboarding "Original illustration" pill measured 4.53–4.66:1. That was too close to
+  4.5:1 while the water animates behind it, so it gained a tight halo.
 
 ## Not yet verified
 On-device VoiceOver, haptics and Switch Control. The simulator has no haptics, and VoiceOver

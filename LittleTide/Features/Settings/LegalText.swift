@@ -3,6 +3,7 @@ import Foundation
 /// In-app legal copy. Kept in sync with Documentation/PRIVACY.md and SUPPORT.md.
 enum LegalText {
     static let supportURL = URL(string: "https://github.com/Mariaareadne1/LittleTide/blob/main/Documentation/SUPPORT.md")!
+    static let privacyPolicyURL = URL(string: "https://github.com/Mariaareadne1/LittleTide/blob/main/Documentation/PRIVACY.md")!
 
     static let privacy = """
     Little Tide has no accounts, advertising, analytics or tracking.

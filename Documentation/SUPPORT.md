@@ -1,6 +1,6 @@
 # Little Tide support
 
-**Contact:** open an issue at the project's GitHub repository, or use the support email
+**Contact:** [open an issue on GitHub](https://github.com/Mariaareadne1/LittleTide/issues), or use the support email
 listed on the App Store page. *(Owner to-do: add a public support email before submission.)*
 
 ## Common questions

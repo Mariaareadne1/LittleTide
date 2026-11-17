@@ -45,6 +45,7 @@ struct SettingsView: View {
                 }
                 Section("About") {
                     NavigationLink("Privacy") { LegalTextView(title: "Privacy", text: LegalText.privacy) }
+                    Link("Full privacy policy", destination: LegalText.privacyPolicyURL)
                     NavigationLink("Data source & credits") { LegalTextView(title: "Credits", text: LegalText.credits) }
                     Link("Support & feedback", destination: LegalText.supportURL)
                     LabeledContent("Version", value: Bundle.main.versionString)

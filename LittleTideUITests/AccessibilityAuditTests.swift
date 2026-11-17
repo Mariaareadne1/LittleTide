@@ -22,6 +22,13 @@ final class AccessibilityAuditTests: XCTestCase {
             if issue.auditType == .contrast, let element = issue.element {
                 if screenshot == nil { screenshot = app.screenshot().image }
             }
+            // Text scrolled past the bottom edge (e.g. 0.5 pt of a 15 pt label still on screen)
+            // has no pixels to judge, mirroring the status-bar rule in isKnownFalsePositive.
+            if issue.auditType == .contrast, let element = issue.element,
+               element.frame.intersection(app.frame).height < element.frame.height * 0.5 {
+                print("AXAUDIT [\(screen)] ignored off-screen contrast for '\(element.label)' frame=\(element.frame)")
+                return true
+            }
             if issue.auditType == .contrast, let element = issue.element, let screenshot,
                let ratio = Self.measuredContrast(of: element.frame, in: screenshot) {
                 print("AXAUDIT [\(screen)] contrast measured \(String(format: "%.2f", ratio)):1 for '\(element.label)'")
