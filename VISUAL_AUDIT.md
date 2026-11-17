@@ -68,3 +68,24 @@ The waterline is illustrative and is labelled as such.
 - **Open:** regions without a painted scene yet still use the old illustration, and white
   type on its pale sky fails contrast (measured 2.1–4.4:1). Painted NorCal and SoCal scenes
   in milestone 2 replace it.
+
+## Milestone 2 result: regions, widgets, polish (2026-11-16)
+- **Scenes:** `eastCoast` (sandy point, dunes, sandbars, boulders), `norCal` (dark rocky
+  pocket cove, cold water, kelp beds, many boulders) and `soCal` (warm sand below a bluff,
+  bright turquoise, submerged reefs). Each has low and high states from the same terrain.
+- **Region mapping** (representative, never a map of the station):
+  - Atlantic, marsh and Gulf → `eastCoast`
+  - Northern California, Pacific Northwest and Alaska → `norCal`
+  - Southern California and tropical islands → `soCal`
+- **Widgets:** painted snapshots (five tide levels per scene, precomputed by ArtForge, since
+  WidgetKit can't run shaders), white type over a teal scrim, line art in tinted and clear.
+  Verified on the real Home Screen in light, dark and tinted.
+- **Onboarding** uses the painted coast and teal glass.
+- **Contrast:** white type over art uses tonal scrims plus a deep-teal text halo. All four
+  accessibility audits pass on pixel measurements (region labels about 5.9:1, titles 7.9:1
+  or more). Content glass is tinted deep teal (iOS 26 Liquid Glass otherwise brightens it).
+- **Size:** full layers ship only in the app bundle and widget snapshots in TideUI.
+  Release `.app` 24 MB, widget extension 5.1 MB.
+- **Not implemented from the reference:** Today/Week/Month tabs, and the sun, moon and
+  layers buttons. They would be non-working or out-of-scope controls, and V1 excludes moon
+  calendars. The people, turtles and boat are also omitted.

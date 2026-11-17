@@ -29,14 +29,18 @@ struct CoastHero<Card: View>: View {
                 .animation(reduceMotion ? nil : .easeInOut(duration: 0.6), value: level)
             // Scrims keep white type legible over any part of the painting.
             VStack(spacing: 0) {
-                LinearGradient(colors: [Palette.oceanDeep.opacity(0.75), Palette.oceanDeep.opacity(0)], startPoint: .top, endPoint: .bottom)
-                    .frame(height: layout.topInset + 130)
-                Spacer()
-                LinearGradient(stops: [.init(color: Palette.oceanMid.opacity(0), location: 0),
-                                       .init(color: Palette.oceanMid.opacity(0.55), location: 0.5),
-                                       .init(color: Palette.oceanDeep.opacity(0.78), location: 1)],
+                LinearGradient(stops: [.init(color: Palette.oceanDeep.opacity(0.88), location: 0),
+                                       .init(color: Palette.oceanDeep.opacity(0.6), location: 0.6),
+                                       .init(color: Palette.oceanDeep.opacity(0), location: 1)],
                                startPoint: .top, endPoint: .bottom)
-                    .frame(height: layout.height * 0.5)
+                    .frame(height: layout.topInset + 150)
+                Spacer()
+                LinearGradient(stops: [.init(color: Palette.oceanDeep.opacity(0), location: 0),
+                                       .init(color: Palette.oceanDeep.opacity(0.62), location: 0.35),
+                                       .init(color: Palette.oceanDeep.opacity(0.88), location: 0.65),
+                                       .init(color: Palette.oceanDeep.opacity(0.95), location: 1)],
+                               startPoint: .top, endPoint: .bottom)
+                    .frame(height: layout.height * 0.55)
             }
             .allowsHitTesting(false)
             .accessibilityHidden(true)
@@ -90,6 +94,7 @@ struct CoastHero<Card: View>: View {
             .accessibilityIdentifier("settings")
         }
         .foregroundStyle(Palette.onArt)
+        .modifier(TextHalo())
         .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
     }
 
@@ -117,7 +122,7 @@ struct CoastHero<Card: View>: View {
             .accessibilityHint("Shows station \(station.id) details and data source.")
             .accessibilityIdentifier("placeTitle")
         }
-        .shadow(color: Palette.oceanDeep.opacity(0.45), radius: 12)
+        .modifier(TextHalo())
     }
 
     private var scrollHint: some View {
@@ -130,6 +135,17 @@ struct CoastHero<Card: View>: View {
         .typeStyle(.label)
         .foregroundStyle(Palette.onArtSoft)
         .accessibilityHidden(true)
+    }
+}
+
+/// A tight deep-teal halo plus a soft wider one: white type stays legible over bright
+/// surf or pale sand without hiding the painting behind a plate.
+struct TextHalo: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .shadow(color: Palette.oceanDeep.opacity(0.95), radius: 2.5)
+            .shadow(color: Palette.oceanDeep.opacity(0.8), radius: 10)
+            .shadow(color: Palette.oceanDeep.opacity(0.5), radius: 24)
     }
 }
 

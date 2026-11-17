@@ -121,6 +121,11 @@ exists. Shipping a paywall without them would be inert. See `Documentation/APP_S
   composition with real NOAA data. Functional tests pass (90/95; 3 opt-in skipped); the two
   home accessibility audits fail only for regions still on the old illustration (fixed in M2).
 
+- M2 ✅ NorCal + SoCal painted scenes, region mapping, painted widget snapshots (Home Screen
+  verified light/dark/tinted), painted onboarding, measured-contrast audits all passing,
+  layers moved to app bundle (Release app 24 MB, widget 5.1 MB). Regression 95 tests:
+  92 passed, 0 failed, 3 skipped (opt-in); live NOAA comparison still passes.
+
 ## Blockers needing the owner
 See `Documentation/APP_STORE.md` → "Owner-only steps". In short:
 - Apple Developer team ID + signing → device install, signed archive, TestFlight.

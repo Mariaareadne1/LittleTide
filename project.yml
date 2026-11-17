@@ -26,6 +26,11 @@ targets:
     platform: iOS
     sources:
       - path: LittleTide
+        excludes:
+          - "Resources/Scenes"
+      - path: LittleTide/Resources/Scenes
+        type: folder
+        buildPhase: resources
     dependencies:
       - package: TideKit
         product: TideKit

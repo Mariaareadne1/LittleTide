@@ -11,13 +11,21 @@ struct OnboardingView: View {
             ScrollView {
                 VStack(spacing: 0) {
                     ZStack(alignment: .topLeading) {
-                        CoastArtView(region: .southernCalifornia, waterLevel: 0.4, horizon: 0.42)
-                            .frame(width: proxy.size.width, height: max(proxy.size.height * 0.72, 520))
+                        PaintedCoastView(scene: .eastCoast, level: 0.45)
+                            .frame(width: proxy.size.width, height: max(proxy.size.height * 0.78, 560))
+                            .overlay {
+                                LinearGradient(stops: [.init(color: Palette.oceanDeep.opacity(0.7), location: 0),
+                                                       .init(color: Palette.oceanDeep.opacity(0), location: 0.22),
+                                                       .init(color: Palette.oceanDeep.opacity(0), location: 0.6),
+                                                       .init(color: Palette.oceanDeep.opacity(0.85), location: 1)],
+                                               startPoint: .top, endPoint: .bottom)
+                            }
                         HStack(spacing: 10) {
                             TideMark().frame(width: 24, height: 24)
-                            Text("Little Tide").typeStyle(.brand).foregroundStyle(Palette.ink)
+                            Text("Little Tide").typeStyle(.brand).foregroundStyle(Palette.onArt)
                         }
                         .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
+                        .modifier(TextHalo())
                         .padding(.horizontal, 24)
                         .padding(.top, proxy.safeAreaInsets.top + 12)
                         .accessibilityElement(children: .combine)
@@ -26,9 +34,9 @@ struct OnboardingView: View {
                     .overlay(alignment: .bottomTrailing) {
                         Text("Original illustration")
                             .typeStyle(.metadata)
-                            .foregroundStyle(Palette.ink)
+                            .foregroundStyle(Palette.onArt)
                             .padding(.horizontal, 10).padding(.vertical, 5)
-                            .glassSurface(Capsule(), tint: Palette.paper.opacity(0.5))
+                            .glassSurface(Capsule(), tint: Palette.oceanDeep.opacity(0.7))
                             .padding(16)
                             .padding(.bottom, 150)
                     }
@@ -39,19 +47,19 @@ struct OnboardingView: View {
             }
             .ignoresSafeArea(edges: .top)
         }
-        .background(Palette.paper.ignoresSafeArea())
+        .background(Palette.oceanDeep.ignoresSafeArea())
     }
 
     private var card: some View {
         VStack(alignment: .leading, spacing: 14) {
             Text("A little window into your coast.")
                 .typeStyle(.heroLocation)
-                .foregroundStyle(Palette.ink)
+                .foregroundStyle(Palette.onArt)
                 .fixedSize(horizontal: false, vertical: true)
                 .accessibilityAddTraits(.isHeader)
             Text("Predicted high and low tides for NOAA stations across the United States, on your Home Screen and in a timeline you can explore with a finger.")
                 .typeStyle(.body)
-                .foregroundStyle(Palette.ink)
+                .foregroundStyle(Palette.onArtSoft)
                 .fixedSize(horizontal: false, vertical: true)
             Button(action: onChooseCoast) {
                 Text("Choose your coast")
@@ -60,17 +68,17 @@ struct OnboardingView: View {
             }
             .buttonStyle(.borderedProminent)
             .buttonBorderShape(.capsule)
-            .tint(Palette.ink)
-            .foregroundStyle(Palette.paper)
+            .tint(.white)
+            .foregroundStyle(Palette.oceanDeep)
             .padding(.top, 6)
             .accessibilityIdentifier("chooseCoast")
             Text("No account or location needed.")
                 .typeStyle(.metadata)
-                .foregroundStyle(Palette.ink)
+                .foregroundStyle(Palette.onArtSoft)
                 .frame(maxWidth: .infinity)
         }
         .padding(24)
-        .glassSurface(RoundedRectangle(cornerRadius: 32, style: .continuous), tint: Palette.paper.opacity(0.6))
+        .glassSurface(RoundedRectangle(cornerRadius: 32, style: .continuous), tint: Palette.oceanDeep.opacity(0.82))
         .padding(.horizontal, 14)
     }
 }

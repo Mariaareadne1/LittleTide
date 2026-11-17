@@ -17,6 +17,7 @@
 		4801A607E1F4D4A7CCA18897 /* TideUI in Frameworks */ = {isa = PBXBuildFile; productRef = 0F164D24BC91245A94D6BC52 /* TideUI */; };
 		4FD6C1A30D8E45D416B39D4A /* SourceInfoSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3ED85307905D38CBE05A92 /* SourceInfoSheet.swift */; };
 		51881B685E573E0C8DAFF0F7 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B862D096A9150A6F0FD4B7 /* OnboardingView.swift */; };
+		551AFD87F9BF2C2DF562A6B1 /* Scenes in Resources */ = {isa = PBXBuildFile; fileRef = 904C214BAF1CA3732B104789 /* Scenes */; };
 		57484212783140717E6E69B1 /* TideReadout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E295FADFEAAA4969B7C333B /* TideReadout.swift */; };
 		584944DC3B0201B26121D09A /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E0D0F0AE102BD5BF58265DA9 /* WidgetKit.framework */; };
 		5B303ECEBF8D580A863E3D4B /* AppModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DBA67AE51443CAADB751905 /* AppModelTests.swift */; };
@@ -118,6 +119,7 @@
 		8AD0A9AB80B94BA3EFA955A1 /* santamonica_9410840_hilo.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = santamonica_9410840_hilo.json; sourceTree = "<group>"; };
 		8BFA2C22CCD03EF2A3E13EB0 /* santamonica_9410840_15min.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = santamonica_9410840_15min.json; sourceTree = "<group>"; };
 		8EB89EC598FC9A157984C9ED /* LittleTideTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = LittleTideTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		904C214BAF1CA3732B104789 /* Scenes */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Scenes; path = LittleTide/Resources/Scenes; sourceTree = SOURCE_ROOT; };
 		906FF05D5E1D43DFE38E4ABB /* LittleTide.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = LittleTide.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		95BFE4BC1A327BA18059AB7A /* TideStudyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TideStudyView.swift; sourceTree = "<group>"; };
 		9DBA67AE51443CAADB751905 /* AppModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppModelTests.swift; sourceTree = "<group>"; };
@@ -304,6 +306,7 @@
 			isa = PBXGroup;
 			children = (
 				A41B2D0EEC2171CBAFB59E76 /* Assets.xcassets */,
+				904C214BAF1CA3732B104789 /* Scenes */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -509,6 +512,7 @@
 			files = (
 				F2139C79791FC53ADC0EC83F /* Assets.xcassets in Resources */,
 				AF0E692AA7117CA732E53814 /* PrivacyInfo.xcprivacy in Resources */,
+				551AFD87F9BF2C2DF562A6B1 /* Scenes in Resources */,
 				6CB3B7FC49BB1227E145CDCA /* kingharbor_9410738_hilo.json in Resources */,
 				D2C983A5FFA65729F2C64193 /* santamonica_9410840_15min.json in Resources */,
 				ECDFA763B0E30149481E93D3 /* santamonica_9410840_hilo.json in Resources */,

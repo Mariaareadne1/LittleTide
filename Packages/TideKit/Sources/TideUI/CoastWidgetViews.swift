@@ -10,10 +10,11 @@ public enum CoastCardRendering: Sendable {
 
 private struct CardColors {
     let rendering: CoastCardRendering
-    var ink: Color { rendering == .fullColor ? Palette.ink : .primary }
-    var soft: Color { rendering == .fullColor ? Palette.inkSoft : .secondary }
-    var accent: Color { rendering == .fullColor ? Palette.seaGlassDeep : .primary }
-    var marker: Color { rendering == .fullColor ? Palette.rust : .primary }
+    // Full colour: white type on painted water under a teal scrim.
+    var ink: Color { rendering == .fullColor ? Palette.onArt : .primary }
+    var soft: Color { rendering == .fullColor ? Palette.onArtSoft : .secondary }
+    var accent: Color { rendering == .fullColor ? Palette.onArt : .primary }
+    var marker: Color { rendering == .fullColor ? Palette.coral : .primary }
 }
 
 /// The painted scene behind a widget (full colour only). Shared by the widget's
@@ -31,23 +32,29 @@ public struct CoastWidgetBackground: View {
 
     public var body: some View {
         ZStack {
-            Palette.paper
+            Palette.oceanDeep
             if let station = content.station {
-                CoastArtView(region: CoastRegion(station: station), waterLevel: content.waterLevel ?? 0.5,
-                             horizon: family == .small ? 0.36 : 0.42)
-                    .accessibilityHidden(true)
+                if let scene = PaintedScene(region: CoastRegion(station: station)),
+                   let image = scene.widgetImage(family: family, level: content.waterLevel ?? 0.5) {
+                    // Precomputed painted snapshot (WidgetKit renders snapshots, not shaders).
+                    image.resizable().scaledToFill().accessibilityHidden(true)
+                } else {
+                    CoastArtView(region: CoastRegion(station: station), waterLevel: content.waterLevel ?? 0.5,
+                                 horizon: family == .small ? 0.36 : 0.42)
+                        .accessibilityHidden(true)
+                }
             }
-            // A soft paper veil where the type sits, so it reads in one glance.
+            // Teal scrim where the type sits, so white text reads in one glance.
             switch family {
             case .small:
-                LinearGradient(stops: [.init(color: Palette.paper.opacity(0), location: 0.34),
-                                       .init(color: Palette.paper.opacity(0.9), location: 0.6),
-                                       .init(color: Palette.paper.opacity(0.97), location: 1)],
+                LinearGradient(stops: [.init(color: Palette.oceanDeep.opacity(0), location: 0.25),
+                                       .init(color: Palette.oceanDeep.opacity(0.62), location: 0.62),
+                                       .init(color: Palette.oceanDeep.opacity(0.88), location: 1)],
                                startPoint: .top, endPoint: .bottom)
             case .medium:
-                LinearGradient(stops: [.init(color: Palette.paper.opacity(0.97), location: 0),
-                                       .init(color: Palette.paper.opacity(0.9), location: 0.46),
-                                       .init(color: Palette.paper.opacity(0), location: 0.72)],
+                LinearGradient(stops: [.init(color: Palette.oceanDeep.opacity(0.88), location: 0),
+                                       .init(color: Palette.oceanDeep.opacity(0.62), location: 0.45),
+                                       .init(color: Palette.oceanDeep.opacity(0), location: 0.75)],
                                startPoint: .leading, endPoint: .trailing)
             }
         }
@@ -229,7 +236,7 @@ struct RhythmStrip: View {
         Canvas { context, size in
             let rect = CGRect(x: 0, y: 3, width: size.width, height: size.height - 6)
             let geometry = TideChartGeometry(window: rhythm.window, dataRange: rhythm.range, rect: rect, padding: 0.15)
-            let line = rendering == .fullColor ? Palette.seaGlassDeep : Color.primary
+            let line = rendering == .fullColor ? Palette.onArt : Color.primary
             var clipped = context
             clipped.clip(to: Path(rect.insetBy(dx: 0, dy: -3)))
             if rhythm.samples.isEmpty {
@@ -242,7 +249,7 @@ struct RhythmStrip: View {
                 }
             } else {
                 if rendering == .fullColor {
-                    clipped.fill(Path(geometry.areaPath(samples: rhythm.samples)), with: .color(Palette.seaGlass.opacity(0.22)))
+                    clipped.fill(Path(geometry.areaPath(samples: rhythm.samples)), with: .color(Palette.onArt.opacity(0.18)))
                 }
                 clipped.stroke(Path(geometry.curvePath(samples: rhythm.samples)), with: .color(line), lineWidth: 1.25)
             }
@@ -254,11 +261,11 @@ struct RhythmStrip: View {
             var marker = Path()
             marker.move(to: CGPoint(x: x, y: rect.minY - 2))
             marker.addLine(to: CGPoint(x: x, y: rect.maxY + 2))
-            context.stroke(marker, with: .color(rendering == .fullColor ? Palette.rust : .primary), lineWidth: 1.5)
+            context.stroke(marker, with: .color(rendering == .fullColor ? Palette.coral : .primary), lineWidth: 1.5)
             var base = Path()
             base.move(to: CGPoint(x: rect.minX, y: rect.maxY + 2))
             base.addLine(to: CGPoint(x: rect.maxX, y: rect.maxY + 2))
-            context.stroke(base, with: .color(rendering == .fullColor ? Palette.sand : Color.secondary), lineWidth: 0.5)
+            context.stroke(base, with: .color(rendering == .fullColor ? Palette.onArt.opacity(0.4) : Color.secondary), lineWidth: 0.5)
         }
         .accessibilityHidden(true)
     }

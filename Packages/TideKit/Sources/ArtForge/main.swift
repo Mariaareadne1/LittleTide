@@ -45,21 +45,27 @@ func scaled(_ src: [UInt8], sw: Int, sh: Int, crop: (x: Int, y: Int, w: Int, h: 
 let arguments = CommandLine.arguments.dropFirst()
 let previewDir = arguments.firstIndex(of: "--preview").map { URL(fileURLWithPath: arguments[$0 + 1]) }
 let wanted = Set(arguments.filter { !$0.hasPrefix("--") && URL(fileURLWithPath: $0) != previewDir })
-let scenes = [SceneSpec.eastCoast].filter { wanted.isEmpty || wanted.contains($0.name) }
+let scenes = [SceneSpec.eastCoast, SceneSpec.norCal, SceneSpec.soCal].filter { wanted.isEmpty || wanted.contains($0.name) }
+// Widget snapshots ship in TideUI (shared with the widget); full-size layers ship only in
+// the app bundle, so the widget extension stays small.
 let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().appendingPathComponent("TideUI/Scenes")
+let appRoot = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
+    .deletingLastPathComponent().deletingLastPathComponent().appendingPathComponent("LittleTide/Resources/Scenes")
 
 for spec in scenes {
     let start = Date()
     let dir = root.appendingPathComponent(spec.name)
+    let layerDir = appRoot.appendingPathComponent(spec.name)
     try FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
+    try FileManager.default.createDirectory(at: layerDir, withIntermediateDirectories: true)
     let terrain = Terrain(spec: spec)
     let painter = LayerPainter(terrain: terrain)
     let land = painter.land(), water = painter.water(), foam = painter.foam(), wander = painter.wander()
     let w = spec.width, h = spec.height
     print("\(spec.name): layers painted in \(Int(Date().timeIntervalSince(start)))s")
 
-    writeImage(land.pixels, width: w, height: h, gray: false, to: dir.appendingPathComponent("land.jpg"), jpegQuality: 0.86)
-    writeImage(water.pixels, width: w, height: h, gray: false, to: dir.appendingPathComponent("water.jpg"), jpegQuality: 0.86)
+    writeImage(land.pixels, width: w, height: h, gray: false, to: layerDir.appendingPathComponent("land.jpg"), jpegQuality: 0.86)
+    writeImage(water.pixels, width: w, height: h, gray: false, to: layerDir.appendingPathComponent("water.jpg"), jpegQuality: 0.86)
     // data.png: R = height ((h − heightMin) / heightSpan, dithered), G = foam lace,
     // B = foam wander (0.5 = none). One image because SwiftUI shaders take one image.
     var rng = SplitMix(seed: spec.seed &+ 9)
@@ -70,7 +76,7 @@ for spec in scenes {
         data[i * 4 + 1] = UInt8(clamp01(foam[i]) * 255)
         data[i * 4 + 2] = UInt8(clamp01(wander[i] * 0.5 + 0.5) * 255)
     }
-    writeImage(data, width: w, height: h, gray: false, to: dir.appendingPathComponent("data.png"))
+    writeImage(data, width: w, height: h, gray: false, to: layerDir.appendingPathComponent("data.png"))
     try? FileManager.default.removeItem(at: dir.appendingPathComponent("height.png"))
     try? FileManager.default.removeItem(at: dir.appendingPathComponent("foam.png"))
 

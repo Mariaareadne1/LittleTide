@@ -117,7 +117,7 @@ struct LayerPainter {
                            color: base, alpha: rng.range(0.12, 0.3), width: wid)
             }
             // Dune grass: tufts of blades on the high dunes.
-            for _ in 0..<1500 {
+            for _ in 0..<spec.grassTufts {
                 let x = Int(rng.unit() * Float(w)), y = Int(rng.unit() * Float(h))
                 let i = y * w + x
                 let s = terrain.across[i]
@@ -173,6 +173,23 @@ struct LayerPainter {
                 let bow = CGFloat(rng.range(-0.2, 0.2) * len)
                 ctx.stroke(from: a, bend: CGPoint(x: (a.x + b.x) / 2 + CGFloat(ty) * bow, y: (a.y + b.y) / 2 - CGFloat(tx) * bow), to: b,
                            color: color, alpha: rng.range(0.12, 0.3), width: CGFloat(rng.range(5, 14)))
+            }
+            // Kelp canopy: clumps of olive fronds floating offshore.
+            if !spec.kelp.isEmpty {
+                for _ in 0..<14000 {
+                    let x = Int(rng.unit() * Float(w)), y = Int(rng.unit() * Float(h))
+                    let s = terrain.across[y * w + x]
+                    let u = Float(x) / Float(w), v = Float(y) / Float(h)
+                    let bed = smoothstep(-0.05, 0.2, noise.fbm(u * 3 + 70, v * 6 + 11, octaves: 4))
+                    guard s > 0.16, s < 0.6, rng.unit() < bed else { continue }
+                    let (tx, ty) = contourTangent(x, y)
+                    let len = rng.range(10, 34)
+                    let color = spec.kelp[Int(rng.unit() * Float(spec.kelp.count)) % spec.kelp.count].scaled(rng.range(0.85, 1.15))
+                    let a = CGPoint(x: CGFloat(Float(x) - tx * len / 2), y: CGFloat(Float(y) - ty * len / 2))
+                    let b = CGPoint(x: CGFloat(Float(x) + tx * len / 2), y: CGFloat(Float(y) + ty * len / 2))
+                    ctx.stroke(from: a, bend: CGPoint(x: (a.x + b.x) / 2 + CGFloat(rng.range(-5, 5)), y: (a.y + b.y) / 2), to: b,
+                               color: color, alpha: rng.range(0.4, 0.8), width: CGFloat(rng.range(2.5, 6)))
+                }
             }
             // Thin light lines on the swell and scattered foam streaks offshore.
             for _ in 0..<1400 {

@@ -7,9 +7,11 @@ import UIKit
 /// A layered, painted coast rendered by ArtForge (see `Sources/ArtForge`).
 public enum PaintedScene: String, CaseIterable, Sendable {
     case eastCoast
+    case norCal
+    case soCal
 
     /// Scene parameters that the shader needs (mirrors `SceneSpec`).
-    struct Look {
+    struct Look: Sendable {
         let turquoise: SIMD3<Float>, seabedTint: SIMD3<Float>, foam: SIMD3<Float>
         let wetDarkening: Float
         let aspect: Float
@@ -19,14 +21,32 @@ public enum PaintedScene: String, CaseIterable, Sendable {
         switch self {
         case .eastCoast:
             return Look(turquoise: rgb(0x8EDDD1), seabedTint: rgb(0xA6DCD2), foam: rgb(0xF7F6EE), wetDarkening: 0.3, aspect: 1080 / 2340)
+        case .norCal:
+            return Look(turquoise: rgb(0x79C4BC), seabedTint: rgb(0x8FC2BC), foam: rgb(0xF2F4F0), wetDarkening: 0.34, aspect: 1080 / 2340)
+        case .soCal:
+            return Look(turquoise: rgb(0x9BE6D7), seabedTint: rgb(0xB2E6D9), foam: rgb(0xFBF9F1), wetDarkening: 0.26, aspect: 1080 / 2340)
         }
     }
 
-    /// The painted scene for a coast region, when one exists yet.
+    /// The representative painted scene for a coast region. Scenes are generic coasts of a
+    /// kind, never the station's actual shoreline:
+    /// - Atlantic, marsh and Gulf coasts → pale sand, dunes, shallow surf (`eastCoast`)
+    /// - Northern California / Pacific Northwest / Alaska → dark rocky cove, kelp (`norCal`)
+    /// - Southern California / tropical islands → warm sand, turquoise water, reefs (`soCal`)
     public init?(region: CoastRegion) {
         switch region {
-        case .northAtlantic: self = .eastCoast
-        default: return nil
+        case .northAtlantic, .southAtlanticMarsh, .gulfShore: self = .eastCoast
+        case .northernPacific, .northernFjord: self = .norCal
+        case .southernCalifornia, .tropicalIsland: self = .soCal
+        }
+    }
+
+    /// Plain-language name used in captions and VoiceOver.
+    public var caption: String {
+        switch self {
+        case .eastCoast: return "Atlantic coast with dunes and sandbars"
+        case .norCal: return "Rocky Pacific cove with kelp"
+        case .soCal: return "Warm-sand beach with reefs"
         }
     }
 
@@ -67,7 +87,9 @@ final class LayerCache: @unchecked Sendable {
         let key = "\(scene)/\(name).\(ext)"
         lock.lock(); defer { lock.unlock() }
         if let cached = images[key] { return cached }
-        guard let url = Bundle.module.url(forResource: name, withExtension: ext, subdirectory: "Scenes/\(scene)"),
+        // Full-size layers live in the app bundle; widget snapshots in TideUI's bundle.
+        guard let url = Bundle.main.url(forResource: name, withExtension: ext, subdirectory: "Scenes/\(scene)")
+                ?? Bundle.module.url(forResource: name, withExtension: ext, subdirectory: "Scenes/\(scene)"),
               let image = UIImage(contentsOfFile: url.path) else { return nil }
         images[key] = image
         return image
@@ -113,15 +135,19 @@ public struct PaintedCoastView: View {
     public var body: some View {
         #if canImport(UIKit)
         if let atlas = LayerCache.shared.atlas(scene: scene.rawValue) {
+            let look = scene.look
+            let level = PaintedScene.level(level)
+            let motion: Float = reduceMotion ? 0 : 1
+            let image = Image(uiImage: atlas)
             TimelineView(.animation(minimumInterval: 1 / 30, paused: reduceMotion)) { context in
                 let time = Float(context.date.timeIntervalSinceReferenceDate.truncatingRemainder(dividingBy: 3600))
                 Rectangle()
                     .visualEffect { content, proxy in
-                        content.colorEffect(shader(size: proxy.size, time: time, atlas: Image(uiImage: atlas)))
+                        content.colorEffect(Self.shader(look: look, size: proxy.size, level: level, time: time, motion: motion, atlas: image))
                     }
             }
             .accessibilityElement()
-            .accessibilityLabel("Illustration of a coast from above. Representative, not a live view.")
+            .accessibilityLabel("Illustration: \(scene.caption), seen from above. Representative, not a live view.")
             .accessibilityAddTraits(.isImage)
         } else {
             Color(red: 0.08, green: 0.36, blue: 0.43)
@@ -131,10 +157,10 @@ public struct PaintedCoastView: View {
         #endif
     }
 
-    private func shader(size: CGSize, time: Float, atlas: Image) -> Shader {
-        let look = scene.look
-        return ShaderLibrary.bundle(.module).tideScene(
-            .float2(size), .float(look.aspect), .float(PaintedScene.level(level)), .float(time), .float(reduceMotion ? 0 : 1),
+    /// Pure, so it can be built inside SwiftUI's nonisolated `visualEffect` closure.
+    private nonisolated static func shader(look: PaintedScene.Look, size: CGSize, level: Float, time: Float, motion: Float, atlas: Image) -> Shader {
+        ShaderLibrary.bundle(.module).tideScene(
+            .float2(size), .float(look.aspect), .float(level), .float(time), .float(motion),
             .image(atlas),
             .float3(look.turquoise.x, look.turquoise.y, look.turquoise.z),
             .float3(look.seabedTint.x, look.seabedTint.y, look.seabedTint.z),
