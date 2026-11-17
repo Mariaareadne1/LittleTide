@@ -20,7 +20,6 @@ struct CoastHomeView: View {
                 let now = model.clock.now()
                 ScrollView {
                     content(now: now, layout: HomeLayout(width: proxy.size.width, height: proxy.size.height + proxy.safeAreaInsets.top + proxy.safeAreaInsets.bottom, topInset: proxy.safeAreaInsets.top))
-                        .padding(.bottom, 36)
                         .background(alignment: .top) {
                             GeometryReader { inner in
                                 Color.clear.preference(key: ScrollOffsetKey.self, value: inner.frame(in: .named("homeScroll")).minY)

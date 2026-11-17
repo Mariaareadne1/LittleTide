@@ -116,6 +116,7 @@ struct LayerPainter {
                 ctx.stroke(from: a, bend: CGPoint(x: (a.x + b.x) / 2 + CGFloat(rng.range(-2, 2)), y: (a.y + b.y) / 2), to: b,
                            color: base, alpha: rng.range(0.12, 0.3), width: wid)
             }
+            paintFigures(ctx, scale: 2.6)
             // Dune grass: tufts of blades on the high dunes.
             for _ in 0..<spec.grassTufts {
                 let x = Int(rng.unit() * Float(w)), y = Int(rng.unit() * Float(h))
@@ -138,7 +139,7 @@ struct LayerPainter {
 
     // MARK: Water colour: painterly tonal bands along depth contours
 
-    func water() -> Canvas {
+    func water(includeCraft: Bool = true) -> Canvas {
         let w = spec.width, h = spec.height
         let bands: Float = 6
         var canvas = Canvas(width: w, height: h) { x, y in
@@ -191,6 +192,7 @@ struct LayerPainter {
                                color: color, alpha: rng.range(0.4, 0.8), width: CGFloat(rng.range(2.5, 6)))
                 }
             }
+            if includeCraft { paintCraft(ctx, scale: 1.8) }
             // Thin light lines on the swell and scattered foam streaks offshore.
             for _ in 0..<1400 {
                 let x = Int(rng.unit() * Float(w)), y = Int(rng.unit() * Float(h))

@@ -62,6 +62,9 @@ public enum PaintedScene: String, CaseIterable, Sendable {
         return Self.image("widget-\(family == .small ? "small" : "medium")-\(step)", ext: "jpg", scene: self)
     }
 
+    /// Painted water with no people or boats, for filling under the tide curve.
+    public var chartFill: Image? { Self.image("chart-fill", ext: "jpg", scene: self) }
+
     static func image(_ name: String, ext: String, scene: PaintedScene) -> Image? {
         #if canImport(UIKit)
         guard let ui = LayerCache.shared.image(named: name, ext: ext, scene: scene.rawValue) else { return nil }
@@ -120,16 +123,56 @@ final class LayerCache: @unchecked Sendable {
 }
 #endif
 
+/// A liquid-glass panel rendered by the scene shader (so it refracts the painting).
+public struct GlassPanel: Equatable, Sendable {
+    public enum Kind: Float, Sendable { case card = 0, button = 1 }
+    public var frame: CGRect
+    public var cornerRadius: CGFloat
+    public var kind: Kind
+
+    public init(frame: CGRect, cornerRadius: CGFloat, kind: Kind) {
+        self.frame = frame
+        self.cornerRadius = cornerRadius
+        self.kind = kind
+    }
+}
+
+/// Legibility scrims baked into the scene, so glass refracts them instead of being dimmed.
+public struct SceneScrim: Equatable, Sendable {
+    public var topEnd: CGFloat
+    public var bottomStart: CGFloat
+    public var topAlpha: Float
+    public var bottomAlpha: Float
+
+    public static let none = SceneScrim(topEnd: 1, bottomStart: 100_000, topAlpha: 0, bottomAlpha: 0)
+
+    public init(topEnd: CGFloat, bottomStart: CGFloat, topAlpha: Float, bottomAlpha: Float) {
+        self.topEnd = topEnd
+        self.bottomStart = bottomStart
+        self.topAlpha = topAlpha
+        self.bottomAlpha = bottomAlpha
+    }
+}
+
 /// The painted coast at a normalised tide level (0 = lowest, 1 = highest in view).
 /// Illustrative only: the waterline is not a map of the station's real shoreline.
 public struct PaintedCoastView: View {
+    public enum Mode: Sendable { case coast, underwater }
+
     let scene: PaintedScene
     let level: Double
+    let mode: Mode
+    let scrim: SceneScrim
+    let panels: [GlassPanel]
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.accessibilityReduceTransparency) private var reduceTransparency
 
-    public init(scene: PaintedScene, level: Double) {
+    public init(scene: PaintedScene, level: Double, mode: Mode = .coast, scrim: SceneScrim = .none, panels: [GlassPanel] = []) {
         self.scene = scene
         self.level = level
+        self.mode = mode
+        self.scrim = scrim
+        self.panels = panels
     }
 
     public var body: some View {
@@ -139,11 +182,16 @@ public struct PaintedCoastView: View {
             let level = PaintedScene.level(level)
             let motion: Float = reduceMotion ? 0 : 1
             let image = Image(uiImage: atlas)
+            let underwater: Float = mode == .underwater ? 1 : 0
+            let scrim = scrim
+            // Under Reduce Transparency the glass is drawn as opaque surfaces by SwiftUI instead.
+            let panelData = reduceTransparency ? [Float(0)] : Self.encode(panels)
             TimelineView(.animation(minimumInterval: 1 / 30, paused: reduceMotion)) { context in
                 let time = Float(context.date.timeIntervalSinceReferenceDate.truncatingRemainder(dividingBy: 3600))
                 Rectangle()
                     .visualEffect { content, proxy in
-                        content.colorEffect(Self.shader(look: look, size: proxy.size, level: level, time: time, motion: motion, atlas: image))
+                        content.colorEffect(Self.shader(look: look, size: proxy.size, level: level, time: time, motion: motion, atlas: image,
+                                                        underwater: underwater, scrim: scrim, panels: panelData))
                     }
             }
             .accessibilityElement()
@@ -158,14 +206,27 @@ public struct PaintedCoastView: View {
     }
 
     /// Pure, so it can be built inside SwiftUI's nonisolated `visualEffect` closure.
-    private nonisolated static func shader(look: PaintedScene.Look, size: CGSize, level: Float, time: Float, motion: Float, atlas: Image) -> Shader {
+    static func encode(_ panels: [GlassPanel]) -> [Float] {
+        var data: [Float] = [Float(min(panels.count, 8))]
+        for panel in panels.prefix(8) {
+            data += [Float(panel.frame.midX), Float(panel.frame.midY), Float(panel.frame.width / 2), Float(panel.frame.height / 2),
+                     Float(panel.cornerRadius), panel.kind.rawValue, 0, 0]
+        }
+        return data
+    }
+
+    private nonisolated static func shader(look: PaintedScene.Look, size: CGSize, level: Float, time: Float, motion: Float, atlas: Image,
+                                           underwater: Float, scrim: SceneScrim, panels: [Float]) -> Shader {
         ShaderLibrary.bundle(.module).tideScene(
             .float2(size), .float(look.aspect), .float(level), .float(time), .float(motion),
             .image(atlas),
             .float3(look.turquoise.x, look.turquoise.y, look.turquoise.z),
             .float3(look.seabedTint.x, look.seabedTint.y, look.seabedTint.z),
             .float3(look.foam.x, look.foam.y, look.foam.z),
-            .float(look.wetDarkening)
+            .float(look.wetDarkening),
+            .float(underwater),
+            .float4(Float(scrim.topEnd), Float(scrim.bottomStart), scrim.topAlpha, scrim.bottomAlpha),
+            .floatArray(panels)
         )
     }
 }

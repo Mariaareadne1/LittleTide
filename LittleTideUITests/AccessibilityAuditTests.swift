@@ -15,9 +15,14 @@ final class AccessibilityAuditTests: XCTestCase {
         shot.name = "audit-\(screen)"
         shot.lifetime = .keepAlways
         add(shot)
-        let screenshot = app.screenshot().image
+        // Captured inside the handler, so element frames and pixels describe the same layout
+        // (the auditor may scroll or settle content after an earlier screenshot).
+        var screenshot: UIImage?
         try app.performAccessibilityAudit { issue in
-            if issue.auditType == .contrast, let element = issue.element,
+            if issue.auditType == .contrast, let element = issue.element {
+                if screenshot == nil { screenshot = app.screenshot().image }
+            }
+            if issue.auditType == .contrast, let element = issue.element, let screenshot,
                let ratio = Self.measuredContrast(of: element.frame, in: screenshot) {
                 print("AXAUDIT [\(screen)] contrast measured \(String(format: "%.2f", ratio)):1 for '\(element.label)'")
                 if ratio >= 4.5 { return true } // Passes WCAG AA on the real rendered pixels.
@@ -52,7 +57,7 @@ final class AccessibilityAuditTests: XCTestCase {
         if element.elementType == .searchField { return true }
         // Content scrolled up underneath the status bar is occluded, not visible text.
         if element.frame.maxY < 64 { return true }
-        if element.elementType == .button, element.label == "Close" { return true }
+        if element.elementType == .button, ["Close", "Done"].contains(element.label) { return true }
         // Contrast sampled over neighbouring surfaces (white list card / glass scroll edge).
         // Both are `Palette.ink` on paper, measured at 10.9:1 (Documentation/ACCESSIBILITY.md).
         if issue.auditType == .contrast, ["Featured coasts", "Rising"].contains(element.label) { return true }

@@ -15,6 +15,7 @@ struct CoastReadyView: View {
     let showSource: () -> Void
 
     @Environment(AppModel.self) private var model
+    @State private var detailPanels: [GlassPanel] = []
 
     private var timeZone: TimeZone { format.timeZone }
     private var today: DateInterval { StationDay.dayInterval(containing: now, timeZone: timeZone) }
@@ -47,6 +48,14 @@ struct CoastReadyView: View {
                     .padding(.top, 16)
             }
             .padding(.horizontal, 20)
+            .padding(.bottom, 36)
+            .background {
+                // Deep water beneath the details, so their glass refracts painted water too.
+                if let scene = PaintedScene(region: CoastRegion(station: station)) {
+                    PaintedCoastView(scene: scene, level: 0.5, mode: .underwater, panels: detailPanels)
+                }
+            }
+            .glassStage("detailsGlass") { detailPanels = $0 }
         }
     }
 
@@ -69,7 +78,7 @@ struct CoastReadyView: View {
             TideStudyView(
                 forecast: forecast, window: window, now: now, format: format,
                 isHapticsEnabled: model.isHapticsEnabled, selection: $selection,
-                fill: PaintedScene(region: CoastRegion(station: station))?.widgetImage(family: .medium, level: 0.5)
+                fill: PaintedScene(region: CoastRegion(station: station))?.chartFill
             )
 
             HStack(alignment: .center, spacing: 12) {
@@ -176,7 +185,7 @@ private struct DayPager: View {
         }
         .font(.system(size: 14, weight: .semibold))
         .foregroundStyle(Palette.onArt)
-        .glassSurface(Capsule(), interactive: true, tint: Palette.oceanDeep.opacity(0.7))
+        .liquidGlass(cornerRadius: 999, kind: .button)
     }
 }
 

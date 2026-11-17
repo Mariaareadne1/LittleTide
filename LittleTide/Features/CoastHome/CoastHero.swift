@@ -20,6 +20,14 @@ struct CoastHero<Card: View>: View {
     @ViewBuilder let card: Card
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @State private var panels: [GlassPanel] = []
+
+    private var paintedScene: PaintedScene? { PaintedScene(region: CoastRegion(station: station)) }
+
+    /// Legibility scrims, rendered inside the scene so the glass refracts them.
+    private var scrim: SceneScrim {
+        SceneScrim(topEnd: layout.topInset + 150, bottomStart: layout.height * 0.42, topAlpha: 0.88, bottomAlpha: 0.95)
+    }
 
     var body: some View {
         ZStack(alignment: .bottom) {
@@ -27,8 +35,32 @@ struct CoastHero<Card: View>: View {
                 .frame(width: layout.width, height: layout.height)
                 .clipped()
                 .animation(reduceMotion ? nil : .easeInOut(duration: 0.6), value: level)
-            // Scrims keep white type legible over any part of the painting.
-            VStack(spacing: 0) {
+            if paintedScene == nil { fallbackScrims }
+
+            content
+        }
+        .frame(width: layout.width, height: layout.height)
+        .glassStage("heroGlass") { panels = $0 }
+    }
+
+    private var content: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            header
+                .padding(.top, layout.topInset + 6)
+            Spacer(minLength: 24)
+            identity
+            card
+                .padding(.top, 16)
+            scrollHint
+                .padding(.top, 18)
+                .padding(.bottom, 14)
+        }
+        .padding(.horizontal, 20)
+    }
+
+    private var fallbackScrims: some View {
+        // Scrims keep white type legible over any part of the painting.
+        VStack(spacing: 0) {
                 LinearGradient(stops: [.init(color: Palette.oceanDeep.opacity(0.88), location: 0),
                                        .init(color: Palette.oceanDeep.opacity(0.6), location: 0.6),
                                        .init(color: Palette.oceanDeep.opacity(0), location: 1)],
@@ -44,27 +76,12 @@ struct CoastHero<Card: View>: View {
             }
             .allowsHitTesting(false)
             .accessibilityHidden(true)
-
-            VStack(alignment: .leading, spacing: 0) {
-                header
-                    .padding(.top, layout.topInset + 6)
-                Spacer(minLength: 24)
-                identity
-                card
-                    .padding(.top, 16)
-                scrollHint
-                    .padding(.top, 18)
-                    .padding(.bottom, 14)
-            }
-            .padding(.horizontal, 20)
-        }
-        .frame(width: layout.width, height: layout.height)
     }
 
     @ViewBuilder
     private var art: some View {
-        if let scene = PaintedScene(region: CoastRegion(station: station)) {
-            PaintedCoastView(scene: scene, level: level)
+        if let scene = paintedScene {
+            PaintedCoastView(scene: scene, level: level, scrim: scrim, panels: panels)
         } else {
             // Regions without a painted scene yet keep the earlier illustration.
             CoastArtView(region: CoastRegion(station: station), waterLevel: level, horizon: 0.45)
@@ -83,13 +100,13 @@ struct CoastHero<Card: View>: View {
             Button(action: actions.chooseCoast) {
                 Image(systemName: "magnifyingglass").font(.system(size: 17, weight: .medium)).frame(width: 44, height: 44)
             }
-            .buttonStyle(OceanGlassButtonStyle())
+            .buttonStyle(LiquidGlassButtonStyle())
             .accessibilityLabel("Change coast")
             .accessibilityIdentifier("changeCoast")
             Button(action: actions.openSettings) {
                 Image(systemName: "ellipsis").font(.system(size: 17, weight: .bold)).frame(width: 44, height: 44)
             }
-            .buttonStyle(OceanGlassButtonStyle())
+            .buttonStyle(LiquidGlassButtonStyle())
             .accessibilityLabel("Settings")
             .accessibilityIdentifier("settings")
         }
@@ -102,7 +119,7 @@ struct CoastHero<Card: View>: View {
         VStack(alignment: .leading, spacing: 6) {
             Text(station.headline.region)
                 .typeStyle(.regionLabel)
-                .foregroundStyle(Palette.onArtSoft)
+                .foregroundStyle(Palette.onArt)
                 .lineLimit(2)
             Button(action: actions.openStationDetails) {
                 HStack(alignment: .firstTextBaseline, spacing: 10) {
@@ -154,7 +171,7 @@ struct OceanGlass: ViewModifier {
     var cornerRadius: CGFloat = 28
 
     func body(content: Content) -> some View {
-        content.glassSurface(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous), tint: Palette.oceanDeep.opacity(0.82))
+        content.liquidGlass(cornerRadius: cornerRadius, kind: .card)
     }
 }
 
@@ -162,10 +179,7 @@ struct OceanGlassButtonStyle: ButtonStyle {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .glassSurface(Capsule(), interactive: true, tint: Palette.oceanDeep.opacity(0.7))
-            .scaleEffect(configuration.isPressed && !reduceMotion ? 0.94 : 1)
-            .animation(reduceMotion ? nil : .easeOut(duration: 0.18), value: configuration.isPressed)
+        LiquidGlassButtonStyle().makeBody(configuration: configuration)
     }
 }
 

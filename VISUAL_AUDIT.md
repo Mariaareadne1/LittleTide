@@ -88,4 +88,38 @@ The waterline is illustrative and is labelled as such.
   Release `.app` 24 MB, widget extension 5.1 MB.
 - **Not implemented from the reference:** Today/Week/Month tabs, and the sun, moon and
   layers buttons. They would be non-working or out-of-scope controls, and V1 excludes moon
-  calendars. The people, turtles and boat are also omitted.
+  calendars. People and a boat were added in milestone 3; the turtles are still omitted.
+
+## Milestone 3 result: people, boats and shader Liquid Glass (2026-11-16)
+- **People and craft** (`ArtForge/Figures.swift`), all original vector work painted into
+  the scene layers:
+  - East Coast: two sunbathers, a walker, a rowboat.
+  - NorCal: a walker, a yellow kayak.
+  - SoCal: an umbrella, a sunbather, a walker, two swimmers, a paddleboarder.
+  - People sit on dry sand above the highest tide line, and craft sit in deep water. The
+    rising tide never paints water over a person, and a boat is never shown aground.
+  - The chart fill uses a figure-free water crop (`chart-fill.jpg`).
+- **Liquid Glass** is ported from the owner's `glass-studies` optical model into
+  `TideScene.metal`. Because it renders inside the scene shader, the glass bends the
+  actual painting behind it. The ported techniques:
+  - rounded-rect signed-distance field with a squircle bevel;
+  - refraction at IOR 1.52, chromatic aberration, golden-angle frost;
+  - Fresnel reflection and deep-teal absorption;
+  - milky rim and separation ring;
+  - streak, glints, sheen and spectral fringe;
+  - hairline and contact shadow.
+- **Glass coverage:** cards and buttons report their frames to the shader through a
+  `PreferenceKey` (`LiquidGlass.swift`). This covers the hero card, the header buttons,
+  the underwater details panels, the day pager and the onboarding card and pill.
+- **Accessibility:**
+  - Reduce Transparency switches to opaque deep-teal panels.
+  - Reduce Motion freezes the animation.
+  - Lowest measured contrast is 4.53:1 (onboarding pill); text elsewhere measures 5.35:1
+    or more.
+- **Evidence** in `Documentation/Design/reconstruction/`:
+  - `m3-liquid-glass-onboarding-hero-details-curve.jpg`
+  - `m3-figures-and-craft.jpg`
+  - `m3-widgets-home-with-figures.png`
+- **Verification:**
+  - Regression: 95 tests, 92 passed, 0 failed, 3 skipped (opt-in).
+  - Release archive: 0 warnings, `.app` 24 MB.

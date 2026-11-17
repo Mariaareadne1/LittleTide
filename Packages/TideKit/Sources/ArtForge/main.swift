@@ -80,6 +80,11 @@ for spec in scenes {
     try? FileManager.default.removeItem(at: dir.appendingPathComponent("height.png"))
     try? FileManager.default.removeItem(at: dir.appendingPathComponent("foam.png"))
 
+    // Chart fill: painted water with no people or boats (used under the NOAA curve).
+    let plainWater = painter.water(includeCraft: false)
+    writeImage(scaled(plainWater.pixels, sw: w, sh: h, crop: (x: 0, y: 400, w: 1080, h: 504), to: 1092, 510), width: 1092, height: 510,
+               gray: false, to: dir.appendingPathComponent("chart-fill.jpg"), jpegQuality: 0.84)
+
     // Composites at five tide levels: widget snapshots (+ optional full-size previews).
     // Widget crops frame the sandy point and its surf.
     let smallCrop = (x: 120, y: 640, w: 900, h: 900)

@@ -5,47 +5,52 @@ import TideUI
 /// First launch: one painted coast, one glass card, one action.
 struct OnboardingView: View {
     let onChooseCoast: () -> Void
+    @State private var panels: [GlassPanel] = []
 
     var body: some View {
         GeometryReader { proxy in
             ScrollView {
-                VStack(spacing: 0) {
-                    ZStack(alignment: .topLeading) {
-                        PaintedCoastView(scene: .eastCoast, level: 0.45)
-                            .frame(width: proxy.size.width, height: max(proxy.size.height * 0.78, 560))
-                            .overlay {
-                                LinearGradient(stops: [.init(color: Palette.oceanDeep.opacity(0.7), location: 0),
-                                                       .init(color: Palette.oceanDeep.opacity(0), location: 0.22),
-                                                       .init(color: Palette.oceanDeep.opacity(0), location: 0.6),
-                                                       .init(color: Palette.oceanDeep.opacity(0.85), location: 1)],
-                                               startPoint: .top, endPoint: .bottom)
-                            }
-                        HStack(spacing: 10) {
-                            TideMark().frame(width: 24, height: 24)
-                            Text("Little Tide").typeStyle(.brand).foregroundStyle(Palette.onArt)
-                        }
-                        .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
-                        .modifier(TextHalo())
-                        .padding(.horizontal, 24)
-                        .padding(.top, proxy.safeAreaInsets.top + 12)
-                        .accessibilityElement(children: .combine)
-                        .accessibilityAddTraits(.isHeader)
+                VStack(alignment: .leading, spacing: 0) {
+                    HStack(spacing: 10) {
+                        TideMark().frame(width: 24, height: 24)
+                        Text("Little Tide").typeStyle(.brand).foregroundStyle(Palette.onArt)
                     }
-                    .overlay(alignment: .bottomTrailing) {
+                    .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
+                    .modifier(TextHalo())
+                    .padding(.horizontal, 24)
+                    .padding(.top, proxy.safeAreaInsets.top + 12)
+                    .accessibilityElement(children: .combine)
+                    .accessibilityAddTraits(.isHeader)
+
+                    Spacer(minLength: max(proxy.size.height * 0.42, 260))
+
+                    HStack {
+                        Spacer()
                         Text("Original illustration")
                             .typeStyle(.metadata)
                             .foregroundStyle(Palette.onArt)
                             .padding(.horizontal, 10).padding(.vertical, 5)
-                            .glassSurface(Capsule(), tint: Palette.oceanDeep.opacity(0.7))
-                            .padding(16)
-                            .padding(.bottom, 150)
+                            .liquidGlass(cornerRadius: 999, kind: .button)
                     }
+                    .padding(.horizontal, 16)
+                    .padding(.bottom, 12)
 
-                    card.padding(.top, -150)
+                    card
+                        .padding(.bottom, max(proxy.safeAreaInsets.bottom, 16) + 16)
                 }
-                .padding(.bottom, 32)
+                .frame(minHeight: proxy.size.height + proxy.safeAreaInsets.top + proxy.safeAreaInsets.bottom, alignment: .top)
+                // The painting spans the whole page, so every glass panel has art to refract.
+                .background {
+                    GeometryReader { inner in
+                        PaintedCoastView(scene: .eastCoast, level: 0.45,
+                                         scrim: SceneScrim(topEnd: proxy.safeAreaInsets.top + 140, bottomStart: inner.size.height * 0.48,
+                                                           topAlpha: 0.85, bottomAlpha: 0.9),
+                                         panels: panels)
+                    }
+                }
+                .glassStage("onboardingGlass") { panels = $0 }
             }
-            .ignoresSafeArea(edges: .top)
+            .ignoresSafeArea(edges: [.top, .bottom])
         }
         .background(Palette.oceanDeep.ignoresSafeArea())
     }
@@ -78,7 +83,7 @@ struct OnboardingView: View {
                 .frame(maxWidth: .infinity)
         }
         .padding(24)
-        .glassSurface(RoundedRectangle(cornerRadius: 32, style: .continuous), tint: Palette.oceanDeep.opacity(0.82))
+        .liquidGlass(cornerRadius: 32, kind: .card)
         .padding(.horizontal, 14)
     }
 }

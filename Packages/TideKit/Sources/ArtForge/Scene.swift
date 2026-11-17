@@ -29,6 +29,10 @@ struct SceneSpec {
     var grassTufts: Int = 1500
     /// Kelp canopy painted into the water layer (Northern California).
     var kelp: [RGB] = []
+    /// People on dry sand (placed above the high-tide line).
+    var figures: [Figure] = []
+    /// Boats and swimmers in water deep enough that the tide never reaches them.
+    var craft: [Craft] = []
 }
 
 extension SceneSpec {
@@ -50,7 +54,11 @@ extension SceneSpec {
         foam: RGB(0xF7F6EE),
         rockDark: RGB(0x37332F), rockLight: RGB(0xA1896A),
         grass: [RGB(0x8E9A5A), RGB(0x6F7D45), RGB(0xA6A867), RGB(0x5E6B3E)],
-        wetDarkening: 0.3
+        wetDarkening: 0.3,
+        figures: [.sitter(v: 0.3, towel: 0xD9674F, shirt: 0xF3EEE2, hair: 0x5A3B27, facing: -0.35),
+                  .sitter(v: 0.37, towel: 0x4F7FA6, shirt: 0x6E8FA8, hair: 0x2A211C, facing: -0.2),
+                  .walker(v: 0.62, shirt: 0xE8C35A, hair: 0x7A5230)],
+        craft: [.rowboat(u: 0.76, v: 0.76, angle: -0.5)]
     )
 }
 
@@ -75,7 +83,9 @@ extension SceneSpec {
         grass: [RGB(0x6F7B4A), RGB(0x55603A), RGB(0x8A8F5C)],
         wetDarkening: 0.34,
         landRise: 0.3, riseWidth: 0.08, grassTufts: 900,
-        kelp: [RGB(0x4E4A22), RGB(0x645C2A), RGB(0x3E3D1E)]
+        kelp: [RGB(0x4E4A22), RGB(0x645C2A), RGB(0x3E3D1E)],
+        figures: [.walker(v: 0.47, shirt: 0xB5462E, hair: 0x3A2C22)],
+        craft: [.kayak(u: 0.7, v: 0.84, angle: -0.6, hull: 0xE2A21A)]
     )
 
     /// Southern California: warm sand below a bluff, bright turquoise water, rocky reefs
@@ -97,7 +107,12 @@ extension SceneSpec {
         rockDark: RGB(0x4A4136), rockLight: RGB(0xB09474),
         grass: [RGB(0x8F9466), RGB(0x7A7F55), RGB(0xA7A27A), RGB(0x6E744B)],
         wetDarkening: 0.26,
-        landRise: 0.34, riseWidth: 0.06, grassTufts: 2200
+        landRise: 0.34, riseWidth: 0.06, grassTufts: 2200,
+        figures: [.umbrella(v: 0.33, canopy: 0xE9B64A, stripe: 0xF7F2E6),
+                  .sitter(v: 0.42, towel: 0x5BA4A8, shirt: 0xE77E62, hair: 0x2F2219, facing: -0.3),
+                  .walker(v: 0.58, shirt: 0xF4F1EA, hair: 0x6B4A2E)],
+        craft: [.swimmer(u: 0.72, v: 0.66, angle: -0.4, cap: 0xF2C14E), .swimmer(u: 0.78, v: 0.7, angle: -0.6, cap: 0xE45B3C),
+                .paddleboard(u: 0.66, v: 0.86, angle: -0.5, board: 0xF5F1E6)]
     )
 }
 

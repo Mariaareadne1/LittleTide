@@ -126,6 +126,12 @@ exists. Shipping a paywall without them would be inert. See `Documentation/APP_S
   layers moved to app bundle (Release app 24 MB, widget 5.1 MB). Regression 95 tests:
   92 passed, 0 failed, 3 skipped (opt-in); live NOAA comparison still passes.
 
+- M3 ✅ People and boats painted into all three scenes (above the high-tide line or in deep
+  water, so tide truthfulness holds). The glass-studies optical model is ported into the
+  Metal scene shader, so every glass panel refracts the painting. Reduce Transparency
+  gives opaque panels. Regression 95 tests: 92 passed, 0 failed, 3 skipped. Release
+  archive has 0 warnings, app 24 MB.
+
 ## Blockers needing the owner
 See `Documentation/APP_STORE.md` → "Owner-only steps". In short:
 - Apple Developer team ID + signing → device install, signed archive, TestFlight.
