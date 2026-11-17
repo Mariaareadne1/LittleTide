@@ -75,7 +75,8 @@ struct LayerPainter {
 
     // MARK: Land: sand, dunes, grass, rocks (also the seabed seen through shallows)
 
-    func land() -> Canvas {
+    /// `includeFigures: false` paints the same land without people (used for the app icon).
+    func land(includeFigures: Bool = true) -> Canvas {
         let w = spec.width, h = spec.height
         var canvas = Canvas(width: w, height: h) { x, y in
             let i = y * w + x, s = terrain.across[i]
@@ -116,7 +117,7 @@ struct LayerPainter {
                 ctx.stroke(from: a, bend: CGPoint(x: (a.x + b.x) / 2 + CGFloat(rng.range(-2, 2)), y: (a.y + b.y) / 2), to: b,
                            color: base, alpha: rng.range(0.12, 0.3), width: wid)
             }
-            paintFigures(ctx, scale: 2.6)
+            if includeFigures { paintFigures(ctx, scale: 2.6) }
             // Dune grass: tufts of blades on the high dunes.
             for _ in 0..<spec.grassTufts {
                 let x = Int(rng.unit() * Float(w)), y = Int(rng.unit() * Float(h))

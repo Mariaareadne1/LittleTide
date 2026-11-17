@@ -6,7 +6,7 @@
 | Builds locally (Debug) | Yes, Xcode 26.6, iOS 26.5 SDK |
 | Runs on the simulator | Yes, iPhone 17 Pro and iPhone SE (3rd gen), iOS 26.5 |
 | Native widgets work | Yes: small and medium installed on the simulator Home Screen with live NOAA data, deep link verified; Lock Screen faces build and preview in-app, not placed on a Lock Screen |
-| Release archive | Yes, unsigned (`CODE_SIGNING_ALLOWED=NO`), 0 warnings, `.app` 25 MB, widget 5.5 MB |
+| Release archive | Yes, unsigned (`CODE_SIGNING_ALLOWED=NO`), 0 warnings, `.app` 27 MB, widget 5.5 MB |
 | Ready for TestFlight | Code yes; blocked on signing (owner steps 1–2) |
 | Uploaded to TestFlight | **No** |
 | Submitted to App Review | **No** |

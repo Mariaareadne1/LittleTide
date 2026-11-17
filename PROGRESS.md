@@ -23,7 +23,7 @@ another project's UI tests.
 | R7–R8 QA and docs | this commit | `QA_REPORT.md`, `ARCHITECTURE.md`, `DESIGN_SYSTEM.md`, `PRODUCT_REFINEMENT.md`, case study rewrite, App Store readiness table, new demo |
 
 Final verification: 118 tests, 113 passed, 0 failed, 5 skipped (opt-in); SE 15/15;
-package 89; Release archive 0 warnings (25 MB app, 5.5 MB widget).
+package 89; Release archive 0 warnings (27 MB app with the painted icon, 5.5 MB widget).
 
 Next, in order: owner signing steps (`Documentation/APP_STORE.md`), then on-device checks
 (GPU cost in Instruments, haptics, VoiceOver, Lock Screen placement), then recapture

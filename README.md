@@ -47,12 +47,13 @@ Archive (needs your Apple Developer team, see `Documentation/APP_STORE.md`):
 ```bash
 xcodebuild -project LittleTide.xcodeproj -scheme LittleTide -configuration Release -destination 'generic/platform=iOS' -archivePath build/LittleTide.xcarchive archive DEVELOPMENT_TEAM=YOURTEAMID
 ```
-Regenerate the station catalog from NOAA metadata, then the app icon:
+Regenerate the station catalog from NOAA metadata, then the app icon (a figure-free crop of
+the painted East Coast; light, dark and tinted):
 ```bash
 cd Packages/TideKit && swift run -c release catalog-builder
 ```
 ```bash
-swift Tools/make-icon.swift
+cd Packages/TideKit && swift build -c release --product art-forge && .build/release/art-forge --icon ../../LittleTide/Resources/Assets.xcassets/AppIcon.appiconset
 ```
 
 Opt-in rendering cost probe (XCTCPUMetric, XCTMemoryMetric):
@@ -78,7 +79,7 @@ Packages/TideKit/      TideKit: Domain, Data (NOAA client, cache, repository, ca
                        CatalogBuilder: regenerates stations.json from NOAA metadata
 LittleTideTests/       app unit tests      LittleTideUITests/   UI + Home Screen tests
 Documentation/         data, privacy, support, App Store kit, evidence, screenshots, media
-Tools/                 icon generator, screenshot helper
+Tools/                 screenshot helper
 ```
 
 ## Documents

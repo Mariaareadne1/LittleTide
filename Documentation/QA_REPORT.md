@@ -12,7 +12,7 @@ Everything below was executed; nothing is reported from memory.
 | `cd Packages/TideKit && swift test` | **89 tests passed** (1 live suite skipped) |
 | `cd Packages/TideKit && LITTLETIDE_LIVE=1 swift test --filter LiveNOAAComparison` | **7/7 stations** match NOAA's published local-time, English-unit predictions (Santa Monica, Bar Harbor, Honolulu, Key West, Montauk subordinate, Pensacola, Juneau) |
 | `TEST_RUNNER_LT_WIDGET_QA=1 … -only-testing:LittleTideUITests/WidgetHomeScreenTests/testChooseCoastThenInstallWidgets test` | **Passed**: small and medium installed on the real simulator Home Screen with live NOAA data; widget tap opens the app on the same coast |
-| `xcodebuild … -configuration Release -destination 'generic/platform=iOS' archive CODE_SIGNING_ALLOWED=NO` | **Archive succeeded, 0 warnings**; `.app` 25 MB, widget 5.5 MB; no demo fixtures or test code in the bundle |
+| `xcodebuild … -configuration Release -destination 'generic/platform=iOS' archive CODE_SIGNING_ALLOWED=NO` | **Archive succeeded, 0 warnings**; `.app` 27 MB, widget 5.5 MB; no demo fixtures or test code in the bundle |
 
 Lint/format: no SwiftLint or SwiftFormat is installed; the build runs Swift 6 strict
 concurrency with 0 warnings.
@@ -49,6 +49,10 @@ Motion (verified with a temporary log, then removed). The simulator's CPU metric
 include the GPU work of the shader, so battery and thermal behaviour still need Instruments
 on a device. Memory was recorded by `XCTMemoryMetric` in the same runs (see the result
 bundles); no leak investigation was done beyond that.
+
+App icon: the compiled asset catalog carries light, dark (`UIAppearanceDark`) and tinted
+(`ISAppearanceTintable`) 1024 px renditions (`xcrun assetutil --info`), and the generated
+`AppIcon60x60@2x.png` shows the painted coast.
 
 ## Visual inspection
 Screenshots inspected for each change: `Documentation/Design/refinement/`

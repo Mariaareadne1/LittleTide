@@ -43,6 +43,15 @@ func scaled(_ src: [UInt8], sw: Int, sh: Int, crop: (x: Int, y: Int, w: Int, h: 
 }
 
 let arguments = CommandLine.arguments.dropFirst()
+
+// `--icon <dir>`: render only the app icon (light, dark, tinted) from the East Coast terrain
+// with no people or boats, then exit without touching the scene assets.
+if let index = arguments.firstIndex(of: "--icon") {
+    let out = URL(fileURLWithPath: arguments[index + 1])
+    try FileManager.default.createDirectory(at: out, withIntermediateDirectories: true)
+    try renderIcon(spec: .eastCoast, to: out)
+    exit(0)
+}
 let previewDir = arguments.firstIndex(of: "--preview").map { URL(fileURLWithPath: arguments[$0 + 1]) }
 let wanted = Set(arguments.filter { !$0.hasPrefix("--") && URL(fileURLWithPath: $0) != previewDir })
 let scenes = [SceneSpec.eastCoast, SceneSpec.norCal, SceneSpec.soCal].filter { wanted.isEmpty || wanted.contains($0.name) }
