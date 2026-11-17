@@ -2,7 +2,7 @@ import SwiftUI
 import TideKit
 import TideUI
 
-/// Loading, failure and expired states: still composed like the coast, never with
+/// Loading, failure and expired states: the same coast and glass card, never with
 /// invented tide values.
 struct CoastStateView: View {
     enum Kind {
@@ -13,69 +13,75 @@ struct CoastStateView: View {
 
     let station: TideStation
     let kind: Kind
+    let layout: HomeLayout
+    let actions: HeroActions
     var retry: (() -> Void)?
     var chooseAnother: (() -> Void)?
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            CoastArtView(region: CoastRegion(station: station), waterLevel: 0.5)
-                .aspectRatio(3 / 2, contentMode: .fit)
-                .clipShape(.rect(cornerRadius: 2))
-                .opacity(isLoading ? 0.55 : 0.8)
-                .saturation(isLoading ? 0.4 : 0.8)
-                .padding(.top, 8)
+            CoastHero(station: station, level: 0.5, topInset: layout.topInset, width: layout.width, actions: actions)
+                .saturation(isLoading ? 0.55 : 0.85)
+            TideCard { message }
+                .padding(.top, -150)
+        }
+    }
 
-            Text(station.displayName.title)
-                .font(Typography.placeTitle)
-                .foregroundStyle(Palette.ink)
-                .lineLimit(3)
-                .minimumScaleFactor(0.7)
-                .padding(.top, 20)
-            Text("\(station.displayName.subtitle) · Station \(station.id)")
-                .font(Typography.caption)
-                .foregroundStyle(Palette.inkSoft)
-                .padding(.top, 4)
-
-            VStack(alignment: .leading, spacing: 10) {
-                switch kind {
-                case .loading:
-                    HStack(spacing: 10) {
-                        ProgressView()
-                        Text("Retrieving predictions from NOAA…")
-                            .font(Typography.body).foregroundStyle(Palette.inkSoft)
-                    }
-                    .accessibilityElement(children: .combine)
-                    .accessibilityIdentifier("loadingState")
-                case let .failed(error):
-                    Text("Predictions unavailable")
-                        .font(Typography.sectionTitle).foregroundStyle(Palette.ink)
-                    Text(error.userMessage)
-                        .font(Typography.body).foregroundStyle(Palette.inkSoft)
-                        .accessibilityIdentifier("errorMessage")
-                case let .expired(lastUpdated, format):
-                    Text("Forecast unavailable")
-                        .font(Typography.sectionTitle).foregroundStyle(Palette.ink)
-                    Text("The saved predictions (retrieved \(format.day(lastUpdated))) no longer cover the current time. Connect to the internet to get new predictions from NOAA.")
-                        .font(Typography.body).foregroundStyle(Palette.inkSoft)
-                        .fixedSize(horizontal: false, vertical: true)
-                        .accessibilityIdentifier("expiredMessage")
+    @ViewBuilder
+    private var message: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            switch kind {
+            case .loading:
+                HStack(spacing: 12) {
+                    ProgressView()
+                    Text("Retrieving predictions from NOAA…")
+                        .typeStyle(.body).foregroundStyle(Palette.ink)
                 }
-                if !isLoading {
-                    HStack(spacing: 12) {
-                        if let retry {
-                            Button("Try again", action: retry)
-                                .buttonStyle(.borderedProminent).tint(Palette.ink)
-                                .accessibilityIdentifier("retryButton")
-                        }
-                        if let chooseAnother {
-                            Button("Choose another coast", action: chooseAnother)
-                                .buttonStyle(.bordered).tint(Palette.ink)
-                        }
-                    }
-                    .padding(.top, 6)
-                }
+                .accessibilityElement(children: .combine)
+                .accessibilityIdentifier("loadingState")
+            case let .failed(error):
+                Text("Predictions unavailable")
+                    .typeStyle(.eventTitle).foregroundStyle(Palette.ink)
+                    .accessibilityAddTraits(.isHeader)
+                Text(error.userMessage)
+                    .typeStyle(.body).foregroundStyle(Palette.inkSoft)
+                    .accessibilityIdentifier("errorMessage")
+            case let .expired(lastUpdated, format):
+                Text("Forecast unavailable")
+                    .typeStyle(.eventTitle).foregroundStyle(Palette.ink)
+                    .accessibilityAddTraits(.isHeader)
+                Text("The saved predictions (retrieved \(format.day(lastUpdated))) no longer cover the current time. Connect to the internet to get new predictions from NOAA.")
+                    .typeStyle(.body).foregroundStyle(Palette.inkSoft)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .accessibilityIdentifier("expiredMessage")
             }
-            .padding(.top, 24)
+            if !isLoading {
+                ViewThatFits(in: .horizontal) {
+                    HStack(spacing: 10) { buttons }
+                    VStack(alignment: .leading, spacing: 10) { buttons }
+                }
+                .padding(.top, 6)
+            }
+        }
+    }
+
+    @ViewBuilder
+    private var buttons: some View {
+        if let retry {
+            Button(action: retry) {
+                Text("Try again").typeStyle(.bodyEmphasis).padding(.horizontal, 18).frame(minHeight: 44)
+            }
+            .buttonStyle(.borderedProminent)
+            .buttonBorderShape(.capsule)
+            .tint(Palette.ink)
+            .accessibilityIdentifier("retryButton")
+        }
+        if let chooseAnother {
+            Button(action: chooseAnother) {
+                Text("Choose another coast").typeStyle(.bodyEmphasis).padding(.horizontal, 18).frame(minHeight: 44)
+            }
+            .buttonStyle(GlassButtonStyle())
+            .foregroundStyle(Palette.ink)
         }
     }
 

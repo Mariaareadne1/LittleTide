@@ -13,6 +13,7 @@ struct TideStudyView: View {
     @Binding var selection: Date?
 
     @State private var hapticTick = 0
+    @Environment(\.dynamicTypeSize) private var dynamicType
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     static let chartHeight: CGFloat = 168
@@ -109,26 +110,36 @@ struct TideStudyView: View {
             }
         }
 
+        var placedLabels: [CGRect] = []
         for event in dayEvents {
             let p = geometry.point(event)
             let dot = Path(ellipseIn: CGRect(x: p.x - 3.5, y: p.y - 3.5, width: 7, height: 7))
             context.fill(dot, with: .color(Palette.paper))
             context.stroke(dot, with: .color(Palette.seaGlassDeep), lineWidth: 1.5)
             let label = Text(event.kind == .high ? "H \(format.time(event.date))" : "L \(format.time(event.date))")
-                .font(.caption2.monospacedDigit())
+                .font(TypeStyle.chartLabel.font(for: dynamicType))
                 .foregroundStyle(Palette.inkSoft)
             let resolved = context.resolve(label)
             let labelSize = resolved.measure(in: CGSize(width: 200, height: 40))
             let gap: CGFloat = 6 + labelSize.height / 2
-            // Highs label above, lows below — unless there is no room, then flip.
             let roomBelow = rect.maxY - p.y >= gap + labelSize.height / 2
             let roomAbove = p.y - rect.minY + 18 >= gap + labelSize.height / 2
-            let above = event.kind == .high ? roomAbove : !roomBelow
+            let preferAbove = event.kind == .high ? roomAbove : !roomBelow
             let x = min(max(p.x, rect.minX + labelSize.width / 2), rect.maxX - labelSize.width / 2)
-            let y = above ? p.y - gap : p.y + gap
-            let backing = CGRect(x: x - labelSize.width / 2 - 3, y: y - labelSize.height / 2 - 1, width: labelSize.width + 6, height: labelSize.height + 2)
+            func frame(above: Bool) -> CGRect {
+                let y = above ? p.y - gap : p.y + gap
+                return CGRect(x: x - labelSize.width / 2 - 3, y: y - labelSize.height / 2 - 1, width: labelSize.width + 6, height: labelSize.height + 2)
+            }
+            // Avoid colliding with labels already placed (events close in time).
+            var backing = frame(above: preferAbove)
+            if placedLabels.contains(where: { $0.intersects(backing) }) {
+                let flipped = frame(above: !preferAbove)
+                guard !placedLabels.contains(where: { $0.intersects(flipped) }) else { continue } // listed below the chart anyway
+                backing = flipped
+            }
+            placedLabels.append(backing)
             context.fill(Path(roundedRect: backing, cornerRadius: 3), with: .color(Palette.paper.opacity(0.85)))
-            context.draw(resolved, at: CGPoint(x: x, y: y))
+            context.draw(resolved, at: CGPoint(x: backing.midX, y: backing.midY))
         }
 
         if window.contains(now) {
@@ -169,7 +180,7 @@ struct TideStudyView: View {
             datum.addLine(to: CGPoint(x: rect.maxX, y: y))
             context.stroke(datum, with: .color(Palette.sand), style: StrokeStyle(lineWidth: 0.75, dash: [1, 3]))
             context.draw(
-                Text("0 \(format.unit.symbol) \(forecast.datum)").font(.system(size: 9, weight: .medium)).foregroundStyle(Palette.inkSoft),
+                Text("0 \(format.unit.symbol) \(forecast.datum)").font(TypeStyle.chartLabel.font(for: .large)).foregroundStyle(Palette.inkSoft),
                 at: CGPoint(x: rect.minX + 2, y: y - 7), anchor: .leading
             )
         }
@@ -185,7 +196,7 @@ struct TideStudyView: View {
             mark.addLine(to: CGPoint(x: x, y: rect.maxY + (hour % 6 == 0 ? 5 : 3)))
             context.stroke(mark, with: .color(Palette.inkSoft.opacity(0.6)), lineWidth: 0.75)
             if hour % 6 == 0 {
-                let label = Text(hourLabel(tick)).font(.system(size: 10).monospacedDigit()).foregroundStyle(Palette.inkSoft)
+                let label = Text(hourLabel(tick)).font(TypeStyle.chartLabel.font(for: dynamicType)).foregroundStyle(Palette.inkSoft)
                 let isFirst = x <= rect.minX + 1
                 context.draw(label, at: CGPoint(x: x, y: rect.maxY + 14), anchor: isFirst ? .leading : .center)
             }

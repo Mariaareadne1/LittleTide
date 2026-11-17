@@ -77,11 +77,13 @@ struct WidgetGuideView: View {
                     SmallCoastCard(content: content, rendering: .fullColor)
                         .padding(16)
                         .frame(width: 170, height: 170)
-                        .background(Palette.paper, in: .rect(cornerRadius: 22))
+                        .background(CoastWidgetBackground(content: content, family: .small))
+                        .clipShape(.rect(cornerRadius: 22, style: .continuous))
                     MediumCoastCard(content: content, rendering: .fullColor)
                         .padding(16)
-                        .frame(height: 170)
-                        .background(Palette.paper, in: .rect(cornerRadius: 22))
+                        .frame(width: 364, height: 170)
+                        .background(CoastWidgetBackground(content: content, family: .medium))
+                        .clipShape(.rect(cornerRadius: 22, style: .continuous))
                 }
                 .padding(.vertical, 8)
                 .listRowBackground(Color.clear)
@@ -111,7 +113,7 @@ struct LegalTextView: View {
     var body: some View {
         ScrollView {
             Text(text)
-                .font(Typography.body)
+                .typeStyle(.body)
                 .foregroundStyle(Palette.ink)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(20)

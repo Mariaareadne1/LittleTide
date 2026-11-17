@@ -11,6 +11,7 @@
 		1799966B80F02213754BFDAB /* LittleTideWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7C1FED7CC6241850BD1C8E2 /* LittleTideWidgetBundle.swift */; };
 		276AFC8435A3BF2FD0496C9D /* CoastSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35298E001ACD7EF0024284C7 /* CoastSearchView.swift */; };
 		3592E4A78CE126AF7CB8F2DE /* TideKit in Frameworks */ = {isa = PBXBuildFile; productRef = DF0F47FF7F2866B769F6338C /* TideKit */; };
+		392EEB5CA85CD2740730E0C6 /* ArtGalleryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DBE1A73FFC5EFA80189C267 /* ArtGalleryView.swift */; };
 		40DE1F8C2A0EDE1DD1395E1D /* CoastReadyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4366743EDB6412FFF7567E23 /* CoastReadyView.swift */; };
 		427BBFDC10028A789A525583 /* LegalText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519673B31D37C45A5F964C03 /* LegalText.swift */; };
 		4801A607E1F4D4A7CCA18897 /* TideUI in Frameworks */ = {isa = PBXBuildFile; productRef = 0F164D24BC91245A94D6BC52 /* TideUI */; };
@@ -19,6 +20,7 @@
 		57484212783140717E6E69B1 /* TideReadout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E295FADFEAAA4969B7C333B /* TideReadout.swift */; };
 		584944DC3B0201B26121D09A /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E0D0F0AE102BD5BF58265DA9 /* WidgetKit.framework */; };
 		5B303ECEBF8D580A863E3D4B /* AppModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DBA67AE51443CAADB751905 /* AppModelTests.swift */; };
+		631DFFA7F78A11BEC148457C /* TypographyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DAB46B2A41FC6F885C3EEC7 /* TypographyTests.swift */; };
 		63D11682575AB97B5BF89DF3 /* AppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B44E2A61D66E228D88B6BE6C /* AppModel.swift */; };
 		67F92B489C8D7EE66786CAEE /* TideKit in Frameworks */ = {isa = PBXBuildFile; productRef = 8F574E89CF3D3A6DB2E23B4C /* TideKit */; };
 		6CB3B7FC49BB1227E145CDCA /* kingharbor_9410738_hilo.json in Resources */ = {isa = PBXBuildFile; fileRef = DABB48864083D2D1031B90A3 /* kingharbor_9410738_hilo.json */; };
@@ -26,6 +28,7 @@
 		7688BB22455C3FAB6CD0CCBD /* AppClock.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2420B67F2E54021914F1671 /* AppClock.swift */; };
 		7D51FB72C825FFA7460EF91E /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 49C389CFCF73EFBC6DA57FCF /* PrivacyInfo.xcprivacy */; };
 		842E806E445A77287FEA6226 /* DeepLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9AA85CFEB032E1C14A4F05E /* DeepLink.swift */; };
+		8465DB5034E3A84A0CF501AD /* CoastHero.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEE90753FF9FA329D9E61C1D /* CoastHero.swift */; };
 		883556083ED12A3C8606EB33 /* TideUI in Frameworks */ = {isa = PBXBuildFile; productRef = 98324160B45E4E1918FCC844 /* TideUI */; };
 		97AC5D7B20D5B0F587BFCBFA /* LittleTideWidgets.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = E11BF5665788FDD2EA4D9496 /* LittleTideWidgets.appex */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		ADAD045417F3E986228BDD97 /* LittleTideUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222EF27B5F78AE382C4C905D /* LittleTideUITests.swift */; };
@@ -94,6 +97,8 @@
 		1A3ED85307905D38CBE05A92 /* SourceInfoSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SourceInfoSheet.swift; sourceTree = "<group>"; };
 		222EF27B5F78AE382C4C905D /* LittleTideUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LittleTideUITests.swift; sourceTree = "<group>"; };
 		22E85FAAEA4B5268554CED0D /* DemoConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoConfiguration.swift; sourceTree = "<group>"; };
+		2DAB46B2A41FC6F885C3EEC7 /* TypographyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypographyTests.swift; sourceTree = "<group>"; };
+		2DBE1A73FFC5EFA80189C267 /* ArtGalleryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtGalleryView.swift; sourceTree = "<group>"; };
 		35298E001ACD7EF0024284C7 /* CoastSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoastSearchView.swift; sourceTree = "<group>"; };
 		37B862D096A9150A6F0FD4B7 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		3BE0DEC37519E71AA7BA8150 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
@@ -129,6 +134,7 @@
 		E60764D31E9897466D089E02 /* LittleTideUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = LittleTideUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F2420B67F2E54021914F1671 /* AppClock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppClock.swift; sourceTree = "<group>"; };
 		F9AA85CFEB032E1C14A4F05E /* DeepLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepLink.swift; sourceTree = "<group>"; };
+		FEE90753FF9FA329D9E61C1D /* CoastHero.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoastHero.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -279,6 +285,7 @@
 			children = (
 				9DBA67AE51443CAADB751905 /* AppModelTests.swift */,
 				89BF0FE8D8398C3A437D3AFA /* DeepLinkTests.swift */,
+				2DAB46B2A41FC6F885C3EEC7 /* TypographyTests.swift */,
 			);
 			path = LittleTideTests;
 			sourceTree = "<group>";
@@ -286,6 +293,7 @@
 		92CE27735700333C0A0A0C49 /* UITestSupport */ = {
 			isa = PBXGroup;
 			children = (
+				2DBE1A73FFC5EFA80189C267 /* ArtGalleryView.swift */,
 				22E85FAAEA4B5268554CED0D /* DemoConfiguration.swift */,
 				3DCBA5AB2C14644B2640644F /* Fixtures */,
 			);
@@ -317,6 +325,7 @@
 			isa = PBXGroup;
 			children = (
 				1A07D0DF769C63FABF6DE710 /* CoastComponents.swift */,
+				FEE90753FF9FA329D9E61C1D /* CoastHero.swift */,
 				A766B455DC3B62399A415A62 /* CoastHomeView.swift */,
 				4366743EDB6412FFF7567E23 /* CoastReadyView.swift */,
 				A1FBB962CA613D0485F666B7 /* CoastStateView.swift */,
@@ -515,6 +524,7 @@
 			files = (
 				5B303ECEBF8D580A863E3D4B /* AppModelTests.swift in Sources */,
 				70572EC59C5701B1D0BA189E /* DeepLinkTests.swift in Sources */,
+				631DFFA7F78A11BEC148457C /* TypographyTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -524,7 +534,9 @@
 			files = (
 				7688BB22455C3FAB6CD0CCBD /* AppClock.swift in Sources */,
 				63D11682575AB97B5BF89DF3 /* AppModel.swift in Sources */,
+				392EEB5CA85CD2740730E0C6 /* ArtGalleryView.swift in Sources */,
 				C56E243ECB61983E59942273 /* CoastComponents.swift in Sources */,
+				8465DB5034E3A84A0CF501AD /* CoastHero.swift in Sources */,
 				FF4F24DE0C876B52636907FC /* CoastHomeView.swift in Sources */,
 				40DE1F8C2A0EDE1DD1395E1D /* CoastReadyView.swift in Sources */,
 				BF4BFDE930650873DD5453A6 /* CoastSearchModel.swift in Sources */,
@@ -747,7 +759,7 @@
 				CODE_SIGN_ENTITLEMENTS = LittleTide/LittleTide.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				ENABLE_PREVIEWS = YES;
-				EXCLUDED_SOURCE_FILE_NAMES = "DemoConfiguration.swift *.json";
+				EXCLUDED_SOURCE_FILE_NAMES = "DemoConfiguration.swift ArtGalleryView.swift *.json";
 				INFOPLIST_FILE = LittleTide/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

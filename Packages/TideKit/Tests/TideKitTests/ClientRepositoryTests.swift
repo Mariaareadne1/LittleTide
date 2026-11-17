@@ -247,23 +247,22 @@ struct CatalogTests {
     }
 
     @Test func displayNamesAreTidied() {
-        #expect(StationDisplayName(noaaName: "MONTEREY, MONTEREY BAY", state: "CA") == StationDisplayName.make("Monterey", "Monterey Bay, CA"))
-        #expect(StationDisplayName(noaaName: "SAN DIEGO (Broadway)", state: "CA").title == "San Diego (Broadway)")
+        let monterey = StationDisplayName(noaaName: "MONTEREY, MONTEREY BAY", state: "CA")
+        #expect(monterey.title == "Monterey" && monterey.subtitle == "Monterey Bay · CA")
+        let sanDiego = StationDisplayName(noaaName: "SAN DIEGO (Broadway)", state: "CA")
+        #expect(sanDiego.title == "San Diego" && sanDiego.subtitle == "Broadway · CA")
         #expect(StationDisplayName(noaaName: "S.C.L. RR. bridge", state: "GA").title == "S.C.L. RR. bridge")
         #expect(StationDisplayName(noaaName: "BOSTON", state: "MA").subtitle == "MA")
-        #expect(StationDisplayName(noaaName: "CHARLESTON (Customhouse Wharf)", state: "SC").title == "Charleston (Customhouse Wharf)")
-        #expect(StationDisplayName(noaaName: "Sabine Offshore Light (USCG S-1 Platform)", state: "TX").title == "Sabine Offshore Light (USCG S-1 Platform)")
-        #expect(StationDisplayName(noaaName: "SEATTLE (Madison St.), Elliott Bay", state: "WA").title == "Seattle (Madison St.)")
+        #expect(StationDisplayName(noaaName: "CHARLESTON (Customhouse Wharf)", state: "SC").title == "Charleston")
+        let sabine = StationDisplayName(noaaName: "Sabine Offshore Light (USCG S-1 Platform)", state: "TX")
+        #expect(sabine.title == "Sabine Offshore Light" && sabine.subtitle == "USCG S-1 Platform · TX")
+        let seattle = StationDisplayName(noaaName: "SEATTLE (Madison St.), Elliott Bay", state: "WA")
+        #expect(seattle.title == "Seattle" && seattle.subtitle == "Madison St. · Elliott Bay · WA")
+        // A parenthetical in the middle is part of the name and stays.
+        #expect(StationDisplayName(noaaName: "Matanzas Pass (fixed bridge) Estero Island", state: "FL").title == "Matanzas Pass (fixed bridge) Estero Island")
     }
 }
 
-extension StationDisplayName {
-    static func make(_ title: String, _ subtitle: String) -> StationDisplayName {
-        // Reconstruct through the public initializer for equality checks.
-        let parts = subtitle.split(separator: ",").map { $0.trimmingCharacters(in: .whitespaces) }
-        return StationDisplayName(noaaName: "\(title), \(parts[0])", state: parts[1])
-    }
-}
 
 @Suite("Widget timeline planning")
 struct WidgetPlannerTests {

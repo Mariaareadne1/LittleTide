@@ -27,6 +27,21 @@ public struct CoastWidgetContent: Sendable {
         /// `nil` when NOAA publishes no height here (high/low-only stations).
         public let waterLevel: Double?
         public let rhythm: Rhythm
+        /// e.g. "then High 4:35 AM"
+        public let followingSummary: String?
+    }
+
+    public var station: TideStation? {
+        switch state {
+        case .unconfigured: return nil
+        case let .unavailable(station, _): return station
+        case let .ready(ready): return ready.station
+        }
+    }
+
+    public var waterLevel: Double? {
+        if case let .ready(ready) = state { return ready.waterLevel }
+        return nil
     }
 
     /// The data for the medium widget's tide-rhythm strip.
@@ -100,7 +115,8 @@ public struct CoastWidgetContent: Sendable {
                 startLabel: window.start.formatted(hourStyle),
                 endLabel: StationDay.isSameDay(window.start, window.end, timeZone: zone)
                     ? window.end.formatted(hourStyle) : window.end.formatted(dayHourStyle)
-            )
+            ),
+            followingSummary: following.map { "then \($0.kind == .high ? "High" : "Low") \(format.time($0.date))" }
         ))
     }
 }

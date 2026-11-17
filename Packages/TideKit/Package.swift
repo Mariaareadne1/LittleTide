@@ -12,7 +12,7 @@ let package = Package(
     ],
     targets: [
         .target(name: "TideKit", resources: [.process("Resources")]),
-        .target(name: "TideUI", dependencies: ["TideKit"]),
+        .target(name: "TideUI", dependencies: ["TideKit"], resources: [.copy("Fonts")]),
         .executableTarget(name: "CatalogBuilder", dependencies: ["TideKit"]),
         .testTarget(
             name: "TideKitTests",

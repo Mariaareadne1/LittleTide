@@ -65,7 +65,7 @@ targets:
         ENABLE_PREVIEWS: YES
       configs:
         Release:
-          EXCLUDED_SOURCE_FILE_NAMES: "DemoConfiguration.swift *.json"
+          EXCLUDED_SOURCE_FILE_NAMES: "DemoConfiguration.swift ArtGalleryView.swift *.json"
   LittleTideWidgets:
     type: app-extension
     platform: iOS

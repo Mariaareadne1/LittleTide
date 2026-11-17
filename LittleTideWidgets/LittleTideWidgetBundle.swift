@@ -5,6 +5,10 @@ import WidgetKit
 
 @main
 struct LittleTideWidgetBundle: WidgetBundle {
+    init() {
+        FontRegistry.registerBundledFonts()
+    }
+
     var body: some Widget {
         CoastWidget()
     }
@@ -88,7 +92,9 @@ struct CoastWidgetEntryView: View {
             }
         }
         .redacted(reason: entry.isPlaceholder ? .placeholder : [])
-        .containerBackground(for: .widget) { Palette.paper }
+        .containerBackground(for: .widget) {
+            CoastWidgetBackground(content: entry.content, family: family == .systemMedium ? .medium : .small)
+        }
         .widgetURL(url)
     }
 

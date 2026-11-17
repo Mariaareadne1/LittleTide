@@ -11,22 +11,23 @@ struct CoastHomeView: View {
     @State private var isChoosingCoast = false
     @State private var isShowingSettings = false
     @State private var isShowingSource = false
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
-        TimelineView(.periodic(from: .now, by: 30)) { _ in
-            let now = model.clock.now()
-            ScrollView {
-                VStack(alignment: .leading, spacing: 0) {
-                    header
-                    content(now: now)
+        GeometryReader { proxy in
+            TimelineView(.periodic(from: .now, by: 30)) { _ in
+                let now = model.clock.now()
+                ScrollView {
+                    content(now: now, layout: HomeLayout(width: proxy.size.width, topInset: proxy.safeAreaInsets.top))
+                        .padding(.bottom, 36)
                 }
-                .padding(.horizontal, 20)
-                .padding(.bottom, 32)
+                .ignoresSafeArea(edges: .top)
+                .refreshable { await model.refreshAndWait() }
             }
-            .refreshable { await model.refreshAndWait() }
         }
         .background(Palette.paper.ignoresSafeArea())
-        .overlay(alignment: .top) { StatusBarBacking() }
+        .overlay(alignment: .top) { StatusBarScrim() }
+        .animation(reduceMotion ? nil : .easeInOut(duration: 0.35), value: model.station?.id)
         .onChange(of: model.stationGeneration) { _, _ in
             selection = nil
             dayOffset = 0
@@ -38,65 +39,44 @@ struct CoastHomeView: View {
         }
     }
 
-    private var header: some View {
-        HStack(spacing: 8) {
-            TideMark().frame(width: 20, height: 20)
-            EditorialLabel("Little Tide")
-            Spacer()
-            Button { isChoosingCoast = true } label: {
-                Image(systemName: "magnifyingglass").frame(width: 44, height: 44)
-            }
-            .accessibilityLabel("Change coast")
-            .accessibilityIdentifier("changeCoast")
-            Button { isShowingSettings = true } label: {
-                Image(systemName: "gearshape").frame(width: 44, height: 44)
-            }
-            .accessibilityLabel("Settings")
-            .accessibilityIdentifier("settings")
-        }
-        .foregroundStyle(Palette.ink)
-        .padding(.top, 4)
+    private var actions: HeroActions {
+        HeroActions(chooseCoast: { isChoosingCoast = true }, openSettings: { isShowingSettings = true })
     }
 
     @ViewBuilder
-    private func content(now: Date) -> some View {
+    private func content(now: Date, layout: HomeLayout) -> some View {
         let format = TideFormat(timeZone: station.timeZone ?? .gmt, unit: model.unit)
         switch model.forecastState {
         case .idle, .loading:
-            CoastStateView(station: station, kind: .loading)
+            CoastStateView(station: station, kind: .loading, layout: layout, actions: actions)
         case let .failed(error):
-            CoastStateView(station: station, kind: .failed(error), retry: { model.refresh(manual: true) }, chooseAnother: { isChoosingCoast = true })
+            CoastStateView(station: station, kind: .failed(error), layout: layout, actions: actions,
+                           retry: { model.refresh(manual: true) }, chooseAnother: { isChoosingCoast = true })
         case let .ready(forecast, refreshError):
             if forecast.stationID != station.id {
-                CoastStateView(station: station, kind: .loading)
+                CoastStateView(station: station, kind: .loading, layout: layout, actions: actions)
             } else if !TideEngine.freshness(of: forecast, at: now).isUsable {
-                CoastStateView(station: station, kind: .expired(forecast.fetchedAt, format), retry: { model.refresh(manual: true) }, chooseAnother: { isChoosingCoast = true })
+                CoastStateView(station: station, kind: .expired(forecast.fetchedAt, format), layout: layout, actions: actions,
+                               retry: { model.refresh(manual: true) }, chooseAnother: { isChoosingCoast = true })
             } else {
                 CoastReadyView(
                     station: station, forecast: forecast, refreshError: refreshError, now: now, format: format,
-                    selection: $selection, dayOffset: $dayOffset, showSource: { isShowingSource = true }
+                    layout: layout, actions: actions, selection: $selection, dayOffset: $dayOffset,
+                    showSource: { isShowingSource = true }
                 )
             }
         }
     }
 }
 
+struct HomeLayout {
+    let width: CGFloat
+    let topInset: CGFloat
+}
+
 extension AppModel {
     func refreshAndWait() async {
         refresh(manual: true)
         while isRefreshing { try? await Task.sleep(for: .milliseconds(100)) }
-    }
-}
-
-/// Paper strip behind the status bar so scrolled content never collides with it.
-private struct StatusBarBacking: View {
-    var body: some View {
-        GeometryReader { proxy in
-            Palette.paper
-                .frame(height: proxy.safeAreaInsets.top)
-                .ignoresSafeArea(edges: .top)
-        }
-        .allowsHitTesting(false)
-        .accessibilityHidden(true)
     }
 }

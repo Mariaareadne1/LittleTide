@@ -2,67 +2,76 @@ import SwiftUI
 import TideKit
 import TideUI
 
-/// First launch: one quiet page, one action.
+/// First launch: one painted coast, one glass card, one action.
 struct OnboardingView: View {
     let onChooseCoast: () -> Void
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 0) {
-                CoastArtView(region: .pacificHeadlands, waterLevel: 0.35)
-                    .aspectRatio(4 / 5, contentMode: .fit)
-                    .clipShape(.rect(cornerRadius: 2))
-                    .overlay(alignment: .bottomLeading) {
-                        Text("Original illustration")
-                            .font(.footnote)
-                            .foregroundStyle(Palette.inkSoft)
-                            .padding(.horizontal, 6).padding(.vertical, 3)
-                            .background(Palette.paper.opacity(0.85), in: .rect(cornerRadius: 2))
-                            .padding(10)
+        GeometryReader { proxy in
+            ScrollView {
+                VStack(spacing: 0) {
+                    ZStack(alignment: .topLeading) {
+                        CoastArtView(region: .southernCalifornia, waterLevel: 0.4, horizon: 0.42)
+                            .frame(width: proxy.size.width, height: max(proxy.size.height * 0.72, 520))
+                        HStack(spacing: 10) {
+                            TideMark().frame(width: 24, height: 24)
+                            Text("Little Tide").typeStyle(.brand).foregroundStyle(Palette.ink)
+                        }
+                        .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
+                        .padding(.horizontal, 24)
+                        .padding(.top, proxy.safeAreaInsets.top + 12)
+                        .accessibilityElement(children: .combine)
+                        .accessibilityAddTraits(.isHeader)
                     }
-                    .padding(.top, 12)
+                    .overlay(alignment: .bottomTrailing) {
+                        Text("Original illustration")
+                            .typeStyle(.metadata)
+                            .foregroundStyle(Palette.ink)
+                            .padding(.horizontal, 10).padding(.vertical, 5)
+                            .glassSurface(Capsule(), tint: Palette.paper.opacity(0.5))
+                            .padding(16)
+                            .padding(.bottom, 150)
+                    }
 
-                HStack(spacing: 8) {
-                    TideMark().frame(width: 22, height: 22)
-                    EditorialLabel("Little Tide")
+                    card.padding(.top, -150)
                 }
-                .padding(.top, 28)
-
-                Text("A little window into your coast.")
-                    .font(Typography.placeTitle)
-                    .foregroundStyle(Palette.ink)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .padding(.top, 10)
-                    .accessibilityAddTraits(.isHeader)
-
-                Text("Predicted high and low tides for NOAA stations across the United States, on your home screen and in a timeline you can explore with a finger.")
-                    .font(Typography.body)
-                    .foregroundStyle(Palette.inkSoft)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .padding(.top, 12)
-
-                Button(action: onChooseCoast) {
-                    Text("Choose your coast")
-                        .font(.headline)
-                        .frame(maxWidth: .infinity, minHeight: 52)
-                }
-                .buttonStyle(.borderedProminent)
-                .tint(Palette.ink)
-                .foregroundStyle(Palette.paper)
-                .buttonBorderShape(.roundedRectangle(radius: 4))
-                .padding(.top, 28)
-                .accessibilityIdentifier("chooseCoast")
-
-                Text("No account or location needed.")
-                    .font(Typography.caption)
-                    .foregroundStyle(Palette.inkSoft)
-                    .frame(maxWidth: .infinity)
-                    .padding(.top, 12)
-                    .padding(.bottom, 24)
+                .padding(.bottom, 32)
             }
-            .padding(.horizontal, 24)
+            .ignoresSafeArea(edges: .top)
         }
         .background(Palette.paper.ignoresSafeArea())
+    }
+
+    private var card: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            Text("A little window into your coast.")
+                .typeStyle(.heroLocation)
+                .foregroundStyle(Palette.ink)
+                .fixedSize(horizontal: false, vertical: true)
+                .accessibilityAddTraits(.isHeader)
+            Text("Predicted high and low tides for NOAA stations across the United States, on your Home Screen and in a timeline you can explore with a finger.")
+                .typeStyle(.body)
+                .foregroundStyle(Palette.ink)
+                .fixedSize(horizontal: false, vertical: true)
+            Button(action: onChooseCoast) {
+                Text("Choose your coast")
+                    .typeStyle(.bodyEmphasis)
+                    .frame(maxWidth: .infinity, minHeight: 52)
+            }
+            .buttonStyle(.borderedProminent)
+            .buttonBorderShape(.capsule)
+            .tint(Palette.ink)
+            .foregroundStyle(Palette.paper)
+            .padding(.top, 6)
+            .accessibilityIdentifier("chooseCoast")
+            Text("No account or location needed.")
+                .typeStyle(.metadata)
+                .foregroundStyle(Palette.ink)
+                .frame(maxWidth: .infinity)
+        }
+        .padding(24)
+        .glassSurface(RoundedRectangle(cornerRadius: 32, style: .continuous), tint: Palette.paper.opacity(0.6))
+        .padding(.horizontal, 14)
     }
 }
 

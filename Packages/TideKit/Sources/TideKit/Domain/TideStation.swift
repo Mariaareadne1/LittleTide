@@ -55,16 +55,28 @@ public struct TideStation: Codable, Hashable, Sendable, Identifiable {
 public struct StationDisplayName: Hashable, Sendable {
     /// e.g. "Monterey"
     public let title: String
-    /// e.g. "Monterey Bay, CA"
+    /// e.g. "Monterey Bay · CA", or "Scripps Institution Wharf · CA"
     public let subtitle: String
 
     public init(noaaName: String, state: String) {
         let pretty = Self.prettify(noaaName)
         let parts = pretty.split(separator: ",", maxSplits: 1).map { $0.trimmingCharacters(in: .whitespaces) }
-        let title = parts.first.flatMap { $0.isEmpty ? nil : $0 } ?? pretty
-        let detail = parts.count > 1 ? parts[1] : ""
+        var title = parts.first.flatMap { $0.isEmpty ? nil : $0 } ?? pretty
+        var details: [String] = []
+        // A trailing parenthetical is a sub-location ("La Jolla (Scripps Institution Wharf)");
+        // move it to the subtitle so the headline stays a place name. Nothing is invented.
+        if title.hasSuffix(")"), let open = title.lastIndex(of: "("), open > title.startIndex {
+            let inner = title[title.index(after: open)..<title.index(before: title.endIndex)].trimmingCharacters(in: .whitespaces)
+            let head = title[..<open].trimmingCharacters(in: .whitespaces)
+            if !head.isEmpty, !inner.isEmpty {
+                title = head
+                details.append(inner)
+            }
+        }
+        if parts.count > 1, !parts[1].isEmpty { details.append(parts[1]) }
+        details.append(state)
         self.title = title
-        self.subtitle = detail.isEmpty ? state : "\(detail), \(state)"
+        subtitle = details.joined(separator: " · ")
     }
 
     /// Title-cases NOAA's ALL-CAPS place names ("SAN DIEGO (Broadway)" → "San Diego

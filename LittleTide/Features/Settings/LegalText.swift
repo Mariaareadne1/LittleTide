@@ -21,6 +21,6 @@ enum LegalText {
 
     Illustrations, the Little Tide mark and the app icon are original works made for Little Tide.
 
-    Typography: Apple system fonts (SF Pro and New York).
+    Typography: Newsreader by Production Type, licensed under the SIL Open Font License 1.1 (the licence text ships inside the app). Interface text uses Apple’s SF Pro system font.
     """
 }

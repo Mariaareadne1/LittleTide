@@ -16,6 +16,44 @@ private struct CardColors {
     var marker: Color { rendering == .fullColor ? Palette.rust : .primary }
 }
 
+/// The painted scene behind a widget (full colour only). Shared by the widget's
+/// `containerBackground` and the in-app preview so both look identical.
+public struct CoastWidgetBackground: View {
+    public enum Family: Sendable { case small, medium }
+
+    let content: CoastWidgetContent
+    let family: Family
+
+    public init(content: CoastWidgetContent, family: Family) {
+        self.content = content
+        self.family = family
+    }
+
+    public var body: some View {
+        ZStack {
+            Palette.paper
+            if let station = content.station {
+                CoastArtView(region: CoastRegion(station: station), waterLevel: content.waterLevel ?? 0.5,
+                             horizon: family == .small ? 0.36 : 0.42)
+                    .accessibilityHidden(true)
+            }
+            // A soft paper veil where the type sits, so it reads in one glance.
+            switch family {
+            case .small:
+                LinearGradient(stops: [.init(color: Palette.paper.opacity(0), location: 0.34),
+                                       .init(color: Palette.paper.opacity(0.9), location: 0.6),
+                                       .init(color: Palette.paper.opacity(0.97), location: 1)],
+                               startPoint: .top, endPoint: .bottom)
+            case .medium:
+                LinearGradient(stops: [.init(color: Palette.paper.opacity(0.97), location: 0),
+                                       .init(color: Palette.paper.opacity(0.9), location: 0.46),
+                                       .init(color: Palette.paper.opacity(0), location: 0.72)],
+                               startPoint: .leading, endPoint: .trailing)
+            }
+        }
+    }
+}
+
 /// Small widget: one coast scene, one clear fact.
 public struct SmallCoastCard: View {
     let content: CoastWidgetContent
@@ -32,48 +70,42 @@ public struct SmallCoastCard: View {
         case .unconfigured:
             UnconfiguredCard(rendering: rendering)
         case let .unavailable(station, _):
-            VStack(alignment: .leading, spacing: 4) {
-                CardArt(station: station, level: 0.5, rendering: rendering).frame(height: 52)
+            VStack(alignment: .leading, spacing: 3) {
+                if rendering == .monochrome { LineArt(station: station, level: 0.5).frame(height: 54) }
                 Spacer(minLength: 0)
-                Text(station.displayName.title).font(.system(.footnote, design: .serif)).foregroundStyle(colors.ink).lineLimit(2)
-                Text("Open Little Tide to refresh predictions").font(.caption2).foregroundStyle(colors.soft).lineLimit(3)
+                Text(station.displayName.title).typeStyle(.widgetPlace).foregroundStyle(colors.ink).lineLimit(2)
+                Text("Open Little Tide to refresh predictions").typeStyle(.widgetSecondary).foregroundStyle(colors.soft).lineLimit(3)
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
             .accessibilityElement(children: .combine)
         case let .ready(ready):
-            VStack(alignment: .leading, spacing: 0) {
-                CardArt(station: ready.station, level: level(ready), rendering: rendering)
-                    .frame(height: 50)
-                    .clipShape(.rect(cornerRadius: 3))
-                Text(ready.station.displayName.title)
-                    .font(.system(.footnote, design: .serif))
-                    .foregroundStyle(colors.ink)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.8)
-                    .padding(.top, 8)
-                Spacer(minLength: 2)
-                Text(ready.nextKindWord.uppercased())
-                    .font(.system(size: 10, weight: .semibold))
-                    .tracking(1)
-                    .foregroundStyle(colors.soft)
+            VStack(alignment: .leading, spacing: 1) {
+                if rendering == .monochrome { LineArt(station: ready.station, level: ready.waterLevel ?? 0.5).frame(height: 50) }
+                Spacer(minLength: 0)
+                EventKindLine(ready: ready, colors: colors)
                 Text(ready.nextTime)
-                    .font(.system(size: 24, weight: .semibold).monospacedDigit())
+                    .typeStyle(.widgetHeroSmall)
                     .foregroundStyle(colors.ink)
                     .lineLimit(1)
-                    .minimumScaleFactor(0.6)
+                    .minimumScaleFactor(0.7)
                     .widgetAccentableIfAvailable()
-                FactLine(ready: ready, colors: colors)
+                Text([ready.station.displayName.title, ready.nextHeight].joined(separator: " · "))
+                    .typeStyle(.widgetSecondary)
+                    .foregroundStyle(colors.soft)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.85)
+                if let aging = ready.agingNote {
+                    Text(aging).typeStyle(.widgetSecondary).foregroundStyle(colors.soft).lineLimit(1)
+                }
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
             .accessibilityElement(children: .ignore)
             .accessibilityLabel(ready.accessibilityLabel)
         }
     }
-
-    private func level(_ ready: CoastWidgetContent.Ready) -> Double {
-        ready.waterLevel ?? 0.5
-    }
 }
 
-/// Medium widget: a horizontal postcard with the tide's rhythm over the next day.
+/// Medium widget: a wide painted scene with the next tide set in its quiet side.
 public struct MediumCoastCard: View {
     let content: CoastWidgetContent
     let rendering: CoastCardRendering
@@ -90,91 +122,85 @@ public struct MediumCoastCard: View {
             UnconfiguredCard(rendering: rendering)
         case let .unavailable(station, _):
             HStack(spacing: 14) {
-                CardArt(station: station, level: 0.5, rendering: rendering)
-                    .frame(width: 110).clipShape(.rect(cornerRadius: 3))
-                VStack(alignment: .leading, spacing: 6) {
-                    Text(station.displayName.title).font(.system(.headline, design: .serif)).foregroundStyle(colors.ink).lineLimit(2)
-                    Text("Forecast unavailable").font(.subheadline.weight(.semibold)).foregroundStyle(colors.ink)
-                    Text("Open Little Tide to get new predictions from NOAA.").font(.caption).foregroundStyle(colors.soft)
+                VStack(alignment: .leading, spacing: 5) {
+                    Text(station.displayName.title).typeStyle(.widgetPlace).foregroundStyle(colors.ink).lineLimit(2)
+                    Text("Forecast unavailable").typeStyle(.widgetHeroMedium).foregroundStyle(colors.ink).minimumScaleFactor(0.6).lineLimit(1)
+                    Text("Open Little Tide to get new predictions from NOAA.").typeStyle(.widgetSecondary).foregroundStyle(colors.soft)
                 }
                 Spacer(minLength: 0)
+                if rendering == .monochrome { LineArt(station: station, level: 0.5).frame(width: 110) }
             }
             .accessibilityElement(children: .combine)
         case let .ready(ready):
-            HStack(spacing: 14) {
-                CardArt(station: ready.station, level: ready.waterLevel ?? 0.5, rendering: rendering)
-                    .frame(width: 96)
-                    .clipShape(.rect(cornerRadius: 3))
-                VStack(alignment: .leading, spacing: 0) {
-                    HStack(alignment: .firstTextBaseline) {
-                        Text(ready.station.displayName.title)
-                            .font(.system(.subheadline, design: .serif))
-                            .foregroundStyle(colors.ink)
-                            .lineLimit(1)
-                        Spacer(minLength: 4)
-                        if ready.trend != .unknown {
-                            Image(systemName: ready.trend == .rising ? "arrow.up.right" : "arrow.down.right")
-                                .font(.caption2.weight(.semibold))
-                                .foregroundStyle(colors.accent)
-                        }
-                    }
-                    Text(ready.headline)
-                        .font(.system(size: 20, weight: .semibold).monospacedDigit())
+            HStack(alignment: .bottom, spacing: 12) {
+                VStack(alignment: .leading, spacing: 1) {
+                    Text(ready.station.displayName.title)
+                        .typeStyle(.widgetPlace)
+                        .foregroundStyle(colors.ink)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.8)
+                    Spacer(minLength: 2)
+                    EventKindLine(ready: ready, colors: colors)
+                    Text(ready.nextTime)
+                        .typeStyle(.widgetHeroMedium)
                         .foregroundStyle(colors.ink)
                         .lineLimit(1)
                         .minimumScaleFactor(0.7)
-                        .padding(.top, 2)
                         .widgetAccentableIfAvailable()
-                    FactLine(ready: ready, colors: colors)
-                    Spacer(minLength: 4)
+                    Text(supportingLine(ready))
+                        .typeStyle(.widgetSecondary)
+                        .foregroundStyle(colors.soft)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.85)
                     RhythmStrip(rhythm: ready.rhythm, rendering: rendering)
-                        .frame(height: 38)
-                    HStack {
-                        Text(ready.rhythm.startLabel)
-                        Spacer()
-                        Text("NOAA \(ready.station.id)")
-                        Spacer()
-                        Text(ready.rhythm.endLabel)
-                    }
-                    .font(.system(size: 9).monospacedDigit())
-                    .foregroundStyle(colors.soft)
-                    .lineLimit(1)
-                    .padding(.top, 2)
+                        .frame(height: 20)
+                        .padding(.top, 6)
+                }
+                .frame(maxWidth: 176, alignment: .leading)
+                Spacer(minLength: 0)
+                if rendering == .monochrome {
+                    LineArt(station: ready.station, level: ready.waterLevel ?? 0.5).frame(maxWidth: 120)
                 }
             }
             .accessibilityElement(children: .ignore)
             .accessibilityLabel(ready.accessibilityLabel)
         }
     }
+
+    private func supportingLine(_ ready: CoastWidgetContent.Ready) -> String {
+        var parts = [ready.nextHeight]
+        if let following = ready.followingSummary { parts.append(following) }
+        if let aging = ready.agingNote { parts = [ready.nextHeight, aging] }
+        return parts.joined(separator: " · ")
+    }
 }
 
-private struct FactLine: View {
+/// "LOW TIDE ↘": the event kind with the direction, when defensible.
+private struct EventKindLine: View {
     let ready: CoastWidgetContent.Ready
     let colors: CardColors
 
     var body: some View {
-        let trend: String? = switch ready.trend {
-        case .rising: "Rising"
-        case .falling: "Falling"
-        case .unknown: nil
+        HStack(spacing: 4) {
+            Text("\(ready.nextKindWord) tide")
+            switch ready.trend {
+            case .rising: Image(systemName: "arrow.up.right")
+            case .falling: Image(systemName: "arrow.down.right")
+            case .unknown: EmptyView()
+            }
         }
-        let parts = [ready.nextHeight] + [trend, ready.agingNote].compactMap { $0 }
-        Text(parts.joined(separator: " · "))
-            .font(.caption2.monospacedDigit())
-            .foregroundStyle(colors.soft)
-            .lineLimit(1)
-            .minimumScaleFactor(0.8)
+        .typeStyle(.widgetMicro)
+        .foregroundStyle(colors.accent)
     }
 }
 
-private struct CardArt: View {
+private struct LineArt: View {
     let station: TideStation
     let level: Double
-    let rendering: CoastCardRendering
 
     var body: some View {
-        CoastArtView(region: CoastRegion(station: station), waterLevel: level, style: rendering == .fullColor ? .painted : .line)
-            .opacity(rendering == .fullColor ? 1 : 0.55)
+        CoastArtView(region: CoastRegion(station: station), waterLevel: level, style: .line)
+            .opacity(0.55)
             .accessibilityHidden(true)
     }
 }
@@ -183,11 +209,11 @@ private struct UnconfiguredCard: View {
     let rendering: CoastCardRendering
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 6) {
+        VStack(alignment: .leading, spacing: 4) {
             TideMark().frame(width: 26, height: 26)
             Spacer(minLength: 0)
-            Text("Little Tide").font(.system(.subheadline, design: .serif)).foregroundStyle(CardColors(rendering: rendering).ink)
-            Text("Open the app to choose your coast.").font(.caption2).foregroundStyle(CardColors(rendering: rendering).soft)
+            Text("Little Tide").typeStyle(.widgetHeroMedium).foregroundStyle(CardColors(rendering: rendering).ink)
+            Text("Open the app to choose your coast.").typeStyle(.widgetSecondary).foregroundStyle(CardColors(rendering: rendering).soft)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .accessibilityElement(children: .combine)

@@ -91,6 +91,25 @@ exists. Shipping a paywall without them would be inert. See `Documentation/APP_S
   Live NOAA comparison re-run: 5 stations, 20/20 events identical. Unsigned Release
   archive succeeds with 0 warnings.
 
+## Design refinement: Canela-direction typography, painterly art, glass (2026-11-16)
+- Audit: the repo had New York + SF and flat vector art; the "painterly art + liquid
+  glass" described in the brief did not exist yet and was built here.
+- Fonts: no licensed Canela available → **Newsreader** (OFL, variable opsz/wght) bundled
+  in TideUI; centralised `TypeStyle` system; `BrandTypeface` switch for a future Canela
+  licence. See `Documentation/TYPOGRAPHY.md`.
+- Art: painterly procedural renderer (sky glow/clouds, regional land, deep→turquoise
+  water, swells, glitter, caustics, foam lace, wet sand, grain); NorCal/SoCal split;
+  static/dynamic layers rasterised separately.
+- Home: edge-to-edge hero whose horizon follows the title; glass region pill; floating
+  Liquid Glass tide card (iOS 26 `glassEffect`, material fallback, opaque under Reduce
+  Transparency); glass header buttons, date pager, Now button; truthful display names
+  (trailing parenthetical → subtitle).
+- Widgets: painted `containerBackground` with paper veil, serif hero time, SF labels;
+  line art in tinted/clear; app reloads widget timelines on launch. Verified on the real
+  Home Screen in light/dark/tinted/clear.
+- Accessibility audits now measure real pixel contrast for flagged elements (all 7.4–10.9:1).
+- Regression: 95 tests — 92 passed, 0 failed, 3 skipped (opt-in).
+
 ## Blockers needing the owner
 See `Documentation/APP_STORE.md` → "Owner-only steps". In short:
 - Apple Developer team ID + signing → device install, signed archive, TestFlight.
@@ -99,4 +118,5 @@ See `Documentation/APP_STORE.md` → "Owner-only steps". In short:
 - Host PRIVACY.md and SUPPORT.md publicly (repo is private), add support email, update
   `LegalText.supportURL`.
 - Optional: approve sourcing licensed / public-domain coastal photographs.
+- Optional: buy a Commercial Type mobile-app licence for Canela (see TYPOGRAPHY.md).
 - On-device checks not possible here: haptics, VoiceOver by ear, real widget refresh cadence.

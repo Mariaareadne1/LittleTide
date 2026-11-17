@@ -17,6 +17,11 @@ public enum Palette {
     public static let inkSoft = dynamic(light: 0x405255, dark: 0xBEC3BD)
     /// Driftwood sand. Beach band in the illustration, hairlines.
     public static let sand = dynamic(light: 0xCEBEA8, dark: 0x6E6253)
+    /// Teal-black used for glass shadows.
+    public static let glassShadow = dynamic(light: 0x0F3B47, dark: 0x000000)
+    /// Light veil laid behind text that sits directly on the painted sky.
+    public static let skyVeil = dynamic(light: 0xF4F1E9, dark: 0x0F1A22)
+
     /// Restrained rust/ochre accent: the selected-time marker only.
     public static let rust = dynamic(light: 0xA34F2A, dark: 0xD9875A)
 

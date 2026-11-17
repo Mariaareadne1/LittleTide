@@ -24,6 +24,9 @@ struct DemoConfiguration {
         case expired
         /// NOAA responds slowly, to show loading.
         case slow
+        /// Real NOAA requests (no fixtures) for `-LTStation`, isolated settings, real clock
+        /// unless `-LTNow` is given. Used for before/after design screenshots.
+        case live
     }
 
     let scenario: Scenario
@@ -38,7 +41,7 @@ struct DemoConfiguration {
         guard let raw = value(after: "-LTDemo"), let scenario = Scenario(rawValue: raw) else { return nil }
         self.scenario = scenario
         now = value(after: "-LTNow").flatMap { ISO8601DateFormatter().date(from: $0) }
-            ?? ISO8601DateFormatter().date(from: "2026-11-16T18:20:00Z")!
+            ?? (scenario == .live ? Date() : ISO8601DateFormatter().date(from: "2026-11-16T18:20:00Z")!)
         stationID = value(after: "-LTStation")
     }
 
@@ -65,6 +68,12 @@ struct DemoConfiguration {
                 try? cache.save(forecast)
             }
         default: break
+        }
+
+        if scenario == .live {
+            let directory = FileManager.default.temporaryDirectory.appendingPathComponent("LittleTideLive", isDirectory: true)
+            let repository = TideRepository(client: NOAATideClient(), cache: FileForecastCache(directory: directory))
+            return AppModel(repository: repository, settings: settings, clock: .system, catalog: catalog, widgetReloader: {})
         }
 
         let transport: HTTPTransport

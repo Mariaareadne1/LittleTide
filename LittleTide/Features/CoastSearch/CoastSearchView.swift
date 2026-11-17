@@ -118,19 +118,19 @@ struct StationRow: View {
             HStack(alignment: .firstTextBaseline) {
                 VStack(alignment: .leading, spacing: 2) {
                     Text(station.displayName.title)
-                        .font(.body)
+                        .typeStyle(.bodyEmphasis)
                         .foregroundStyle(Palette.ink)
                     Text(station.displayName.subtitle)
-                        .font(.subheadline)
+                        .typeStyle(.metadata)
                         .foregroundStyle(Palette.inkSoft)
                 }
                 Spacer(minLength: 12)
                 VStack(alignment: .trailing, spacing: 2) {
                     Text(station.id)
-                        .font(.caption.monospacedDigit())
+                        .typeStyle(.metadata)
                         .foregroundStyle(Palette.inkSoft)
                     Text(station.kind == .reference ? "Curve" : "High/low")
-                        .font(.caption2)
+                        .typeStyle(.metadata)
                         .foregroundStyle(Palette.inkSoft)
                 }
             }
@@ -151,10 +151,10 @@ private struct NoMatchesView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text("No station matches “\(query)”")
-                .font(Typography.sectionTitle)
+                .typeStyle(.sectionHeading)
                 .foregroundStyle(Palette.ink)
             Text("Little Tide uses NOAA tide-prediction stations, which are named for harbors, piers and inlets rather than beaches. Try a nearby town or bay, a state name, or browse by state.")
-                .font(Typography.body)
+                .typeStyle(.body)
                 .foregroundStyle(Palette.inkSoft)
         }
         .padding(.vertical, 24)
@@ -169,9 +169,10 @@ private struct SectionHeader: View {
 
     var body: some View {
         Text(title)
-            .font(.subheadline.weight(.semibold))
+            .typeStyle(.eventTitle)
             .foregroundStyle(Palette.ink)
             .textCase(nil)
+            .padding(.bottom, 2)
             .accessibilityAddTraits(.isHeader)
     }
 }

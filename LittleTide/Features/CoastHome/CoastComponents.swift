@@ -2,50 +2,22 @@ import SwiftUI
 import TideKit
 import TideUI
 
-/// The framed coast picture: the original illustration (or the user's own photo), with
-/// an honest caption plate.
-struct CoastPostcard: View {
-    let station: TideStation
-    let level: Double
-    let treatment: VisualTreatment
-
-    var body: some View {
-        let region = CoastRegion(station: station)
-        CoastArtView(region: region, waterLevel: level)
-            .aspectRatio(3 / 2, contentMode: .fit)
-            .clipShape(.rect(cornerRadius: 2))
-            .overlay {
-                RoundedRectangle(cornerRadius: 2).strokeBorder(Palette.sand.opacity(0.6), lineWidth: 0.5)
-            }
-            .overlay(alignment: .bottomLeading) {
-                Text("Illustration · \(region.illustrationDescription)")
-                    .font(.caption2)
-                    .foregroundStyle(Palette.inkSoft)
-                    .lineLimit(2)
-                    .padding(.horizontal, 6).padding(.vertical, 3)
-                    .background(Palette.paper.opacity(0.88), in: .rect(cornerRadius: 2))
-                    .padding(8)
-                    .accessibilityHidden(true)
-            }
-            .accessibilityIdentifier("coastPostcard")
-    }
-}
-
 struct FreshnessBanner: View {
     let text: String
 
     var body: some View {
         Label(text, systemImage: "clock.arrow.circlepath")
-            .font(Typography.caption)
+            .typeStyle(.label)
             .foregroundStyle(Palette.ink)
-            .padding(.horizontal, 12).padding(.vertical, 8)
+            .padding(.horizontal, 14).padding(.vertical, 10)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .background(Palette.fog, in: .rect(cornerRadius: 4))
+            .background(Palette.fog, in: .rect(cornerRadius: 14, style: .continuous))
             .accessibilityIdentifier("freshnessBanner")
     }
 }
 
 /// Right now: direction (only when defensible) and the next predicted event.
+/// Rendered inside the glass `TideCard`.
 struct NowSummaryView: View {
     let forecast: TideForecast
     let now: Date
@@ -53,25 +25,33 @@ struct NowSummaryView: View {
 
     var body: some View {
         let moment = TideMoment(forecast: forecast, instant: now)
-        VStack(alignment: .leading, spacing: 6) {
+        VStack(alignment: .leading, spacing: 8) {
             HStack(spacing: 8) {
-                EditorialLabel("Predicted tide · NOAA")
                 if moment.trend != .unknown {
                     TrendBadge(trend: moment.trend)
+                } else {
+                    Text("Predicted tide").typeStyle(.label).foregroundStyle(Palette.ink)
                 }
+                Spacer(minLength: 8)
+                Text("NOAA").typeStyle(.regionLabel).foregroundStyle(Palette.ink)
             }
             if let next = moment.nextEvent {
                 Text(format.eventHeadline(next))
-                    .font(Typography.eventTime)
+                    .typeStyle(.heroTideTime)
                     .foregroundStyle(Palette.ink)
+                    .lineLimit(2)
+                    .minimumScaleFactor(0.8)
+                    .contentTransition(.numericText())
                     .accessibilityLabel(format.eventAccessibilityLabel(next))
                 Text("Next \(next.kind == .high ? "high" : "low") \(format.countdown(from: now, to: next.date)) · \(format.height(next.heightMeters)) · \(format.zoneAbbreviation(at: next.date))")
-                    .font(Typography.caption.monospacedDigit())
-                    .foregroundStyle(Palette.inkSoft)
+                    .typeStyle(.body)
+                    .monospacedDigit()
+                    .foregroundStyle(Palette.ink.opacity(0.85))
+                    .contentTransition(.numericText())
                     .accessibilityLabel("Next \(next.kind == .high ? "high" : "low") tide \(format.countdown(from: now, to: next.date)), station time.")
             }
         }
-        // One element, read in order: source, direction, next event, countdown.
+        // One element, read in order: direction, next event, countdown.
         .accessibilityElement(children: .combine)
         .accessibilityIdentifier("nowSummary")
     }
@@ -81,18 +61,16 @@ struct TrendBadge: View {
     let trend: TideTrend
 
     var body: some View {
-        HStack(spacing: 3) {
+        HStack(spacing: 5) {
             Image(systemName: trend == .rising ? "arrow.up.right" : "arrow.down.right")
-                .font(.caption2.weight(.semibold))
-            Text(trend == .rising ? "Rising" : "Falling")
-                .font(Typography.label)
+                .font(.system(size: 12, weight: .bold))
+                .foregroundStyle(Palette.seaGlassDeep)
+            Text(trend == .rising ? "Rising tide" : "Falling tide")
+                .typeStyle(.label)
+                .foregroundStyle(Palette.ink)
         }
-        .foregroundStyle(Palette.seaGlassDeep)
-        .padding(.horizontal, 7).padding(.vertical, 2)
-        .overlay(Capsule().strokeBorder(Palette.seaGlassDeep.opacity(0.5), lineWidth: 0.75))
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(trend == .rising ? "Tide rising" : "Tide falling")
-        .accessibilityIdentifier("trendBadge")
     }
 }
 
@@ -105,11 +83,14 @@ struct DayEventsList: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            EditorialLabel("Highs and lows")
-                .padding(.bottom, 8)
+            Text("Highs and lows")
+                .typeStyle(.regionLabel)
+                .foregroundStyle(Palette.inkSoft)
+                .padding(.bottom, 6)
+                .accessibilityAddTraits(.isHeader)
             if events.isEmpty {
                 Text("No predicted highs or lows on this day.")
-                    .font(Typography.body).foregroundStyle(Palette.inkSoft)
+                    .typeStyle(.body).foregroundStyle(Palette.inkSoft)
             }
             ForEach(events, id: \.date) { event in
                 Button { select(event) } label: {
@@ -118,19 +99,19 @@ struct DayEventsList: View {
                             .font(.footnote)
                             .foregroundStyle(Palette.seaGlassDeep)
                             .frame(width: 20)
-                        Text(event.kind == .high ? "High" : "Low")
-                            .font(Typography.body)
+                        Text(event.kind == .high ? "High tide" : "Low tide")
+                            .typeStyle(.eventTitle)
                             .foregroundStyle(Palette.ink)
-                            .frame(width: 48, alignment: .leading)
+                        Spacer(minLength: 8)
                         Text(format.time(event.date))
-                            .font(Typography.dataValue)
+                            .typeStyle(.data)
                             .foregroundStyle(Palette.ink)
-                        Spacer()
                         Text(format.height(event.heightMeters))
-                            .font(Typography.dataValue)
+                            .typeStyle(.data)
                             .foregroundStyle(Palette.inkSoft)
+                            .frame(minWidth: 62, alignment: .trailing)
                     }
-                    .padding(.vertical, 10)
+                    .padding(.vertical, 12)
                     .contentShape(.rect)
                     .background(alignment: .leading) {
                         if selection == event.date {
@@ -158,21 +139,23 @@ struct SourceFooter: View {
     var body: some View {
         Button(action: action) {
             VStack(alignment: .leading, spacing: 4) {
-                EditorialLabel("Predicted tide · NOAA CO-OPS")
+                Text("Predicted tide · NOAA CO-OPS")
+                    .typeStyle(.regionLabel)
+                    .foregroundStyle(Palette.inkSoft)
                 Text("Station \(station.id) · heights above \(forecast.datum) · times in \(format.zoneAbbreviation(at: now)) (station time)")
-                    .font(Typography.caption)
+                    .typeStyle(.metadata)
                     .foregroundStyle(Palette.inkSoft)
                     .fixedSize(horizontal: false, vertical: true)
                 Text("Retrieved \(format.day(forecast.fetchedAt)), \(format.time(forecast.fetchedAt))")
-                    .font(Typography.caption)
+                    .typeStyle(.metadata)
                     .foregroundStyle(Palette.inkSoft)
                 HStack(spacing: 4) {
                     Text("About this prediction")
                     Image(systemName: "info.circle")
                 }
-                .font(Typography.caption.weight(.semibold))
+                .typeStyle(.label)
                 .foregroundStyle(Palette.seaGlassDeep)
-                .padding(.top, 4)
+                .padding(.top, 6)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .contentShape(.rect)

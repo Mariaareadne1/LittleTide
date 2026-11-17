@@ -3,7 +3,10 @@ import Foundation
 /// Broad coastal character used to pick an illustration. Deliberately coarse: the art is
 /// representative of a kind of coast, never a depiction of the station itself.
 public enum CoastRegion: String, Codable, CaseIterable, Sendable {
-    case pacificHeadlands
+    /// Northern California, Oregon, Washington: dark rocky coves, kelp, dramatic water.
+    case northernPacific
+    /// Southern California (south of Point Conception): warm sand, golden light.
+    case southernCalifornia
     case northAtlantic
     case southAtlanticMarsh
     case gulfShore
@@ -12,7 +15,8 @@ public enum CoastRegion: String, Codable, CaseIterable, Sendable {
 
     public init(station: TideStation) {
         switch station.state {
-        case "CA", "OR", "WA": self = .pacificHeadlands
+        case "CA": self = station.latitude < Self.pointConceptionLatitude ? .southernCalifornia : .northernPacific
+        case "OR", "WA": self = .northernPacific
         case "ME", "NH", "MA", "RI", "CT", "NY", "NJ": self = .northAtlantic
         case "PA", "DE", "MD", "DC", "VA", "NC", "SC", "GA": self = .southAtlanticMarsh
         case "AL", "MS", "LA", "TX": self = .gulfShore
@@ -26,11 +30,15 @@ public enum CoastRegion: String, Codable, CaseIterable, Sendable {
         }
     }
 
+    /// Point Conception (≈34.45° N) is the conventional NorCal/SoCal coastal divide.
+    static let pointConceptionLatitude = 34.6
+
     /// Plain-language description used in the illustration's caption and VoiceOver label.
     public var illustrationDescription: String {
         switch self {
-        case .pacificHeadlands: return "Pacific headlands and sea stacks"
-        case .northAtlantic: return "North Atlantic dunes and granite"
+        case .northernPacific: return "Rocky Pacific cove with kelp"
+        case .southernCalifornia: return "Southern California beach in golden light"
+        case .northAtlantic: return "Atlantic dunes and tidal flats"
         case .southAtlanticMarsh: return "Low-country marsh and barrier beach"
         case .gulfShore: return "Gulf shore with old pilings"
         case .tropicalIsland: return "Volcanic island shore"

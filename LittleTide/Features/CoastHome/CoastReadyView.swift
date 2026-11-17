@@ -8,12 +8,13 @@ struct CoastReadyView: View {
     let refreshError: NOAAError?
     let now: Date
     let format: TideFormat
+    let layout: HomeLayout
+    let actions: HeroActions
     @Binding var selection: Date?
     @Binding var dayOffset: Int
     let showSource: () -> Void
 
     @Environment(AppModel.self) private var model
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     private var timeZone: TimeZone { format.timeZone }
     private var today: DateInterval { StationDay.dayInterval(containing: now, timeZone: timeZone) }
@@ -25,59 +26,40 @@ struct CoastReadyView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            CoastPostcard(station: station, level: waterLevel, treatment: model.treatment)
-                .padding(.top, 8)
-                .animation(reduceMotion ? nil : .easeOut(duration: 0.35), value: waterLevel)
+            CoastHero(station: station, level: waterLevel, topInset: layout.topInset, width: layout.width, actions: actions)
 
-            placeTitle.padding(.top, 20)
-
-            if let banner = freshnessBanner {
-                FreshnessBanner(text: banner).padding(.top, 14)
+            TideCard {
+                NowSummaryView(forecast: forecast, now: now, format: format)
             }
+            .padding(.top, -150)
 
-            NowSummaryView(forecast: forecast, now: now, format: format)
-                .padding(.top, 18)
-
-            Hairline().padding(.vertical, 22)
-
-            studySection
-
-            Hairline().padding(.vertical, 22)
-
-            DayEventsList(events: TideEngine.events(in: window, from: forecast.events), format: format, selection: selection) { event in
-                selection = event.date
+            VStack(alignment: .leading, spacing: 0) {
+                if let banner = freshnessBanner {
+                    FreshnessBanner(text: banner).padding(.top, 16)
+                }
+                studySection.padding(.top, 30)
+                Hairline().padding(.vertical, 26)
+                DayEventsList(events: TideEngine.events(in: window, from: forecast.events), format: format, selection: selection) { event in
+                    selection = event.date
+                }
+                SourceFooter(station: station, forecast: forecast, now: now, format: format, action: showSource)
+                    .padding(.top, 30)
             }
-
-            SourceFooter(station: station, forecast: forecast, now: now, format: format, action: showSource)
-                .padding(.top, 28)
+            .padding(.horizontal, 20)
         }
-    }
-
-    private var placeTitle: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text(station.displayName.title)
-                .font(Typography.placeTitle)
-                .foregroundStyle(Palette.ink)
-                .lineLimit(3)
-                .minimumScaleFactor(0.7)
-                .accessibilityAddTraits(.isHeader)
-            Text("\(station.displayName.subtitle) · Station \(station.id)")
-                .font(Typography.caption)
-                .foregroundStyle(Palette.inkSoft)
-        }
-        .accessibilityElement(children: .combine)
     }
 
     private var studySection: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            HStack(alignment: .firstTextBaseline) {
-                Text(dayOffset == 0 ? "The tide today" : "The tide")
-                    .font(Typography.sectionTitle)
-                    .foregroundStyle(Palette.ink)
-                    .accessibilityAddTraits(.isHeader)
-                Spacer()
-                DayPager(label: format.day(window.start), canGoBack: canShift(-1), canGoForward: canShift(1)) { step in
-                    shiftDay(step)
+        VStack(alignment: .leading, spacing: 14) {
+            ViewThatFits(in: .horizontal) {
+                HStack(alignment: .center) {
+                    heading
+                    Spacer(minLength: 8)
+                    pager
+                }
+                VStack(alignment: .leading, spacing: 10) {
+                    heading
+                    pager
                 }
             }
 
@@ -88,27 +70,43 @@ struct CoastReadyView: View {
                 isHapticsEnabled: model.isHapticsEnabled, selection: $selection
             )
 
-            HStack {
-                Text(forecast.hasCurve ? "Drag across the day to explore NOAA's predicted tide." : "This station publishes high and low times only. Drag to step between them.")
-                    .font(Typography.caption)
+            HStack(alignment: .center, spacing: 12) {
+                Text(forecast.hasCurve ? "Drag across the day to explore NOAA’s predicted tide." : "This station publishes high and low times only. Drag to step between them.")
+                    .typeStyle(.metadata)
                     .foregroundStyle(Palette.inkSoft)
                     .fixedSize(horizontal: false, vertical: true)
-                Spacer(minLength: 12)
+                Spacer(minLength: 8)
                 if selection != nil || dayOffset != 0 {
-                    Button("Now") {
+                    Button {
                         selection = nil
                         dayOffset = 0
+                    } label: {
+                        Text("Now").typeStyle(.bodyEmphasis).padding(.horizontal, 18).frame(minHeight: 44)
                     }
-                    .buttonStyle(.bordered)
-                    .tint(Palette.ink)
+                    .buttonStyle(GlassButtonStyle())
+                    .foregroundStyle(Palette.ink)
                     .accessibilityHint("Returns the timeline to the current time.")
                     .accessibilityIdentifier("nowButton")
+                    .transition(.opacity)
                 }
             }
         }
     }
 
-    /// Water level for the illustration, normalised to today's predicted range.
+    private var heading: some View {
+        Text(dayOffset == 0 ? "The tide today" : "The tide")
+            .typeStyle(.sectionHeading)
+            .foregroundStyle(Palette.ink)
+            .fixedSize()
+            .accessibilityAddTraits(.isHeader)
+    }
+
+    private var pager: some View {
+        DayPager(label: format.day(window.start), canGoBack: canShift(-1), canGoForward: canShift(1)) { shiftDay($0) }
+            .fixedSize()
+    }
+
+    /// Water level for the illustration, normalised to the day's predicted range.
     /// Neutral when the selected instant has no published height.
     private var waterLevel: Double {
         guard let range = TideEngine.heightRange(in: window, forecast: forecast),
@@ -153,19 +151,23 @@ private struct DayPager: View {
     let shift: (Int) -> Void
 
     var body: some View {
-        HStack(spacing: 2) {
-            Button { shift(-1) } label: { Image(systemName: "chevron.left").frame(width: 36, height: 36) }
+        HStack(spacing: 0) {
+            Button { shift(-1) } label: { Image(systemName: "chevron.left").frame(width: 40, height: 44) }
                 .disabled(!canGoBack)
                 .accessibilityLabel("Previous day")
             Text(label)
-                .font(.subheadline.monospacedDigit())
-                .foregroundStyle(Palette.inkSoft)
+                .typeStyle(.label)
+                .monospacedDigit()
+                .foregroundStyle(Palette.ink)
+                .contentTransition(.numericText())
                 .accessibilityLabel("Showing \(label)")
-            Button { shift(1) } label: { Image(systemName: "chevron.right").frame(width: 36, height: 36) }
+            Button { shift(1) } label: { Image(systemName: "chevron.right").frame(width: 40, height: 44) }
                 .disabled(!canGoForward)
                 .accessibilityLabel("Next day")
         }
+        .font(.system(size: 14, weight: .semibold))
         .foregroundStyle(Palette.ink)
+        .glassSurface(Capsule(), interactive: true)
     }
 }
 
@@ -177,26 +179,43 @@ private struct SelectionReadout: View {
 
     var body: some View {
         let readout = TideReadout(forecast: forecast, instant: instant, isNow: isNow, format: format)
-        HStack(alignment: .firstTextBaseline, spacing: 10) {
-            Text(isNow ? "Now" : readout.day)
-                .font(Typography.label)
-                .tracking(Typography.labelTracking)
-                .textCase(.uppercase)
-                .foregroundStyle(isNow ? Palette.inkSoft : Palette.rust)
-            Text(readout.time)
-                .font(Typography.dataValue)
-                .foregroundStyle(Palette.ink)
-            Text(readout.detail)
-                .font(Typography.caption)
-                .foregroundStyle(Palette.ink)
-                .lineLimit(1)
-            Spacer(minLength: 4)
-            if let height = readout.height {
-                Text(height).font(Typography.dataValue).foregroundStyle(Palette.ink)
+        ViewThatFits(in: .horizontal) {
+            HStack(alignment: .firstTextBaseline, spacing: 10) {
+                lead(readout)
+                Text(readout.detail).typeStyle(.label).foregroundStyle(Palette.ink).lineLimit(1)
+                Spacer(minLength: 4)
+                heightText(readout)
+            }
+            VStack(alignment: .leading, spacing: 4) {
+                HStack(alignment: .firstTextBaseline, spacing: 10) { lead(readout); Spacer(minLength: 4); heightText(readout) }
+                Text(readout.detail).typeStyle(.label).foregroundStyle(Palette.ink)
             }
         }
+        .padding(.vertical, 12)
+        .contentShape(.rect)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(readout.spoken)
         .accessibilityIdentifier("selectionReadout")
+    }
+
+    private func lead(_ readout: TideReadout) -> some View {
+        HStack(alignment: .firstTextBaseline, spacing: 10) {
+            Text(isNow ? "Now" : readout.day)
+                .typeStyle(.regionLabel)
+                .foregroundStyle(isNow ? Palette.inkSoft : Palette.rust)
+                .fixedSize()
+            Text(readout.time)
+                .typeStyle(.data)
+                .foregroundStyle(Palette.ink)
+                .fixedSize()
+                .contentTransition(.numericText())
+        }
+    }
+
+    @ViewBuilder
+    private func heightText(_ readout: TideReadout) -> some View {
+        if let height = readout.height {
+            Text(height).typeStyle(.data).foregroundStyle(Palette.ink).fixedSize()
+        }
     }
 }

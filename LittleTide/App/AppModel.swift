@@ -45,6 +45,12 @@ final class AppModel {
         isHapticsEnabled = UserDefaults.standard.object(forKey: Self.hapticsKey) as? Bool ?? true
     }
 
+    /// Asks WidgetKit to re-render from the shared cache, e.g. after an app update
+    /// changed the widget design. Cheap: no network unless the refresh policy says so.
+    func reloadWidgetsOnLaunch() {
+        reloadWidgets()
+    }
+
     func loadCatalogIfNeeded() async {
         guard catalog == nil else { return }
         catalog = await Task.detached(priority: .userInitiated) { try? StationCatalog.bundled() }.value
