@@ -10,7 +10,7 @@ Result: **95 tests — 92 passed, 0 failed, 3 skipped.** Skipped tests are opt-i
 - `WidgetHomeScreenTests.testChooseCoastThenInstallWidgets` and `testHomeScreenStyle`
   (drive SpringBoard; run with `TEST_RUNNER_LT_WIDGET_QA=1`).
 - `LiveNOAAComparisonTests.matchesNOAAPublishedPredictions` (hits the network; run with
-  `LT_LIVE_NOAA=1`).
+  `LITTLETIDE_LIVE=1 swift test --filter LiveNOAAComparison` in `Packages/TideKit`).
 
 | Suite | Tests |
 |---|---|

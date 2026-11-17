@@ -15,6 +15,8 @@ struct LiveNOAAComparisonTests {
         "1612340", // Honolulu, HI — reference, no DST
         "8724580", // Key West, FL — reference, Gulf/Atlantic
         "8510502", // Montauk Harbor entrance, NY — subordinate
+        "8729840", // Pensacola, FL — reference, Gulf, Central time, diurnal
+        "9452210", // Juneau, AK — reference, Alaska time, large range
     ]
 
     @Test(arguments: stationIDs)
