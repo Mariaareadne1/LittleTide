@@ -83,3 +83,12 @@ the glass press scale eases to 0.97. Unused `EditorialLabel` and legacy `Typogra
 - `LittleTideUITests` on "LittleTide QA 17 Pro Max": 11/11 passed; App Store screenshots in
   `AppStore/6.9in/` re-captured from that run.
 - Not re-run: iPhone SE suite, Home Screen widget QA, live NOAA comparison, perf probe.
+
+### Calmer button glass (same day)
+Button glass: bevel `min(radius × 0.45, 10)` instead of the full radius, thickness 14, milk
+0.4, specular 0.8, aberration 0.25. Affects the header buttons, day pager, Now button and the
+onboarding caption pill.
+- `LittleTideUITests` on "LittleTide QA 17 Pro Max": TEST SUCCEEDED; App Store screenshots
+  re-captured.
+- `AccessibilityAuditTests` on "LittleTide QA 17 Pro": first run hit "Audit failed to complete
+  in time" on `testHomeCurveAudit` (an XCTest timeout, no finding); re-run 4/4 passed.

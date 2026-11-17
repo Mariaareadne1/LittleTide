@@ -149,15 +149,17 @@ struct Material {
     float absorb;
 };
 
-/// 0 = text card (frosted, smoked teal so white type reads), 1 = button (thicker, clearer).
+/// 0 = text card (frosted, smoked teal so white type reads), 1 = button (a quieter, thinner
+/// slab: the bevel covers under half the radius so a round button keeps a flat face instead
+/// of reading as a bubble).
 static Material materialFor(float kind, float radius) {
     Material m;
     if (kind < 0.5) {
         m.bevel = 26.0; m.thickness = 18.0; m.refraction = 1.0; m.frost = 0.62; m.aberration = 0.4;
         m.specular = 1.0; m.milk = 0.6; m.tint = float3(0.09, 0.33, 0.39); m.absorb = 0.48;
     } else {
-        m.bevel = min(radius, 22.0); m.thickness = 26.0; m.refraction = 1.0; m.frost = 0.3; m.aberration = 0.55;
-        m.specular = 1.25; m.milk = 0.7; m.tint = float3(0.07, 0.27, 0.32); m.absorb = 0.46;
+        m.bevel = min(radius * 0.45, 10.0); m.thickness = 14.0; m.refraction = 1.0; m.frost = 0.45; m.aberration = 0.25;
+        m.specular = 0.8; m.milk = 0.4; m.tint = float3(0.07, 0.27, 0.32); m.absorb = 0.5;
     }
     return m;
 }

@@ -23,8 +23,9 @@ information on the glass.
   squircle-bevel SDF, refraction at IOR 1.52, chromatic split along the displacement,
   golden-angle frost, Fresnel reflection, deep-teal absorption, milky rim, glints and a
   contact shadow. Only refraction moves pixels; light terms add exposure.
-- Two materials: **card** (frost 0.62, bevel 26) for information, **button** (frost 0.3,
-  stronger specular) for controls. Used only for the tide card, header controls, day pager,
+- Two materials: **card** (frost 0.62, bevel 26) for information, **button** (bevel under
+  half the radius, max 10; thinner slab, softer milk, specular and fringe) for controls, so
+  round buttons keep a flat face and read as glass discs, not bubbles. Used only for the tide card, header controls, day pager,
   details panels, onboarding card and the caption pill.
 - Reduce Transparency: opaque `oceanDeep` panels with a white hairline.
 
